@@ -5,6 +5,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import styles from "./admin.scss"
 import { Extension, ExtensionProps } from "./components/extension/extension";
+import SignUp from "./components/user-form/signup/signup.component";
 
 
 const AdminSys: React.FC = () => {
@@ -25,7 +26,7 @@ const AdminSys: React.FC = () => {
                 <div className={styles.formatPage}>
                     <h4 className={styles['title-page']}>{t("adminSystem")}</h4>
                     <div className={styles['mhiseg-main-content']}>
-                        mm
+                
                     </div>
                 </div>
             </div>

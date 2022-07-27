@@ -9,7 +9,7 @@ const importTranslation = require.context(
 );
 
 function setupOpenMRS() {
-  const moduleName = "@mhiseg/esm-admin-app";
+  const moduleName = "@mhiseg/esm-admin-system-app";
 
   const options = {
     featureName: "admin-system",

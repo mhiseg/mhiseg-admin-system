@@ -1,5 +1,5 @@
 {
-  "name": "@mhiseg/esm-admin-system",
+  "name": "@mhiseg/esm-admin-system-app",
   "version": "3.0.0",
   "license": "MPL-2.0",
   "description": "A microfrontend for administration system powered by mhiseg",

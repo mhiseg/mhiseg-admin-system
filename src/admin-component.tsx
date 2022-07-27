@@ -1,18 +1,20 @@
-import { navigate, NavigateOptions } from "@openmrs/esm-framework";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import styles from "./admin.scss"
+
 
 const AdminSys: React.FC = () => {
     const { t } = useTranslation();
-        return (
-            <>
-                <h4 className={`title-page`}>{t('declareDeathTitle', 'Declare a death')}</h4>
-                <div className={`mhiseg-main-content `}>
-                    {/* <DeathFormRegistry patient={patientSearch?.data} /> */}
-                </div>
-            </>
-        );
+    return (
+        <> 
+         <div className={styles["admin-container"]}>
+            <h4 className={styles['title-page']}>{t("adminSystem")}</h4>
+            <div className={styles['mhiseg-main-content']}>
+                mm
+            </div>
+            </div>
+        </>
+    );
 
 };
 export default AdminSys;

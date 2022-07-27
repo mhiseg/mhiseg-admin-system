@@ -6,7 +6,7 @@ import AdminSys from './admin-component';
 const RootComponent: React.FC = () => {
   return (
     <BrowserRouter basename={`${window.spaBase}/admin/admin-system/`}>
-      <Route>
+      <Route >
        <AdminSys/> 
       </Route>
     </BrowserRouter>

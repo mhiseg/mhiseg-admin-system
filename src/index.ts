@@ -1,4 +1,4 @@
-import { getAsyncLifecycle, defineConfigSchema } from "@openmrs/esm-framework";
+import { getAsyncLifecycle, defineConfigSchema, registerBreadcrumbs } from "@openmrs/esm-framework";
 import { configSchema } from "./config-schema";
 
 const importTranslation = require.context(
@@ -15,7 +15,13 @@ function setupOpenMRS() {
     featureName: "admin-system",
     moduleName,
   };
-
+  registerBreadcrumbs([
+    {
+      path: `${window.spaBase}/admin`,
+      title: "admin-system",
+      parent: `${window.spaBase}/admin-system`,
+    }
+  ]);
 
   return {
     pages: [
@@ -28,4 +34,4 @@ function setupOpenMRS() {
   };
 }
 
-export {importTranslation, setupOpenMRS };
+export { importTranslation, setupOpenMRS };

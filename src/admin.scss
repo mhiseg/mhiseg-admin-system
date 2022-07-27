@@ -1,7 +1,15 @@
 .admin-container {
-  margin-top: 100px;
+  margin-top: 35px;
 }
-
+.formatPage{
+  position: relative;
+  padding: 0 !important;
+  margin-top:30px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background: transparent;
+  width: 100%;
+}
 .mhiseg-main-content.mhiseg-main-content {
   max-height: calc(89vh - 1.5rem);
   padding: 1rem;

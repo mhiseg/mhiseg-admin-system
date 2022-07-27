@@ -1,1 +1,1 @@
-# mhiseg-death-administration
+# mhiseg-admin-system

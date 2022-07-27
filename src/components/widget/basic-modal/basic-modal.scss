@@ -1,0 +1,96 @@
+.nodeDanger{
+    border-top: 5px solid #c6000d;
+    border-radius: 10px;
+}
+
+.nodeInfo{
+    border-top: 5px solid #0096b0;
+    border-radius: 10px;
+}
+
+.nodeConfirmation{
+    border-top: 5px solid #00b812;
+    border-radius: 10px;
+}
+
+.modal {
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.body{
+    margin-top: 10px!important;
+    margin-bottom: 15px !important;
+    color: rgb(88, 87, 87);
+}
+
+.footer {
+    padding: 3px;
+    margin: 5px;
+
+    .cancelButton {
+        margin: 5px;
+        width: 20px;
+        height: 24.79px;
+        border-radius: 5px;
+        padding: 5px;
+        justify-content: center;
+        border: 1px solid #034E5E;
+        color: #024352;
+
+        &:hover {
+            background: #034E5E;
+            color: white;
+        }
+    }
+
+    .deleteButton {
+        width: 20px !important;
+        height: 24.79px !important;
+        border-radius: 5px;
+        background: rgba(247, 105, 114, 0.18);
+        border: 1px solid #FB000F;
+        padding: 20px;
+        justify-content: center;
+        margin: 5px;
+
+        &:hover {
+            background: #c6000d;
+        }
+    }
+
+    .confimButton{
+        width: 20px !important;
+        height: 24.79px !important;
+        border-radius: 5px;
+        background: rgba(0, 184, 18,0.18);
+        border: 1px solid green;
+        padding: 20px;
+        justify-content: center;
+        margin: 5px;
+        color: green;
+
+        &:hover {
+            background: #00b812;
+            color: white;
+        }
+    }
+
+    .infoButton{
+        width: 20px !important;
+        height: 24.79px !important;
+        border-radius: 5px;
+        background: rgba(0, 150, 176,0.10);
+        border: 1px solid #0096b0;
+        padding: 20px;
+        justify-content: center;
+        margin: auto;
+        color: #0096b0;
+
+        &:hover {
+            background:#0096b0;
+            color: white;
+        }
+    }
+}

@@ -1,10 +1,13 @@
-// import { DataTable, TableContainer, TableToolbar, TableBatchActions,
-//     TableBatchAction,TableToolbarContent, TableToolbarSearch, TableToolbarMenu,
+// import {
+//     DataTable, TableContainer, TableToolbar, TableBatchActions,
+//     TableBatchAction, TableToolbarContent, TableToolbarSearch, TableToolbarMenu,
 //     TableToolbarAction, Button, Table, TableHead, TableRow, TableSelectAll,
-//     TableHeader, TableBody, TableSelectRow, TableCell } from "carbon-components-react";
+//     TableHeader, TableBody, TableSelectRow, TableCell
+// } from "carbon-components-react";
+// import { TrashCan32,Save32,Download32 } from '@carbon/icons-react';
 // import React from "react";
 
-// (args) => ( 
+// (args) => (
 //     <DataTable rows={rows} headers={headers} {...args}>
 //         {({
 //             rows,
@@ -23,27 +26,25 @@
 
 //             return (
 //                 <TableContainer
-//                     title="DataTable"
-//                     description="With batch actions"
 //                     {...getTableContainerProps()}>
 //                     <TableToolbar {...getToolbarProps()}>
 //                         <TableBatchActions {...batchActionProps}>
 //                             <TableBatchAction
-//                                 tabIndex={batchActionProps.shouldShowBatchActions ? : -}
-//                                 renderIcon={TrashCan}
-//                                 onClick={batchActionClick(selectedRows)}>
+//                                 tabIndex={batchActionProps.shouldShowBatchActions ? "": ""}
+//                                 renderIcon={TrashCan32}
+//                                 onClick={(e)=>(selectedRows)}>
 //                                 Delete
 //                             </TableBatchAction>
 //                             <TableBatchAction
 //                                 tabIndex={batchActionProps.shouldShowBatchActions ? : -}
-//                                 renderIcon={Save}
-//                                 onClick={batchActionClick(selectedRows)}>
+//                                 renderIcon={Save32}
+//                                 onClick={(e)=>(selectedRows)}>
 //                                 Save
 //                             </TableBatchAction>
 //                             <TableBatchAction
 //                                 tabIndex={batchActionProps.shouldShowBatchActions ? : -}
-//                                 renderIcon={Download}
-//                                 onClick={batchActionClick(selectedRows)}>
+//                                 renderIcon={Download32}
+//                                 onClick={(e)=>(selectedRows)}>
 //                                 Download
 //                             </TableBatchAction>
 //                         </TableBatchActions>

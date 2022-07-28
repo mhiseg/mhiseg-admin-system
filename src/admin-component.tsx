@@ -4,6 +4,7 @@ import { Grid, Row } from "carbon-components-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import styles from "./admin.scss"
+import MhisegadminSystem from "./components/user-data-table/mhiseg-admin-System";
 import UserRegisterForm from "./components/user-form/register-form/register-form";
 
 
@@ -12,17 +13,10 @@ const AdminSys: React.FC = () => {
 
     return (
         <>
-            <div className={styles["admin-container"]}>
-                <ExtensionSlot
-                    className={styles["admin-extension-module"]}
-                    extensionSlotName={"breadcrumbs-slot"}
-                />
-                <div className={styles.formatPage}>
-                    <h4 className={styles['title-page']}>{t("adminSystem")}</h4>
-                    <div className={styles['mhiseg-main-content']}>
-                    <UserRegisterForm user={undefined} /> 
-                    </div>
-                </div>
+            <h4 className={styles['title-page']}>{t("adminSystem")}</h4>
+            <div className={styles['mhiseg-main-content']}>
+                {/* <MhisegadminSystem /> */}
+                <UserRegisterForm user={undefined} />
             </div>
         </>
     );

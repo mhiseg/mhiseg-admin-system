@@ -1,3 +1,13 @@
 {
-  "adminSystem": "System administration panel"
+  "adminSystem": "System administration panel",
+  "Username": "Username",
+  "gender": "Gender",
+  "firstName": "Firstname",
+  "lastName": "Lastname",
+  "Search": "Search...",
+  "PreviousPage": "Previous Page",
+  "NextPage": "Next Page",
+  "fullName":"Full name",
+  "phone":"phone"
+  
 }

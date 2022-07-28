@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import TextInput from 'carbon-components-react/es/components/TextInput';
 import { useField } from 'formik';
-import styles from "../../../input/input.scss";
 import { useTranslation } from 'react-i18next';
 
 interface InputProps {
@@ -13,25 +12,30 @@ interface InputProps {
   placeholder?: string;
   hideLabel?: boolean;
   className?: string;
+  value?: string;
+  classNameBlock?: string;
+  classNameInput?: string;
+  hidden?: boolean;
   type?: string;
+  onSuggestionSelected?: () => void;
+
+
 }
 
-
-export const Input: React.FC<InputProps> = props => {
-  const [field, meta, helpers] = useField(props.name);
-  const { setValue } = helpers;
-  const { t } = useTranslation(); 
-
-
+export const Input: React.FC<InputProps> = (props) => {
+  const name = props.name;
+  const [field, meta] = useField(props.name);
+  const { t } = useTranslation();
+  
   return (
-    <div>
+    <div className={props.classNameBlock}>
+      <label>{t(props.labelText)}</label>
       <TextInput
-        type={props.type}
         {...props}
         {...field}
-        invalid={!!(meta.error)}
+        className={props.classNameInput}
+        invalid={!!meta.error}
         invalidText={t(meta.error)}
-        size="lg"
       />
     </div>
   );

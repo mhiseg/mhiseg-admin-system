@@ -1,21 +1,20 @@
 import React from 'react';
 import { Input } from '../input/input.component';
 
-interface FamilyNameFieldProps {
+interface UsernameFieldProps {
   name: string;
-  className?: string;
   required?: boolean;
 }
-export const FamilyNameField: React.FC<FamilyNameFieldProps> = ({ name, className, required }) => {
 
+export const UsernameField: React.FC<UsernameFieldProps> = ({ name }) => {
   return (
     <>
-       <Input
+      <Input
         id={name}
         name={name}
-        labelText={'familyName'}
-        light={false}
+        labelText={name}
         hideLabel={true}
+        light={false}
       />
     </>
   );

@@ -1,8 +1,9 @@
 import { openmrsFetch, refetchCurrentUser } from '@openmrs/esm-framework';
+const BASE_WS_API_URL = '/ws/rest/v1/';
 
 export function performLogin(username, password) {
   const token = window.btoa(`${username}:${password}`);
-  return openmrsFetch(`/ws/rest/v1/session`, {
+  return openmrsFetch(`${BASE_WS_API_URL}session`, {
     headers: {
       Authorization: `Basic ${token}`,
     },
@@ -13,5 +14,9 @@ export function performLogin(username, password) {
 }
 
 export function geUserByEmailOrUsername(identifier: string) {
-  return openmrsFetch(`/ws/rest/v1/user?username=${identifier}`);
+  return openmrsFetch(`${BASE_WS_API_URL}user?username=${identifier}`);
+}
+
+export function getAllRoles() {
+  return openmrsFetch(`${BASE_WS_API_URL}role`);
 }

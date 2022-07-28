@@ -54,7 +54,7 @@ const UserList: React.FC<DeathListProps> = ({ headers }) => {
         changeRows(e.pageSize, e.page);
     }
     return (
-        <DataTable rows={rowsTable} headers={headers} useZebraStyles={true} >
+        <DataTable rows={rowsTable} headers={headers} useZebraStyles={true}  >
             {({
                 rows,
                 headers,
@@ -69,64 +69,109 @@ const UserList: React.FC<DeathListProps> = ({ headers }) => {
                 getTableContainerProps,
             }) => {
                 const batchActionProps = getBatchActionProps();
-
                 return (
-                    <TableContainer
-                        {...getTableContainerProps()}>
-                        <TableToolbar {...getToolbarProps()}>
-                            <TableBatchActions {...batchActionProps}>
-                                <TableBatchAction
-                                    tabIndex={batchActionProps.shouldShowBatchActions ? 0 : -1}
-                                    // renderIcon={TrashCan}
-                                    onClick={(e) => (selectedRows)}>
-                                    Delete
-                                </TableBatchAction>
-                                <TableBatchAction
-                                    tabIndex={batchActionProps.shouldShowBatchActions ? 0 : -1}
-                                    // renderIcon={Save}
-                                    onClick={(e) => (selectedRows)}>
-                                    Save
-                                </TableBatchAction>
-                                <TableBatchAction
-                                    tabIndex={batchActionProps.shouldShowBatchActions ? 0 : -1}
-                                    //renderIcon={Download}
-                                    onClick={(e) => (selectedRows)}>
-                                    Download
-                                </TableBatchAction>
-                            </TableBatchActions>
-                        </TableToolbar>
-                        <div className={styles.TableContainer}>
-                            <div className={"bx--toolbar-content"}>
-                                <SearchInput
-                                    className={styles['search-1']}
-                                    onChange={(e) => ((e.currentTarget.value.trim().length) > 0) && onInputChange(e)} />
+                    <>
+                        <TableContainer {...getTableContainerProps()} >
+                            <TableToolbar {...getToolbarProps()}>
+                                <TableBatchActions {...batchActionProps}>
+                                    <TableBatchAction
+                                        tabIndex={batchActionProps.shouldShowBatchActions ? 0 : -1}
+                                        renderIcon={TrashCan32}
+                                        onClick={(e)=>(selectedRows)}>
+                                        Delete
+                                    </TableBatchAction>
+                                    
+                                    <TableBatchAction
+                                        tabIndex={batchActionProps.shouldShowBatchActions ? 1 : 0}
+                                        renderIcon={Save32}
+                                        onClick={(e) => (selectedRows)}>
+                                        Save
+                                    </TableBatchAction>
+                                    <TableBatchAction
+                                        tabIndex={batchActionProps.shouldShowBatchActions ? 1 : 0}
+                                        renderIcon={Download32}
+                                        onClick={(e) => (selectedRows)}>
+                                        Download
+                                    </TableBatchAction>
+                                </TableBatchActions>
+                                <TableToolbarContent
+                                    aria-hidden={batchActionProps.shouldShowBatchActions}>
+                                    <TableToolbarSearch
+                                        tabIndex={batchActionProps.shouldShowBatchActions ? 1 : 0}
+                                        onChange={onInputChange}
+                                    />
+                                    <TableToolbarMenu
+                                        tabIndex={batchActionProps.shouldShowBatchActions ? 1 : 0}>
+                                        <TableToolbarAction onClick={() => alert('Alert ')}>
+                                            Action
+                                        </TableToolbarAction>
+                                        <TableToolbarAction onClick={() => alert('Alert ')}>
+                                            Action
+                                        </TableToolbarAction>
+                                        <TableToolbarAction onClick={() => alert('Alert ')}>
+                                            Action
+                                        </TableToolbarAction>
+                                    </TableToolbarMenu>
+                                    <Button
+                                        tabIndex={batchActionProps.shouldShowBatchActions ? 1 : 0}
+                                        onClick={(e) => alert('Alert ')}
+                                        size="small"
+                                        kind="primary">
+                                        Add new
+                                    </Button>
+                                </TableToolbarContent>
+                            </TableToolbar>
+                            <TableContainer className={styles.table}>
+                                <Table
+                                    {...getTableProps()} size="md" >
+                                    <TableHead className={styles.TableRowHeader} >
+                                        <TableRow>
+                                            <TableSelectAll {...getSelectionProps()} />
+                                            {headers.map((header) => (
+                                                <TableHeader key={header.key} {...getHeaderProps({ header, isSortable: true })}>
+                                                    {header.header}
+                                                </TableHeader>
+                                            ))}
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody className={styles.TableBody}>
+                                        {rows.map((row, i) => (
+                                            <TableRow className={styles.TableRow} key={row.id}  {...getRowProps({ row })} onClick={e => { onTableRowHandleClick(e, row) }} >
+                                                <TableSelectRow {...getSelectionProps({ row })} />
+                                                {row.cells.map((cell) => (
+                                                    <>
+                                                        <TableCell key={cell.id} children={
+                                                            cell.id.split(':')[1] == 'deathDate' && (cell.value != undefined || '') ?
+                                                                new Intl.DateTimeFormat(t("local", 'fr-FR'), { dateStyle: 'full' }).format(new Date(cell.value)) : cell.value
+                                                        } />
+                                                    </>
+                                                ))}
+                                            </TableRow>
+
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </TableContainer>
+                        <div>
+                            <div>
+                                <Pagination
+                                    backwardText={t("PreviousPage")}
+                                    forwardText={t("NextPage")}
+                                    itemsPerPageText={t("Show")}
+                                    onChange={onPaginationChange}
+                                    page={page}
+                                    pageSize={pageSize}
+                                    pageSizes={paginationPageSizes}
+                                    size="sm"
+                                    totalItems={totalpageSize}
+                                />
                             </div>
                         </div>
-                        <Table {...getTableProps()}>
-                            <TableHead>
-                                <TableRow>
-                                    <TableSelectAll {...getSelectionProps()} />
-                                    {headers.map((header, i) => (
-                                        <TableHeader key={i} {...getHeaderProps({ header })}>
-                                            {header.header}
-                                        </TableHeader>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {rows.map((row, i) => (
-                                    <TableRow key={i} {...getRowProps({ row })}>
-                                        <TableSelectRow {...getSelectionProps({ row })} />
-                                        {row.cells.map((cell) => (
-                                            <TableCell key={cell.id}>{cell.value}</TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                );
-            }}
+                    </>
+                )
+            }
+            }
         </DataTable>
     );
 }

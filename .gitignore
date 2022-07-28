@@ -26,6 +26,9 @@ dist/
 target/
 dist/
 
+#local history
+.history/
+
 # JetBrains IDE
 .idea/
 

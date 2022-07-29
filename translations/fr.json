@@ -1,12 +1,16 @@
 { 
   "messageErrorGivenName": "Le prénom ne peut pas être vide",
-  "messageErrorGender": "Le patient doit avoir un genre",
+  "messageErrorGender": "L'utilsateur doit avoir un genre",
   "messageErrorFamilyName": "Le nom ne peut pas être vide",
   "messageErrorPhoneNumber": "Le format du téléphone est incorrect",
   "messageErrorProfil":"L'utilisateur doit avoir un profil",
   "messageErrorUsername": "Le nom d'utilisateur ne peut pas être vide",
+  "fieldset1Label":"Info personne",
+  "fieldset2Label":"Gestion d'accès",
   "maleLabel": "Masculin",
   "femalLabel": "Feminin",
+  "LocaleLabel": "Langue",
+  "profilLabel": "Profil",
   "adminSystem": "Pannel d’administration système",
   "Username": "Nom d'utilisateur",
   "PreviousPage": "Page precedent",
@@ -16,5 +20,8 @@
   "gender": "Sexe",
   "Search": "Rechercher...",
   "fullName":"Nom complet",
-  "phone":"telephone"
+  "phone":"telephone",
+  "french": "Français",
+  "english": "Anglais",
+  "creole":"Créole"
 }

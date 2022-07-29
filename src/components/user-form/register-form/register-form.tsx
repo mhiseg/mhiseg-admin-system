@@ -44,7 +44,6 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
       .test('search exist user', (value, { createError }) => {
         return validateIdentifier(value, createError);
       }),
-    // userProperties: Yup.object(),
     person: Yup.object({
       givenName: Yup.string().required('messageErrorGivenName'),
       familyName: Yup.string().required('messageErrorFamilyName'),
@@ -69,13 +68,13 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
         setSubmitting(false);
       }}>
       {(formik) => {
-        const { handleSubmit, isValid, dirty } = formik;
+        const { handleSubmit, isValid, dirty, resetForm } = formik;
         return (
           <Form name="form" className={styles.cardForm} onSubmit={handleSubmit}>
-
-            <Icon className={styles.closeButton} icon="carbon:close-outline" onClick={() => colSize([12, 0])}/>
-            {/* <p id={styles.closeButton} onClick={() => colSize([12, 0])}>x</p> */}
-
+            <Icon type="reset" className={styles.closeButton} icon="carbon:close-outline" onClick={() => {
+              resetForm();
+              colSize([12, 0])
+            }} />
             <Grid fullWidth={true} className={styles.p0}>
               <div id={styles.person}>
                 <h5>Info personne</h5>
@@ -97,7 +96,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
                 </Row>
               </div>
               <div id={styles.access}>
-                <h5>Droit d'accès</h5>
+                <h5>{t("fieldset2Label","Gestion d'accès")}</h5>
 
                 <Row>
                   <Column className={styles.firstColSyle} lg={6}>
@@ -112,13 +111,13 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
                     {FieldForm('retired')}
                   </Column>
                   <Column className={styles.secondColStyle} lg={6}>
-                    {FieldForm('roles')}
+                    {FieldForm('profil')}
                   </Column>
                 </Row>
 
                 <Row>
-                  <Column className={styles.firstColSyle} lg={6}>
-                    {FieldForm('profil')}
+                  <Column className={styles.firstColSyle} lg={12}>
+                    {FieldForm('roles')}
                   </Column>
                 </Row>
               </div>
@@ -134,7 +133,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
                         type="reset"
                         size="sm"
                         isSelected={true}
-                      >
+                        onClick={() => colSize([12, 0])}                      >
 
                         {t("cancelButton", "Annuler")}
                       </Button>

@@ -1,13 +1,16 @@
 {
   "messageErrorGivenName": "Given name can't be null",
   "messageErrorFamilyName": "Family name can't be null",
-  "messageErrorGender": "The patient must have a gender",
+  "messageErrorGender": "The user must have a gender",
   "messageErrorPhoneNumber": "The phone number format is invalid",
   "messageErrorProfil":"The user must have a profil",
   "messageErrorUsername": "Username can't be null",
+  "fieldset1Label":"Person info",
+  "fieldset2Label":"Access management",
   "maleLabel": "Male",
   "femalLabel": "Female",
   "genderLabel": "Gender",
+  "profilLabel": "Profil",
   "adminSystem": "System administration panel",
   "Username": "Username",
   "gender": "Gender",
@@ -17,6 +20,8 @@
   "PreviousPage": "Previous Page",
   "NextPage": "Next Page",
   "fullName":"Full name",
-  "phone":"phone"
-  
+  "phone":"phone",
+  "french": "French",
+  "english": "English",
+  "creole":"Creole"
 }

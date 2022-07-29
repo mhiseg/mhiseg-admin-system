@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./unvalided-death.scss";
+import styles from "./userList.scss";
 import { useTranslation } from "react-i18next";
 import { SearchInput, Toolbar_Button } from "./toolbar_search_container";
 import { useState, useEffect } from "react";
@@ -71,10 +71,18 @@ const UserList: React.FC<DeathListProps> = ({ headers }) => {
                 const batchActionProps = getBatchActionProps();
 
                 return (
+                    <>
                     <TableContainer
                         {...getTableContainerProps()}>
-                        <TableToolbar {...getToolbarProps()}>
-                            <TableBatchActions {...batchActionProps}>
+                        <div className={styles.TableContainer}>
+                            <div className={"bx--toolbar-content"}>
+                                <SearchInput
+                                    className={styles['search-1']}
+                                    onChange={(e) => ((e.currentTarget.value.trim().length) > 0) && onInputChange(e)} />
+                            </div>
+                        </div>
+                        <TableToolbar className={styles.TableToolbar} {...getToolbarProps()}>
+                            <TableBatchActions {...batchActionProps} >
                                 <TableBatchAction
                                     tabIndex={batchActionProps.shouldShowBatchActions ? 0 : -1}
                                     // renderIcon={TrashCan}
@@ -95,13 +103,6 @@ const UserList: React.FC<DeathListProps> = ({ headers }) => {
                                 </TableBatchAction>
                             </TableBatchActions>
                         </TableToolbar>
-                        <div className={styles.TableContainer}>
-                            <div className={"bx--toolbar-content"}>
-                                <SearchInput
-                                    className={styles['search-1']}
-                                    onChange={(e) => ((e.currentTarget.value.trim().length) > 0) && onInputChange(e)} />
-                            </div>
-                        </div>
                         <Table {...getTableProps()}>
                             <TableHead>
                                 <TableRow>
@@ -125,6 +126,22 @@ const UserList: React.FC<DeathListProps> = ({ headers }) => {
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    <div>
+                    <div>
+                        <Pagination
+                            backwardText={t("PreviousPage")}
+                            forwardText={t("NextPage")}
+                            itemsPerPageText={t("Show")}
+                            onChange={onPaginationChange}
+                            page={page}
+                            pageSize={pageSize}
+                            pageSizes={paginationPageSizes}
+                            size="sm"
+                            totalItems={totalpageSize}
+                        />
+                    </div>
+                </div>
+                </>
                 );
             }}
         </DataTable>

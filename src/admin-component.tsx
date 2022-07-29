@@ -16,12 +16,12 @@ const AdminSys: React.FC = () => {
             <h4 className={styles['title-page']}>{t("adminSystem")}</h4>
             <div className={styles['mhiseg-main-content']}>
                 <Row>
-                <Column>
-               <MhisegadminSystem />
-               </Column>
-               <Column>
-                <UserRegisterForm user={undefined} />
-                </Column>
+                    <Column className={styles['mhiseg-main-column']}>
+                        <MhisegadminSystem />
+                    </Column >
+                    <Column className={styles['mhiseg-main-column']}>
+                        <UserRegisterForm user={undefined} />
+                    </Column>
                 </Row>
             </div>
         </>

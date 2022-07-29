@@ -1,4 +1,12 @@
-{
+{ 
+  "messageErrorGivenName": "Le prénom ne peut pas être vide",
+  "messageErrorGender": "Le patient doit avoir un genre",
+  "messageErrorFamilyName": "Le nom ne peut pas être vide",
+  "messageErrorPhoneNumber": "Le format du téléphone est incorrect",
+  "messageErrorProfil":"L'utilisateur doit avoir un profil",
+  "messageErrorUsername": "Le nom d'utilisateur ne peut pas être vide",
+  "maleLabel": "Masculin",
+  "femalLabel": "Feminin",
   "adminSystem": "Pannel d’administration système",
   "Username": "Nom d'utilisateur",
   "PreviousPage": "Page precedent",

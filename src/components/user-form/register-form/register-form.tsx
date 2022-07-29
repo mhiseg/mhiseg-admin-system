@@ -1,5 +1,5 @@
 import { Button, Column, Grid, Row } from "carbon-components-react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "../CurrentUserContext";
 import { validateIdentifier } from "../validation/validation-utils";
@@ -9,12 +9,15 @@ import { Form, Formik } from "formik";
 import FieldForm from "../field/field.component";
 import { uuidPhoneNumber } from "../constante";
 import { User } from "../administration-types";
-interface  UserRegisterFormuser {
+import { UserRegistrationContext } from "../../../user-context";
+import { Icon } from "@iconify/react";
+interface UserRegisterFormuser {
   user: User;
 }
 
-const UserRegisterForm: React.FC<UserRegisterFormuser> = ({user}) => {
+const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
   const { t } = useTranslation();
+  const { colSize } = useContext(UserRegistrationContext);
 
   // const user: LoggedInUser = useCurrentUser();
 
@@ -23,7 +26,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({user}) => {
     username: user?.username || "",
     userProperties: user?.userProperties || null,
     person: {
-      givenName: user?.person?.names[0]?.givenName  || "" ,
+      givenName: user?.person?.names[0]?.givenName || "",
       familyName: user?.person?.names[0]?.familyName || "",
     },
     retired: user?.retired,
@@ -47,8 +50,8 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({user}) => {
       familyName: Yup.string().required('messageErrorFamilyName'),
     }),
     phone: Yup.string().min(9, ("messageErrorPhoneNumber")),
-    gender: Yup.string().required("messageErrorPhoneNumber"),
-    profil: Yup.string().required("messageErrorPhoneNumber"),
+    gender: Yup.string().required("messageErrorGender"),
+    profil: Yup.string().required("messageErrorProfil"),
     roles: Yup.array(),
     locale: Yup.string(),
     retired: Yup.boolean(),
@@ -66,48 +69,59 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({user}) => {
         setSubmitting(false);
       }}>
       {(formik) => {
-        const { values, handleSubmit, errors, touched, isValid, dirty } = formik;
+        const { handleSubmit, isValid, dirty } = formik;
         return (
           <Form name="form" className={styles.cardForm} onSubmit={handleSubmit}>
+
+            <Icon className={styles.closeButton} icon="carbon:close-outline" onClick={() => colSize([12, 0])}/>
+            {/* <p id={styles.closeButton} onClick={() => colSize([12, 0])}>x</p> */}
+
             <Grid fullWidth={true} className={styles.p0}>
-               <Row>
-                <Column className={styles.firstColSyle} lg={6}>
-                  {FieldForm('person.givenName')}
-                </Column>
-                <Column className={styles.secondColStyle} lg={6}>
-                  {FieldForm('person.familyName')}
-                </Column>
-              </Row>
-              <Row>
-                <Column className={styles.firstColSyle} lg={6}>
-                  {FieldForm('gender')}
-                </Column>
-                <Column className={styles.secondColStyle} lg={6}>
-                  {FieldForm('phone')}
-                </Column>
-              </Row> 
-              <Row>
-                <Column className={styles.firstColSyle} lg={6}>
-                  {FieldForm('username')}
-                </Column>
-                <Column className={styles.secondColStyle} lg={6}>
-                  {FieldForm('locale')}
-                </Column> 
-              </Row>
-               <Row>
-                <Column className={styles.firstColSyle} lg={6}>
-                  {FieldForm('retired')}
-                </Column>
-                <Column className={styles.secondColStyle} lg={6}>
-                  {FieldForm('roles')}
-                </Column>
-              </Row>
-               
-              <Row>
-                <Column className={styles.firstColSyle} lg={6}>
-                  {FieldForm('profil')}
-                </Column>
-              </Row> 
+              <div id={styles.person}>
+                <h5>Info personne</h5>
+                <Row>
+                  <Column className={styles.firstColSyle} lg={6}>
+                    {FieldForm('person.givenName')}
+                  </Column>
+                  <Column className={styles.secondColStyle} lg={6}>
+                    {FieldForm('person.familyName')}
+                  </Column>
+                </Row>
+                <Row>
+                  <Column className={styles.firstColSyle} lg={6}>
+                    {FieldForm('gender')}
+                  </Column>
+                  <Column className={styles.secondColStyle} lg={6}>
+                    {FieldForm('phone')}
+                  </Column>
+                </Row>
+              </div>
+              <div id={styles.access}>
+                <h5>Droit d'accès</h5>
+
+                <Row>
+                  <Column className={styles.firstColSyle} lg={6}>
+                    {FieldForm('username')}
+                  </Column>
+                  <Column className={styles.secondColStyle} lg={6}>
+                    {FieldForm('locale')}
+                  </Column>
+                </Row>
+                <Row>
+                  <Column className={styles.firstColSyle} lg={6}>
+                    {FieldForm('retired')}
+                  </Column>
+                  <Column className={styles.secondColStyle} lg={6}>
+                    {FieldForm('roles')}
+                  </Column>
+                </Row>
+
+                <Row>
+                  <Column className={styles.firstColSyle} lg={6}>
+                    {FieldForm('profil')}
+                  </Column>
+                </Row>
+              </div>
             </Grid>
             <Row>
               <Column>

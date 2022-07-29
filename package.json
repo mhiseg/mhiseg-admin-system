@@ -48,7 +48,8 @@
     "lodash-es": "^4.17.15",
     "formik": "^2.2.9",
     "yup": "^0.32.11",
-    "@iconify/react": "^3.2.1"
+    "@iconify/react": "^3.2.1",
+    "carbon-icons": "7.x"
   },
   "peerDependencies": {
     "@openmrs/esm-framework": "^3.14.0-pre",

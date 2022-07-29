@@ -44,9 +44,19 @@
     border-radius: 5px;
     padding: 20px;
 
-    // &:hover{
-        
-    // }
+}
+
+.closeButton{
+    position: absolute;
+    color: gray;
+    top: 25px;
+    right: 25px;
+    width: 18px;
+    height: 18px;
+    
+    &:hover{
+        color: red;
+    }
 }
 
 .flexEnd {
@@ -76,7 +86,7 @@
     padding-left: 0;
 }
 
-.fieldStyle{
+.fieldStyle {
     padding-left: 0;
     margin-top: 20x;
 }
@@ -90,15 +100,15 @@
     padding: 0;
 }
 
-.mt{
+.mt {
     margin-top: 15px;
 }
 
-p{
+p {
     color: gray;
 }
 
-.ml{
+.ml {
     margin-left: 16px;
 }
 
@@ -106,13 +116,37 @@ p{
     margin-top: $spacing-10;
 }
 
-.columnMaxSize{
-    margin:0;
-    width:95%;
+.columnMaxSize {
+    margin: 0;
+    width: 95%;
 }
 
-.buttonPosition{
+.buttonPosition {
     position: absolute;
     right: 37px;
     margin-top: 21px;
+}
+
+#person {
+    padding: 20px;
+    border: 0.5px solid rgb(209, 209, 209);
+    border-radius: 5px;
+    padding-bottom: 40px;
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
+
+#access {
+    padding: 20px;
+    border: 0.5px solid rgb(209, 209, 209);
+    border-radius: 5px;
+    padding-bottom: 40px;
+    margin-top: 10px;
+}
+
+h5{
+    color: rgb(105, 105, 105);
+    background-color: white;
+    margin-top: -31px;
+    width: 115px;
 }

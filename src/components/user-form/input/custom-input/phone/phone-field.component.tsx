@@ -21,6 +21,8 @@ export const PhoneInput: React.FC<InputProps> = (props) => {
   const [field, meta, helpers] = useField(props.name);
   const { value } = meta;
   const { setValue } = helpers;
+  const { t } = useTranslation();
+
 
   const handleChange = (e, value) => {
     e.target.value = formatPhoneNumber(value.substring(6));
@@ -36,7 +38,7 @@ export const PhoneInput: React.FC<InputProps> = (props) => {
         {...props}
         {...field}
         invalid={!!(meta.touched && meta.error)}
-        invalidText={meta.error}
+        invalidText={t(meta.error)}
         onChange={(e) => {
           const { value } = e.target;
           handleChange(e, value)

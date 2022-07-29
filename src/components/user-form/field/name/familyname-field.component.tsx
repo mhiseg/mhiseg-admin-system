@@ -1,20 +1,26 @@
 import React from 'react';
-import { Input } from '../input/input.component';
+import { useTranslation } from 'react-i18next';
+import { Input } from '../../input/basic-input/input/input.component';
+import styles from '../field.scss';
 
-interface FamilyNameFieldProps {
-  name: string;
-  className?: string;
-  required?: boolean;
+interface FamilyNameFieldProps{
+  name: string,
+  className?: string
+  required?: boolean
 }
-export const FamilyNameField: React.FC<FamilyNameFieldProps> = ({ name, className, required }) => {
-
-  return (
+export const FamilyNameField: React.FC<FamilyNameFieldProps> = ({name, className,required}) => {
+  const { t } = useTranslation();
+  let star = "";
+  required == true ? star =" *":star="";
+  return(
     <>
-       <Input
+      <Input
+        className={className}
         id={name}
-        name={name}
-        labelText={'familyName'}
-        light={false}
+        name={"person.familyName"}
+        labelText={t("familyNameLabelText", "Nom")+star}
+        light={true}
+        placeholder={t("familyNameLabelText", "Nom")+star}
         hideLabel={true}
       />
     </>

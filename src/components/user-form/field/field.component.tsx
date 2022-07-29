@@ -1,11 +1,16 @@
 import React from 'react';
+import { Unknow } from '../input/custom-input/unknow-format-component';
 import { EmailField } from './email/email-field.component';
-// import styles from './field/field.scss';
-import { Unknow } from './input/unknow-format-component';
+import { GenderField } from './gender/gender';
+import { LocaleField } from './locale/locale';
+import { ModuleField } from './modules-access/module-access-overlay';
 import { FamilyNameField } from './name/familyname-field.component';
 import { GivenNameField } from './name/givenname-field.component';
 import { PasswordConfirmField } from './password/password-confirm-field.component';
 import { PasswordField } from './password/password-field.component';
+import { PhoneField } from './phone/phone-field.component';
+import { ProfilField } from './profil/profil';
+import { StatusField } from './status/status';
 import { UsernameField } from './username/username-field.component';
 
 const FieldForm = (name: string) => {
@@ -23,6 +28,17 @@ const FieldForm = (name: string) => {
     case 'passwordConfirm':
       return <PasswordConfirmField name={name} />;
     case 'gender':
+      return <GenderField />;
+    case 'phone':
+      return <PhoneField name={name} />;
+    case 'retired':
+      return <StatusField />;
+    case 'locale':
+      return <LocaleField />;
+    case 'roles':
+      return <ModuleField />;
+    case 'profil':
+      return <ProfilField />;
     default:
       return <Unknow />;
   }

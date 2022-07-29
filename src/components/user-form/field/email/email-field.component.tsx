@@ -2,7 +2,7 @@ import { TextInput } from 'carbon-components-react';
 import { useField } from 'formik';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Input } from '../input/input.component';
+import { Input } from '../../input/basic-input/input/input.component';
 
 interface EmailFieldProps {
   name: string;

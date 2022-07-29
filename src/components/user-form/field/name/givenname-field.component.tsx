@@ -1,21 +1,29 @@
 import React from 'react';
-import { Input } from '../input/input.component';
+import { useTranslation } from 'react-i18next';
+import { Input } from '../../input/basic-input/input/input.component';
+import styles from '../field.scss';
 
-interface GivenNameFieldProps {
+
+interface GivenNameFieldProps{
   name: string;
   className?: string;
+  required?: boolean;
 }
 
-export const GivenNameField: React.FC<GivenNameFieldProps> = ({ name }) => {
-
-  return (
+export const GivenNameField:React.FC<GivenNameFieldProps> = ({name, className,required}) => {
+  const { t } = useTranslation();
+  let star = "";
+  required == true ? star =" *":star="";
+  return(
     <>
-     <Input
+      <Input
+        className={className}
         id={name}
-        name={name}
-        labelText={'givenName'}
+        name="person.givenName"
+        labelText={t("givenNameLabelText","Prénom")+star}
+        light={true}
+        placeholder={t("givenNameLabelText","Prénom")+star}
         hideLabel={true}
-        light={false}
       />
     </>
   );

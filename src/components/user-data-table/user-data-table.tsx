@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./user-data-table.scss";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
@@ -13,6 +13,7 @@ import { Settings32, UserAccess24, Queued32 } from '@carbon/icons-react';
 import { SearchInput, Toolbar_Button } from "../toolbar_search_container/toolbar_search_container";
 import { getSizeUsers, getAllUserPages, getUsers } from "../../resource/user.resource";
 import MultiSelectField from "./multi-select-component";
+import { UserRegistrationContext } from "../../user-context";
 
 export interface DeathListProps {
     headers: { key: string; header: string; }[]
@@ -20,6 +21,7 @@ export interface DeathListProps {
 const UserDataTable: React.FC<DeathListProps> = ({ headers }) => {
 
     const [rowsTable, setRows] = useState([]);
+    const { colSize } = useContext(UserRegistrationContext);
     const [totalpageSize, setTotalPageSize] = useState(1);
     const [[pageSize, page], setPaginationPageSize] = useState([5, 1]);
     const paginationPageSizes = [1, 5, 10, 20, 30, 40];
@@ -152,7 +154,10 @@ const UserDataTable: React.FC<DeathListProps> = ({ headers }) => {
                                 </TableHead>
                                 <TableBody>
                                     {rows.map((row, i) => (
-                                        <TableRow id={row.cells[6].value} key={i} {...getRowProps({ row })}>
+                                        <TableRow id={row.cells[6].value} key={i} {...getRowProps({ row })} onClick={() => {
+                                            colSize([7, 5])
+                                            
+                                          }}>
                                             <TableSelectRow {...getSelectionProps({ row })} />
                                             {row.cells.map((cell) => (
                                                 (cell.id.split(":")[1] !== "uuid") &&

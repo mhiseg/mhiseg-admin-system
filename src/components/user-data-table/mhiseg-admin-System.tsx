@@ -45,4 +45,4 @@ const MhisegadminSystem: React.FC = () => {
   );
 };
 
-export default MhisegadminSystem;``
+export default MhisegadminSystem;

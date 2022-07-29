@@ -20,7 +20,9 @@ export function geUserByEmailOrUsername(identifier: string) {
 }
 
 async function getPerson(uuid: string) {
-  return openmrsFetch(`${BASE_WS_API_URL}person/${uuid}?v=full`);
+  if (uuid)
+    return openmrsFetch(`${BASE_WS_API_URL}person/${uuid}?v=full`);
+  return undefined;
 }
 
 export function getAllRoles() {
@@ -35,16 +37,34 @@ export function disabledUser(uuid: string) {
 }
 
 export function formatRole(roles) {
-  return roles.map(role => ({
-    uuid: role.uuid,
-    display: role.display,
-  }));
+  if (roles?.length > 0)
+    return roles.map(role => ({
+      uuid: role.uuid,
+      display: role.display,
+    }));
 }
 
 export async function formatUser(user: User) {
-  const person = await (await getPerson(user.person.uuid)).data;
-  console.log('formatUser:', user);
+
+  const person = await (await getPerson(user?.person?.uuid))?.data || undefined;
   return {
+    // uuid: user?.uuid,
+    // username: user?.username,
+    // userProperties:  undefined,// user?.userProperties === undefined ? { defaultLocale: "", forcePassword: "false" } : user?.userProperties,
+    // person: {
+    //   givenName: person?.names[0]?.givenName,
+    //   familyName: person?.names[0]?.familyName,
+    //   gender: user?.person?.gender,
+    //   phone: person?.attributes.find((attribute) => attribute.attributeType.uuid == uuidPhoneNumber)?.value || "",
+    // },
+    // retired: user?.retired || false,
+    // roles: formatRole(user?.roles),
+    // profil: user?.systemId?.split("-")[0],
+    // systemId: user?.systemId
+
+
+
+
     uuid: user?.uuid,
     username: user?.username,
     userProperties: user?.userProperties === undefined ? { defaultLocale: "", forcePassword: undefined } : user?.userProperties,
@@ -68,7 +88,7 @@ export function forcePassword(abortController: AbortController, uuid: string, us
       userProperties: {
         forcePassword: "true"
       },
-      password: username+"A123",
+      password: username + "A123",
     },
     headers: { 'Content-Type': 'application/json' },
     signal: abortController.signal
@@ -76,13 +96,13 @@ export function forcePassword(abortController: AbortController, uuid: string, us
 }
 
 export function resetPassword(abortController: AbortController, user: User, uuid?: string) {
-    return openmrsFetch(`${BASE_WS_API_URL}password/${uuid}`, {
-      method: 'POST',
-      body: user,
-      headers: { 'Content-Type': 'application/json' },
-      signal: abortController.signal
-    });
-  }
+  return openmrsFetch(`${BASE_WS_API_URL}password/${uuid}`, {
+    method: 'POST',
+    body: user,
+    headers: { 'Content-Type': 'application/json' },
+    signal: abortController.signal
+  });
+}
 
 export function saveUser(abortController: AbortController, user: User, uuid?: string) {
   return openmrsFetch(`${BASE_WS_API_URL}user/${uuid ? uuid : ""}`, {

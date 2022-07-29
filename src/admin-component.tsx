@@ -12,7 +12,6 @@ import { UserRegistrationContext } from "./user-context";
 const AdminSys: React.FC = () => {
     const { t } = useTranslation();
     const [lgValue,setLgValue]=useState([7,5]);
-   // console.log(lgValue,"***********",setLgValue([12,0]));
 
     return (
         <>
@@ -21,11 +20,11 @@ const AdminSys: React.FC = () => {
                 <UserRegistrationContext.Provider value={{ colSize:setLgValue}}>
                     <Grid fullWidth={true} className={styles.p0}>
                         <Row>
-                            <Column lg={lgValue[0]} className={lgValue[0] < 12 ? styles.pr0 : ''}>
+                            <Column sm={lgValue[1]} lg={lgValue[0]} className={lgValue[0] < 12 ? styles.pr0 : ''}>
                                 <MhisegadminSystem />
 
                             </Column>
-                            <Column lg={lgValue[1]}>
+                            <Column sm={lgValue[0]} lg={lgValue[1]}>
                                 <UserRegisterForm user={undefined} />
                             </Column>
                         </Row>

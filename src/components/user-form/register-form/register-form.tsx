@@ -24,6 +24,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
   const { colSize } = useContext(UserRegistrationContext);
 
 
+
   const [initialV, setInitialV] = useState({
     uuid: user?.uuid,
     username: user?.username,
@@ -33,25 +34,12 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
       familyName: user?.person?.names[0]?.familyName,
       gender: user?.person?.gender,
       phone: ""
-
     },
     retired: user?.retired || false,
     roles: user?.roles,
     profil: user?.systemId?.split("-")[0],
     systemId: user?.systemId
   });
-
-  // useEffect(() => {
-  //   const userRoles = geUserByEmailOrUsername("meme").then(user => {
-  //     formatUser(user.data.results[0]).then(result => setInitialV(result))
-  //     console.log("UserRoles+++++++++++++++++++++", initialV);
-  //   });
-
-  //   return () => {
-  //     userRoles;
-
-  //   };
-  // }, []);
 
   const userSchema = Yup.object().shape({
     username: Yup.string()
@@ -67,9 +55,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
     }),
     userProperties: Yup.object({
       defaultLocale: Yup.string(),
-      forcePassword: Yup.string(),
     }),
-    gender: Yup.string().required("messageErrorGender"),
     profil: Yup.string().required("messageErrorProfil"),
     roles: Yup.array(),
     retired: Yup.boolean(),
@@ -133,13 +119,13 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
         save(values)
       }}>
       {(formik) => {
-        const { handleSubmit, isValid, dirty } = formik;
+        const { handleSubmit, isValid, dirty, values, resetForm } = formik;
         return (
           <Form name="form" className={styles.cardForm} onSubmit={handleSubmit}>
-
-            <Icon className={styles.closeButton} icon="carbon:close-outline" onClick={() => colSize([12, 0])} />
-            {/* <p id={styles.closeButton} onClick={() => colSize([12, 0])}>x</p> */}
-
+            <Icon type="reset" className={styles.closeButton} icon="carbon:close-outline" onClick={() => {
+              resetForm();
+              colSize([12, 0])
+            }} />
             <Grid fullWidth={true} className={styles.p0}>
               <div id={styles.person}>
                 <h5>Info personne</h5>
@@ -161,7 +147,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
                 </Row>
               </div>
               <div id={styles.access}>
-                <h5>Droit d'accès</h5>
+                <h5>{t("fieldset2Label", "Gestion d'accès")}</h5>
 
                 <Row>
                   <Column className={styles.firstColSyle} lg={6}>
@@ -176,15 +162,23 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
                     {FieldForm('retired')}
                   </Column>
                   <Column className={styles.secondColStyle} lg={6}>
-                    {FieldForm('roles')}
+                    {FieldForm('profil')}
                   </Column>
                 </Row>
 
                 <Row>
-                  <Column className={styles.firstColSyle} lg={6}>
-                    {FieldForm('profil')}
-                  </Column>
+                  {values.uuid &&
+                    <Column className={styles.firstColSyle} lg={12}>
+                      {FieldForm('roles')}
+                    </Column>
+                  }
+                  {!values.uuid &&
+                    <Column className={styles.firstColSyle} lg={12}>
+                      {FieldForm('roles')}
+                    </Column>
+                  }
                 </Row>
+
               </div>
             </Grid>
             <Row>
@@ -198,7 +192,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
                         type="reset"
                         size="sm"
                         isSelected={true}
-                      >
+                        onClick={() => colSize([12, 0])}                      >
 
                         {t("cancelButton", "Annuler")}
                       </Button>

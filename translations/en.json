@@ -5,9 +5,13 @@
   "firstName": "Firstname",
   "lastName": "Lastname",
   "Search": "Search...",
+  "profil": "Profile",
+  "statut"  : "Status",
   "PreviousPage": "Previous Page",
   "NextPage": "Next Page",
   "fullName":"Full name",
-  "phone":"phone"
-  
+  "phone":"Phone",
+  "enable":"Enable",
+  "disable":"Disable",
+  "reset":"Reset"
 }

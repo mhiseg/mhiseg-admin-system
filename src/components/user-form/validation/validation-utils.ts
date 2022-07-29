@@ -1,5 +1,5 @@
 import { useField } from 'formik';
-import { geUserByEmailOrUsername } from '../register-form/role.resource';
+import { geUserByEmailOrUsername } from '../../../resource/role.resource';
 
 export async function validateIdentifier(value, createError) {
   if (value?.length > 3) {

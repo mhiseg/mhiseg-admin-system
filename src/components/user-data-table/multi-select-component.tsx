@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useField } from 'formik';
 import { SelectItem, Select, MultiSelect } from 'carbon-components-react';
 import { useTranslation } from 'react-i18next';
-import { getAllRoles } from '../../../../../resource/role.resource';
+import { Plane16 } from '@carbon/icons-react';
+import { getAllRoles } from '../../resource/role.resource';
 
 interface InputSelectProps {
     name: string;
@@ -29,11 +30,12 @@ export const MultiSelectField: React.FC<InputSelectProps> = ({ name, label, plac
     return (
         <div >
             <MultiSelect.Filterable
+                light={true} {...field}
                 initialSelectedItems={meta.value}
                 placeholder={placeholder}
                 label={label}
                 hideLabel={true}
-                id={name} 
+                id={name}
                 titleText="Multiselect title"
                 items={roles}
                 itemToString={(role) => (role ? role.display : '')}

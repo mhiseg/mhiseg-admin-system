@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import styles from "./toolbar_search_container.scss";
 import IconPlus from "@carbon/icons-react/es/add/24";
 import SearchIcon from "@carbon/icons-react/es/search/20";
+import { UserFollow32 } from "@carbon/icons-react"
 import { useRef } from "react";
 import { Icon } from "@iconify/react";
 import { useTranslation } from "react-i18next";
+import { Button } from "carbon-components-react";
 
 
 export function SearchInput({ onChange, className }) {
@@ -61,9 +63,14 @@ export function SearchInput({ onChange, className }) {
 
 }
 
-export function Toolbar_Button({ onClickChange, label }) {
+export function Toolbar_Button({ onClickChange }) {
     return <>
-        <button onClick={onClickChange} className={styles.Button}> <i><IconPlus className={styles.buttonIcon} /> </i><i>{label}</i></button>
+        <Button
+            hasIconOnly
+            renderIcon={UserFollow32}
+            onClick={onClickChange}
+            className={styles.Button}
+        />
     </>
 
 }

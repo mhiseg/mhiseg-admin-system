@@ -6,7 +6,12 @@
   "firstName": "Nom",
   "lastName": "Prenom",
   "gender": "Sexe",
+  "statut"  : "Statut",
+  "profil": "profil",
   "Search": "Rechercher...",
   "fullName":"Nom complet",
-  "phone":"telephone"
+  "phone":"Telephone",
+  "enable":"Activer",
+  "disable":"Desactiver",
+  "reset":"Réinitialiser"
 }

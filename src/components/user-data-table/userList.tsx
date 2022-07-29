@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./unvalided-death.scss";
+import styles from "./userList.scss";
 import { useTranslation } from "react-i18next";
 import { SearchInput, Toolbar_Button } from "./toolbar_search_container";
 import { useState, useEffect } from "react";

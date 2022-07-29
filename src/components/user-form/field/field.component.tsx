@@ -16,9 +16,9 @@ import { UsernameField } from './username/username-field.component';
 
 const FieldForm = (name: string) => {
   switch (name) {
-    case 'person.givenName':
+    case 'givenName':
       return <GivenNameField name={name} />;
-    case 'person.familyName':
+    case 'familyName':
       return <FamilyNameField name={name} />;
     case 'username':
       return <UsernameField name={name} />;

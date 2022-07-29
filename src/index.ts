@@ -27,7 +27,7 @@ function setupOpenMRS() {
       {
         load: getAsyncLifecycle(() => import("./root.component"), options),
         route: "settings",
-        //privilege: "App: death.management"
+        privilege: "Application: Administers System"
       },
     ]
   };

@@ -12,8 +12,8 @@ export const GenderField: React.FC = () => {
     <>
       <SelectCustom
         className={styles.margin_field}
-        options={[{display:t("male"), value:"M"},{display:t("female"), value:"F"}]}
-        label={"gender"}
+        options={[{display:t("maleLabel","Masculin"), value:"M"},{display:t("femaleLabel","Feminin"), value:"F"}]}
+        label={t("gender","Sexe")}
         name="person.gender"
       />
     </>

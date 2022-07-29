@@ -1,5 +1,5 @@
 import { Button, Column, Grid, Row } from "carbon-components-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "../CurrentUserContext";
 import { validateIdentifier } from "../validation/validation-utils";
@@ -12,6 +12,8 @@ import { User } from "../administration-types";
 import { disabledUser, formatUser, geUserByEmailOrUsername, saveUser } from "./user-ressource";
 import { showToast } from "@openmrs/esm-framework";
 import { format } from "prettier";
+import { UserRegistrationContext } from "../../../user-context";
+import { Icon } from "@iconify/react";
 interface UserRegisterFormuser {
   user: User;
 }
@@ -19,6 +21,7 @@ interface UserRegisterFormuser {
 const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
   const { t } = useTranslation();
   const abortController = new AbortController();
+  const { colSize } = useContext(UserRegistrationContext);
 
 
   const [initialV, setInitialV] = useState({
@@ -38,14 +41,17 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
     systemId: user?.systemId
   });
 
-  useEffect(() => {
-    const userRoles = geUserByEmailOrUsername("meme").then(user =>
-      formatUser(user.data.results[0]).then(result => setInitialV(result)));
-    return () => {
-      userRoles;
+  // useEffect(() => {
+  //   const userRoles = geUserByEmailOrUsername("meme").then(user => {
+  //     formatUser(user.data.results[0]).then(result => setInitialV(result))
+  //     console.log("UserRoles+++++++++++++++++++++", initialV);
+  //   });
 
-    };
-  }, []);
+  //   return () => {
+  //     userRoles;
+
+  //   };
+  // }, []);
 
   const userSchema = Yup.object().shape({
     username: Yup.string()
@@ -63,7 +69,8 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
       defaultLocale: Yup.string(),
       forcePassword: Yup.string(),
     }),
-    profil: Yup.string().required("messageErrorPhoneNumber"),
+    gender: Yup.string().required("messageErrorGender"),
+    profil: Yup.string().required("messageErrorProfil"),
     roles: Yup.array(),
     retired: Yup.boolean(),
   });
@@ -126,57 +133,59 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
         save(values)
       }}>
       {(formik) => {
-        const { values, handleSubmit, errors, touched, isValid, dirty } = formik;
+        const { handleSubmit, isValid, dirty } = formik;
         return (
           <Form name="form" className={styles.cardForm} onSubmit={handleSubmit}>
+
+            <Icon className={styles.closeButton} icon="carbon:close-outline" onClick={() => colSize([12, 0])} />
+            {/* <p id={styles.closeButton} onClick={() => colSize([12, 0])}>x</p> */}
+
             <Grid fullWidth={true} className={styles.p0}>
-              <Row>
-                <Column className={styles.firstColSyle} lg={6}>
-                  {FieldForm('person.givenName')}
-                </Column>
-                <Column className={styles.secondColStyle} lg={6}>
-                  {FieldForm('person.familyName')}
-                </Column>
-              </Row>
-              <Row>
-                <Column className={styles.firstColSyle} lg={6}>
-                  {FieldForm('gender')}
-                </Column>
-                <Column className={styles.secondColStyle} lg={6}>
-                  {FieldForm('phone')}
-                </Column>
-              </Row>
-              <Row>
-                <Column className={styles.firstColSyle} lg={6}>
-                  {FieldForm('username')}
-                </Column>
-                <Column className={styles.secondColStyle} lg={6}>
-                  {FieldForm('locale')}
-                </Column>
-              </Row>
-              <Row>
-                <Column className={styles.firstColSyle} lg={6}>
-                  {FieldForm('profil')}
-                </Column>
-                <Column className={styles.secondColStyle} lg={6}>
-                  {FieldForm('forcePassword')}
-                </Column>
-                {!values.uuid &&
+              <div id={styles.person}>
+                <h5>Info personne</h5>
+                <Row>
+                  <Column className={styles.firstColSyle} lg={6}>
+                    {FieldForm('givenName')}
+                  </Column>
+                  <Column className={styles.secondColStyle} lg={6}>
+                    {FieldForm('familyName')}
+                  </Column>
+                </Row>
+                <Row>
+                  <Column className={styles.firstColSyle} lg={6}>
+                    {FieldForm('gender')}
+                  </Column>
+                  <Column className={styles.secondColStyle} lg={6}>
+                    {FieldForm('phone')}
+                  </Column>
+                </Row>
+              </div>
+              <div id={styles.access}>
+                <h5>Droit d'accès</h5>
+
+                <Row>
+                  <Column className={styles.firstColSyle} lg={6}>
+                    {FieldForm('username')}
+                  </Column>
+                  <Column className={styles.secondColStyle} lg={6}>
+                    {FieldForm('locale')}
+                  </Column>
+                </Row>
+                <Row>
+                  <Column className={styles.firstColSyle} lg={6}>
+                    {FieldForm('retired')}
+                  </Column>
                   <Column className={styles.secondColStyle} lg={6}>
                     {FieldForm('roles')}
                   </Column>
-                }
-              </Row>
-              {values.uuid && <Row>
-                <Column className={styles.firstColSyle} lg={6}>
-                  {FieldForm('retired')}
-                </Column>
+                </Row>
 
-                <Column className={styles.secondColStyle} lg={values.uuid ? 6 : 12}>
-                  {FieldForm('roles')}
-                </Column>
-              </Row>
-              }
+                <Row>
+                  <Column className={styles.firstColSyle} lg={6}>
+                    {FieldForm('profil')}
+                  </Column>
+                </Row>
+              </div>
             </Grid>
             <Row>
               <Column>

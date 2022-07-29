@@ -29,7 +29,7 @@ export function getAllRoles() {
 
 
 export function disabledUser(uuid: string) {
-  return openmrsFetch(`${BASE_WS_API_URL}user/${uuid}`,{
+  return openmrsFetch(`${BASE_WS_API_URL}user/${uuid}`, {
     "method": "DELETE",
   });
 }
@@ -44,7 +44,6 @@ export function formatRole(roles) {
 export async function formatUser(user: User) {
   const person = await (await getPerson(user.person.uuid)).data;
   console.log('formatUser:', user);
-
   return {
     uuid: user?.uuid,
     username: user?.username,
@@ -61,6 +60,30 @@ export async function formatUser(user: User) {
     systemId: user?.systemId
   }
 }
+
+export function forcePassword(abortController: AbortController, uuid: string, username: string, password: string) {
+  return openmrsFetch(`${BASE_WS_API_URL}user/${uuid ? uuid : ""}`, {
+    method: 'POST',
+    body: {
+      userProperties: {
+        forcePassword: "true"
+      },
+      password: username+"A123",
+    },
+    headers: { 'Content-Type': 'application/json' },
+    signal: abortController.signal
+  });
+}
+
+export function resetPassword(abortController: AbortController, user: User, uuid?: string) {
+    return openmrsFetch(`${BASE_WS_API_URL}password/${uuid}`, {
+      method: 'POST',
+      body: user,
+      headers: { 'Content-Type': 'application/json' },
+      signal: abortController.signal
+    });
+  }
+
 export function saveUser(abortController: AbortController, user: User, uuid?: string) {
   return openmrsFetch(`${BASE_WS_API_URL}user/${uuid ? uuid : ""}`, {
     method: 'POST',

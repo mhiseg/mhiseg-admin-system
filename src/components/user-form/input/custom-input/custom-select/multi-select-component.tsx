@@ -17,11 +17,12 @@ export const MultiSelectField: React.FC<InputSelectProps> = ({ name, label,optio
     const [field, meta, helpers] = useField(name);
     const { setValue } = helpers;
     const { t } = useTranslation();
+
     return (
         <div className={styles.margin_field}>
             <MultiSelect.Filterable
                 light={true} {...field}
-                initialSelectedItems={meta.value}
+                initialSelectedItems={meta.initialValue}
                 placeholder={placeholder}
                 label={label}
                 hideLabel={true}

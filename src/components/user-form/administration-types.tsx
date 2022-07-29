@@ -15,7 +15,7 @@ export interface User {
   password?: string;
   userProperties?: {
     defaultLocale?: string;
-    forcePassword?: boolean;
+    forcePassword?: string;
   };
   person: Person;
   privileges?: Array<Privilege>;

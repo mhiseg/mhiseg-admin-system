@@ -1,6 +1,7 @@
 import React from 'react';
 import { Unknow } from '../input/custom-input/unknow-format-component';
 import { EmailField } from './email/email-field.component';
+import { ForcePasswordField } from './force-change-password /force-change-password';
 import { GenderField } from './gender/gender';
 import { LocaleField } from './locale/locale';
 import { ModuleField } from './modules-access/module-access-overlay';
@@ -39,6 +40,8 @@ const FieldForm = (name: string) => {
       return <ModuleField />;
     case 'profil':
       return <ProfilField />;
+    case 'forcePassword':
+      return <ForcePasswordField />;
     default:
       return <Unknow />;
   }

@@ -24,17 +24,13 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
   const [initialV, setInitialV] = useState({
     uuid: user?.uuid,
     username: user?.username,
-    userProperties: user?.userProperties === undefined ? { defaultLocale: "" } : user?.userProperties,
+    userProperties: user?.userProperties === undefined ? { defaultLocale: "", forcePassword: "false" } : user?.userProperties,
     person: {
-      // names: [{
       givenName: user?.person?.names[0]?.givenName,
       familyName: user?.person?.names[0]?.familyName,
       gender: user?.person?.gender,
       phone: ""
-      ,
-      // attributes: [{
-      //   attributeType: uuidPhoneNumber, value: user?.person?.attributes.find((attribute) => attribute.attributeType.uuid == uuidPhoneNumber)?.value || "",
-      // }],
+
     },
     retired: user?.retired || false,
     roles: user?.roles,
@@ -43,16 +39,13 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
   });
 
   useEffect(() => {
-    // setInitialV
-    const userRoles = geUserByEmailOrUsername("marc").then(user =>
+    const userRoles = geUserByEmailOrUsername("meme").then(user =>
       formatUser(user.data.results[0]).then(result => setInitialV(result)));
     return () => {
       userRoles;
 
     };
   }, []);
-
-
 
   const userSchema = Yup.object().shape({
     username: Yup.string()
@@ -68,6 +61,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
     }),
     userProperties: Yup.object({
       defaultLocale: Yup.string(),
+      forcePassword: Yup.string(),
     }),
     profil: Yup.string().required("messageErrorPhoneNumber"),
     roles: Yup.array(),
@@ -75,12 +69,11 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
   });
 
   const save = (values) => {
-
-    const systemId = values.systemId  && values.systemId?.split("-")[0] == values.profil ? values.systemId : values.profil + "-" + new Date().getTime();
+    console.log("data saved", values);
+    const systemId = values.systemId && values.systemId?.split("-")[0] == values.profil ? values.systemId : values.profil + "-" + new Date().getTime();
     let user: User = {
       username: values.username,
       systemId: systemId,
-      password: values.username + "A123",
       person: {
         names: [{
           givenName: values.person.givenName,
@@ -91,8 +84,8 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
       roles: values.roles,
     }
     user.person.attributes = [];
-    if (values.phone) {
-      user.person.attributes.push({ attributeType: uuidPhoneNumber, value: values.phone, })
+    if (values.person.phone) {
+      user.person.attributes.push({ attributeType: uuidPhoneNumber, value: values.person.phone, })
     }
     if (values.userProperties.defaultLocale) {
       user.userProperties = values.userProperties;
@@ -100,9 +93,13 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
     if (values.retired == "false") {
       user.retired = false;
     }
+    if (!values.uuid) {
+      user.password = values.username + "A123"
+    }
+
+    console.log(user, 'To save changes');
 
     saveUser(abortController, user, values.uuid).then(async (user) => {
-      // try {
       if (values.retired == "true")
         await disabledUser(user.data.uuid)
       showToast({
@@ -110,8 +107,6 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
         kind: 'success',
         description: 'Patient save succesfully',
       })
-
-      // } catch (()=>showToast({ description: "Failed to save user"}))
     }
     ).catch(
       error => {
@@ -162,6 +157,9 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
               <Row>
                 <Column className={styles.firstColSyle} lg={6}>
                   {FieldForm('profil')}
+                </Column>
+                <Column className={styles.secondColStyle} lg={6}>
+                  {FieldForm('forcePassword')}
                 </Column>
                 {!values.uuid &&
                   <Column className={styles.secondColStyle} lg={6}>

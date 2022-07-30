@@ -22,28 +22,12 @@
 
 .Button {
   position: relative;
-  background-color: #3A4345;
-  color: white;
-  width: 12%;
-  font-style: normal;
-  height: 34px;
-  border-radius: 5px;
-  margin-right: 5px;
+  background-color:white;
+  color: rgb(0, 0, 0);
   font-family: 'Poppins';
-  justify-content: center;
-  font-style: normal;
-  font-size: 18px;
+  left: -5px;
 }
 
 .Button:hover {
-  background-color: #034E5E;
-}
-
-.Button i {
-  display: inline;
-}
-
-.buttonIcon {
-  margin-bottom: -4px;
-  
+  background-color: #707070;
 }

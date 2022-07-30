@@ -17,11 +17,16 @@
   "firstName": "Firstname",
   "lastName": "Lastname",
   "Search": "Search...",
+  "profil": "Profile",
+  "statut"  : "Status",
   "PreviousPage": "Previous Page",
   "NextPage": "Next Page",
   "fullName":"Full name",
   "phone":"phone",
   "french": "French",
   "english": "English",
-  "creole":"Creole"
+  "creole":"Creole",
+  "enable":"Enable",
+  "disable":"Disable",
+  "reset":"Reset"
 }

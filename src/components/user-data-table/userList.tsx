@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./userList.scss";
 import { useTranslation } from "react-i18next";
-import { SearchInput, Toolbar_Button } from "./toolbar_search_container";
 import { useState, useEffect } from "react";
 import { navigate, NavigateOptions } from "@openmrs/esm-framework";
 import {
@@ -11,7 +10,7 @@ import {
     TableHeader, TableBody, TableSelectRow, TableCell, Pagination
 } from "carbon-components-react";
 import { TrashCan32, Save32, Download32 } from '@carbon/icons-react';
-import { getAllUserPages, getSizeUsers, getUsers } from "./getUser";
+import { getSizeUsers, getAllUserPages, getUsers } from "../user-form/register-form/user-ressource";
 
 export interface DeathListProps {
     headers: { key: string; header: string; }[]
@@ -140,10 +139,7 @@ const UserList: React.FC<DeathListProps> = ({ headers }) => {
                                                 <TableSelectRow {...getSelectionProps({ row })} />
                                                 {row.cells.map((cell) => (
                                                     <>
-                                                        <TableCell key={cell.id} children={
-                                                            cell.id.split(':')[1] == 'deathDate' && (cell.value != undefined || '') ?
-                                                                new Intl.DateTimeFormat(t("local", 'fr-FR'), { dateStyle: 'full' }).format(new Date(cell.value)) : cell.value
-                                                        } />
+                                                        <TableCell key={cell.id} />
                                                     </>
                                                 ))}
                                             </TableRow>

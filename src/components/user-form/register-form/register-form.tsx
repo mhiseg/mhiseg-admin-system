@@ -1,7 +1,6 @@
 import { Button, Column, Grid, Row } from "carbon-components-react";
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useCurrentUser } from "../CurrentUserContext";
 import { validateIdentifier } from "../validation/validation-utils";
 import * as Yup from 'yup';
 import styles from "./form.scss"
@@ -16,30 +15,34 @@ import { UserRegistrationContext } from "../../../user-context";
 import { Icon } from "@iconify/react";
 interface UserRegisterFormuser {
   user: User;
+  username?: string;
 }
 
-const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
+const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, username }) => {
   const { t } = useTranslation();
   const abortController = new AbortController();
   const { colSize } = useContext(UserRegistrationContext);
 
 
+  const [initialV, setInitialV] = useState<any>();
 
-  const [initialV, setInitialV] = useState({
-    uuid: user?.uuid,
-    username: user?.username,
-    userProperties: user?.userProperties === undefined ? { defaultLocale: "", forcePassword: "false" } : user?.userProperties,
-    person: {
-      givenName: user?.person?.names[0]?.givenName,
-      familyName: user?.person?.names[0]?.familyName,
-      gender: user?.person?.gender,
-      phone: ""
-    },
-    retired: user?.retired || false,
-    roles: user?.roles,
-    profil: user?.systemId?.split("-")[0],
-    systemId: user?.systemId
-  });
+
+  useEffect(() => {
+    let user;
+    console.log('colSize', colSize);
+
+    if (username) {
+      user = geUserByEmailOrUsername(username)
+        .then(user => formatUser(user.data.results[0]).then(result => setInitialV(result)));
+    }
+    return () => {
+      user;
+    };
+  }, [username]);
+
+  useEffect(() => {
+    console.log('colSize', colSize);
+  }, [colSize]);
 
   const userSchema = Yup.object().shape({
     username: Yup.string()
@@ -167,12 +170,12 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user }) => {
                 </Row>
 
                 <Row>
-                  {values.uuid &&
+                  {values?.uuid &&
                     <Column className={styles.firstColSyle} lg={12}>
                       {FieldForm('roles')}
                     </Column>
                   }
-                  {!values.uuid &&
+                  {!values?.uuid &&
                     <Column className={styles.firstColSyle} lg={12}>
                       {FieldForm('roles')}
                     </Column>

@@ -46,6 +46,7 @@ export type Person = {
   age?: number;
 };
 
+
 export interface AttributeValue {
   attributeType: string | any;
   value: string;

@@ -4,29 +4,28 @@
 
 
 .TableContainer {
-  padding-top: 5px;
   margin-top: 50px;
   border: 1px solid #B1B1B1;
   border-width: 1.1px 1.1px 0px 1.1px;
-}
-
-
-.bx--batch-actions {
-  color: #B1B1B1;
-  background-color: none;
 }
 
 .TableRowHeader {
   border: 2px solid #B1B1B1;
   border-width: 0px 1.1px 1.1px 1.1px;
 }
-
+.TableBatchActions{
+  background-color: rgb(255, 255, 255);
+  color: #000;
+}
 .TableBody {
   max-height: 60vh;
   overflow: scroll;
 }
 
-
+#toolbar-content {
+  margin-top: 5px;
+  padding-bottom: 10px;
+}
 
 .search-1 {
   width: 30%;

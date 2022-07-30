@@ -18,10 +18,15 @@
   "firstName": "Nom",
   "lastName": "Prenom",
   "gender": "Sexe",
+  "statut"  : "Statut",
+  "profil": "profil",
   "Search": "Rechercher...",
   "fullName":"Nom complet",
   "phone":"telephone",
   "french": "Français",
   "english": "Anglais",
-  "creole":"Créole"
+  "creole":"Créole",
+  "enable":"Activer",
+  "disable":"Desactiver",
+  "reset":"Réinitialiser"
 }

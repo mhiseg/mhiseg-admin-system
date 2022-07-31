@@ -4,17 +4,15 @@ import { SelectItem, Select, MultiSelect } from 'carbon-components-react';
 import { useTranslation } from 'react-i18next';
 import { Plane16 } from '@carbon/icons-react';
 import { getAllRoles } from '../user-form/register-form/user-ressource';
+import styles from "./user-data-table.scss";
 
 interface InputSelectProps {
-    name: string;
     placeholder?: string;
     label?: string;
-   
+    onChange?: (value: any) => void;
 }
 
-export const MultiSelectField: React.FC<InputSelectProps> = ({ name, label, placeholder}) => {
-    const [field, meta, helpers] = useField(name);
-    const { setValue } = helpers;
+export const MultiSelectField: React.FC<InputSelectProps> = ({ label,onChange, placeholder}) => {
     const { t } = useTranslation();
     const [roles, setRoles] = useState([{ uuid: "", display: "" }]);
 
@@ -28,19 +26,18 @@ export const MultiSelectField: React.FC<InputSelectProps> = ({ name, label, plac
 
 
     return (
-        <div >
+        <div className={styles.roles}>
             <MultiSelect.Filterable
-                light={true} {...field}
-                initialSelectedItems={meta.value}
+                light={true}
                 placeholder={placeholder}
                 label={label}
                 hideLabel={true}
-                id={name}
+                id="role-select"
                 titleText="Multiselect title"
                 items={roles}
                 itemToString={(role) => (role ? role.display : '')}
                 selectionFeedback="top-after-reopen"
-               onChange={(e) => { setValue(e.selectedItems) }}
+               onChange={(e) =>onChange(e.selectedItems)}
             />
         </div>
     );

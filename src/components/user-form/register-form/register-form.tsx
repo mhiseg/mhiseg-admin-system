@@ -8,47 +8,45 @@ import { Form, Formik, validateYupSchema } from "formik";
 import FieldForm from "../field/field.component";
 import { uuidPhoneNumber } from "../constante";
 import { User } from "../administration-types";
-import { disabledUser, formatUser, geUserByEmailOrUsername, saveUser } from "./user-ressource";
+import { changeUserStatus, formatUser, getPerson, geUserByUuid, saveUser } from "./user-ressource";
 import { showToast } from "@openmrs/esm-framework";
-import { format } from "prettier";
 import { UserRegistrationContext } from "../../../user-context";
 import { Icon } from "@iconify/react";
 interface UserRegisterFormuser {
-  user: User;
-  username?: string;
+  user?: User;
+  uuid?: string;
+  refresh?: any;
 }
 
-const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, username }) => {
+const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh }) => {
   const { t } = useTranslation();
   const abortController = new AbortController();
-  const { colSize } = useContext(UserRegistrationContext);
-
-
-  const [initialV, setInitialV] = useState<any>();
+  const { colSize, setRefresh } = useContext(UserRegistrationContext);
+  const [initialV, setInitialV] = useState(formatUser(user));
 
 
   useEffect(() => {
     let user;
-    console.log('colSize', colSize);
-
-    if (username) {
-      user = geUserByEmailOrUsername(username)
-        .then(user => formatUser(user.data.results[0]).then(result => setInitialV(result)));
+    if (uuid) {
+      user = geUserByUuid(uuid)
+        .then(async user => {
+          const person = await getPerson(user.data.person.uuid);
+          setInitialV(formatUser(user.data, person.data))
+        })
+    } else {
+      setInitialV(formatUser(undefined))
     }
     return () => {
       user;
     };
-  }, [username]);
-
-  useEffect(() => {
-    console.log('colSize', colSize);
-  }, [colSize]);
+  }, [uuid, refresh]);
 
   const userSchema = Yup.object().shape({
     username: Yup.string()
       .required('messageErrorUsername')
-      .test('search exist user', (value, { createError }) => {
-        return validateIdentifier(value, createError);
+      .lowercase("minuscule")
+      .test('search exist user', (value, { createError, parent }) => {
+        return validateIdentifier(value, createError, parent);
       }),
     person: Yup.object().shape({
       givenName: Yup.string().required('messageErrorGivenName'),
@@ -59,14 +57,16 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, username }) =>
     userProperties: Yup.object({
       defaultLocale: Yup.string(),
     }),
-    profil: Yup.string().required("messageErrorProfil"),
-    roles: Yup.array(),
-    retired: Yup.boolean(),
+    status: Yup.string().required("messageErrorprofile"),
+    profile: Yup.string().required("messageErrorprofile"),
+    roles: Yup.array()
+      .of(Yup.object()
+      ).min(1)
+    ,
   });
 
-  const save = (values) => {
-    console.log("data saved", values);
-    const systemId = values.systemId && values.systemId?.split("-")[0] == values.profil ? values.systemId : values.profil + "-" + new Date().getTime();
+  const save = (values, resetForm) => {
+    const systemId = values.systemId && values.systemId?.split("-")[0] == values.profile ? values.systemId : values.profile + "-" + new Date().getTime();
     let user: User = {
       username: values.username,
       systemId: systemId,
@@ -86,23 +86,19 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, username }) =>
     if (values.userProperties.defaultLocale) {
       user.userProperties = values.userProperties;
     }
-    if (values.retired == "false") {
-      user.retired = false;
-    }
     if (!values.uuid) {
       user.password = values.username + "A123"
     }
-
-    console.log(user, 'To save changes');
-
+    console.log(user,'to save');
     saveUser(abortController, user, values.uuid).then(async (user) => {
-      if (values.retired == "true")
-        await disabledUser(user.data.uuid)
+        await changeUserStatus(abortController, user.data.uuid, values.status);
       showToast({
         title: t('successfullyAdded', 'Successfully added'),
         kind: 'success',
         description: 'Patient save succesfully',
       })
+      // resetForm();
+      setRefresh(user.data.systemId + new Date().getTime())
     }
     ).catch(
       error => {
@@ -117,9 +113,9 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, username }) =>
       enableReinitialize
       initialValues={initialV}
       validationSchema={userSchema}
-      onSubmit={async (values, { setSubmitting }) => {
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
         setSubmitting(false);
-        save(values)
+        save(values, resetForm)
       }}>
       {(formik) => {
         const { handleSubmit, isValid, dirty, values, resetForm } = formik;
@@ -151,7 +147,6 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, username }) =>
               </div>
               <div id={styles.access}>
                 <h5>{t("fieldset2Label", "Gestion d'accès")}</h5>
-
                 <Row>
                   <Column className={styles.firstColSyle} lg={6}>
                     {FieldForm('username')}
@@ -162,26 +157,17 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, username }) =>
                 </Row>
                 <Row>
                   <Column className={styles.firstColSyle} lg={6}>
-                    {FieldForm('retired')}
+                    {FieldForm('status')}
                   </Column>
                   <Column className={styles.secondColStyle} lg={6}>
-                    {FieldForm('profil')}
+                    {FieldForm('profile')}
                   </Column>
                 </Row>
-
                 <Row>
-                  {values?.uuid &&
-                    <Column className={styles.firstColSyle} lg={12}>
-                      {FieldForm('roles')}
-                    </Column>
-                  }
-                  {!values?.uuid &&
-                    <Column className={styles.firstColSyle} lg={12}>
-                      {FieldForm('roles')}
-                    </Column>
-                  }
+                  <Column className={styles.firstColSyle} lg={12}>
+                    {FieldForm('roles')}
+                  </Column>
                 </Row>
-
               </div>
             </Grid>
             <Row>

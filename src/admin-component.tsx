@@ -10,9 +10,9 @@ import { UserRegistrationContext } from "./user-context";
 
 const AdminSys: React.FC = () => {
     const { t } = useTranslation();
-    const [lgValue,setLgValue]=useState([12,0]);
-    const [ username, setUsername ] = useState();
-   
+    const [lgValue,setLgValue]=useState([7,5]);
+    const [ userUuid, setUserUuid ] = useState("");
+    const [refreshTable, setRefreshTable] = useState();
 
    
   
@@ -20,15 +20,15 @@ const AdminSys: React.FC = () => {
         <>
             <h4 className={styles['title-page']}>{t("adminSystem")}</h4>
             <div className={styles['mhiseg-main-content']}>
-                <UserRegistrationContext.Provider value={{ colSize:setLgValue, username: setUsername, }}>
+                <UserRegistrationContext.Provider value={{ colSize:setLgValue, userUuid: setUserUuid,setRefresh: setRefreshTable }}>
                     <Grid fullWidth={true} className={styles.p0}>
                         <Row>
                             <Column sm={lgValue[1]} lg={lgValue[0]} className={lgValue[0] < 12 ? styles.pr0 : ''}>
-                            <UserDataTable/>
+                            <UserDataTable refresh={refreshTable}/>
 
                             </Column>
                             <Column sm={lgValue[0]} lg={lgValue[1]}>
-                                <UserRegisterForm user={undefined} username={username} />
+                                <UserRegisterForm user={undefined} uuid={userUuid} refresh={refreshTable}/>
                             </Column>
                         </Row>
                     </Grid>

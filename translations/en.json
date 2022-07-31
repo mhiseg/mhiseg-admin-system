@@ -8,7 +8,7 @@
   "fieldset1Label":"Person info",
   "fieldset2Label":"Access management",
   "maleLabel": "Male",
-  "femalLabel": "Female",
+  "femaleLabel": "Female",
   "genderLabel": "Gender",
   "profilLabel": "Profil",
   "adminSystem": "System administration panel",
@@ -17,7 +17,6 @@
   "firstName": "Firstname",
   "lastName": "Lastname",
   "Search": "Search...",
-  "profil": "Profile",
   "statut"  : "Status",
   "PreviousPage": "Previous Page",
   "NextPage": "Next Page",
@@ -27,6 +26,11 @@
   "english": "English",
   "creole":"Creole",
   "enable":"Enable",
-  "disable":"Disable",
-  "reset":"Reset"
+  "disabled":"disabled",
+  "reset":"Reset",
+  "waiting":"Waiting",
+  "nurse": "Nurse",
+  "doctor":"Physician",
+  "admin":"Administrator",
+  "unknown":"Unknown"
 }

@@ -1,7 +1,11 @@
 import { openmrsFetch, refetchCurrentUser } from '@openmrs/esm-framework';
+import { VirtualAction } from 'rxjs';
 import { User } from '../administration-types';
 import { uuidPhoneNumber } from '../constante';
 const BASE_WS_API_URL = '/ws/rest/v1/';
+
+export const profiles = [{ display: "doctor", value: "doctor" }, { display: "nurse", value: "nurse" }, { display: "admin", value: "admin" }];
+export const status = [{ display: "enable", value: "enable" }, { display: "disabled", value: "disabled" }, { display: "waiting", value: "waiting" }]
 
 export function performLogin(username, password) {
   const token = window.btoa(`${username}:${password}`);
@@ -15,11 +19,14 @@ export function performLogin(username, password) {
   });
 }
 
-export function geUserByEmailOrUsername(identifier: string) {
+export function geUserCriteria(identifier: string) {
   return openmrsFetch(`${BASE_WS_API_URL}user?q=${identifier}&includeAll=true&v=full&limit=1`);
 }
 
-async function getPerson(uuid: string) {
+export function geUserByUuid(uuid: string) {
+  return openmrsFetch(`${BASE_WS_API_URL}user/${uuid}?v=full`);
+}
+export async function getPerson(uuid: string) {
   if (uuid)
     return openmrsFetch(`${BASE_WS_API_URL}person/${uuid}?v=full`);
   return undefined;
@@ -30,11 +37,84 @@ export function getAllRoles() {
 }
 
 
-export function disabledUser(uuid: string) {
-  return openmrsFetch(`${BASE_WS_API_URL}user/${uuid}`, {
-    "method": "DELETE",
-  });
+
+export async function changeUserStatus(abortController: AbortController, users: string | any[], status: string) {
+
+  let usersToEdit = [{ uuid: "", username: "" }];
+  if (typeof users === "string")
+    usersToEdit.push({ uuid: users, username: null });
+  else
+    usersToEdit = users.map(user => ({ uuid: user.cells[7].value, username: user.cells[6].value }))
+  const res = await Promise.all(usersToEdit.map(async user => {
+    console.log("changeUserStatus", status," users=====",user);
+
+    if (status == "enable")
+      await openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid}`, {
+        method: 'POST',
+        body: {
+          retired: false,
+          userProperties: {
+            forcePassword: "false"
+          },
+        },
+        headers: { 'Content-Type': 'application/json' },
+        signal: abortController.signal
+      });
+    else if (status == "disabled")
+      await openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid}`, {
+        "method": "DELETE",
+      })
+    else
+      await openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid}`, {
+        method: 'POST',
+        body: {
+          userProperties: {
+            forcePassword: "true"
+          },
+          password: user.username + "A123",
+        },
+        headers: { 'Content-Type': 'application/json' },
+        signal: abortController.signal
+      });
+  }));
 }
+
+export async function changeUserProfile(abortController: AbortController, users: any[], profile: string) {
+  const usersToEdit = users.map(user => ({ uuid: user.cells[7].value, profile: user.cells[4].value }))
+  await Promise.all(usersToEdit.map(async (user, i) => {
+    if (user.profile !== profile) {
+      const id = profile + '-' + i + new Date().getTime();
+      await openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid}`, {
+        method: 'POST',
+        body: {
+          systemId: id,
+        },
+        headers: { 'Content-Type': 'application/json' },
+        signal: abortController.signal
+      });
+    }
+  }));
+}
+
+export async function updateUserRoles(abortController: AbortController, users: any[], roles: any[]) {
+  if (users.length > 0 && roles.length > 0) {
+    let userRoles = new Set([...roles.map(role => role.uuid)])
+    await Promise.all(users.map(async (user, i) => {
+      const rolesUser = await (await geUserByUuid(user.cells[7].value)).data.roles;
+      Promise.all(rolesUser.map(role => userRoles.add(role.uuid)));
+      await openmrsFetch(`${BASE_WS_API_URL}user/${user.cells[7].value}`, {
+        method: 'POST',
+        body: {
+          roles: [...userRoles],
+        },
+        headers: { 'Content-Type': 'application/json' },
+        signal: abortController.signal
+      });
+    }
+    ));
+  }
+}
+
 
 export function formatRole(roles, object?) {
   if (roles?.length > 0 && object == undefined)
@@ -46,24 +126,24 @@ export function formatRole(roles, object?) {
     return roles.map(role => role.display);
 }
 
-export async function formatUser(user: User) {
-
-  const person = await (await getPerson(user?.person?.uuid))?.data || undefined;
+export function formatUser(user: User, person?: any) {
   return {
-
-    uuid: user?.uuid,
-    username: user?.username,
-    userProperties: user?.userProperties === undefined ? { defaultLocale: "", forcePassword: undefined } : user?.userProperties,
-    person: {
-      givenName: person?.names[0]?.givenName,
-      familyName: person?.names[0]?.familyName,
-      phone: person?.attributes?.find((attribute) => attribute.attributeType.uuid == uuidPhoneNumber)?.value || "",
-      gender: user?.person?.gender,
+    uuid: user?.uuid || "",
+    username: user?.username || "",
+    userProperties: {
+      defaultLocale: user?.userProperties.defaultLocale || "",
+      forcePassword: user?.userProperties.forcePassword || ""
     },
-    retired: user?.retired || false,
-    roles: formatRole(user?.roles),
-    profil: user?.systemId?.split("-")[0],
-    systemId: user?.systemId
+    person: {
+      givenName: person?.names[0]?.givenName || "",
+      familyName: person?.names[0]?.familyName || "",
+      phone: person?.attributes?.find((attribute) => attribute.attributeType.uuid == uuidPhoneNumber)?.value || "",
+      gender: user?.person?.gender || "",
+    },
+    status: getStatusUser(user?.retired, user?.userProperties?.forcePassword) || "",
+    roles: formatRole(user?.roles) || [],
+    profile: user?.systemId?.split("-")[0] || "",
+    systemId: user?.systemId || ""
   }
 }
 
@@ -122,37 +202,14 @@ export function getSizeUsers() {
   })
 }
 
-function checkProfiles(value) {
-  switch (value) {
-    case 'nurse':
-      return
+export function getStatusUser(retired, forcePassword) {
+  if (retired !== undefined || forcePassword !== undefined) {
+    if (forcePassword == "true")
+      return "waiting"
+    else if (retired === true)
+      return "disabled";
+    else
+      return "enable";
   }
-  return (value == "nurse" || value == "doctor") ? value : "Unknown";
+  return ""
 }
-
-function getStatusUSer(retired, forcePassword) {
-  if (forcePassword && forcePassword == "true")
-    return "waiting";
-  else if (retired == true)
-    return "desabled";
-  else
-    return "enable";
-}
-
-export async function getUsers(items) {
-  return Promise.all(
-    items.map(async (item, i) => {
-      return {
-        id: i,
-        uuid: item?.uuid,
-        Username: item?.username,
-        fullName: item?.person.display,
-        gender: item?.person.gender,
-        statut: getStatusUSer(item?.retired, item?.userProperties?.forcePassword),
-        profil: checkProfiles(item.systemId.split('-')[0]),
-        roles: item?.roles?.length > 1 ? item.roles[0].display + ", " + item.roles[1].display : item?.roles[0]?.display,
-        phone: item?.person.attributes?.find( (attribute) => attribute?.display.split(" = ")[0] == "Telephone Number" )?.display.split("Telephone Number = ")[1],
-      }
-    }))
-}
-

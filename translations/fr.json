@@ -8,7 +8,7 @@
   "fieldset1Label":"Info personne",
   "fieldset2Label":"Gestion d'accès",
   "maleLabel": "Masculin",
-  "femalLabel": "Feminin",
+  "femaleLabel": "Féminin",
   "LocaleLabel": "Langue",
   "profilLabel": "Profil",
   "adminSystem": "Pannel d’administration système",
@@ -27,6 +27,13 @@
   "english": "Anglais",
   "creole":"Créole",
   "enable":"Activer",
-  "disable":"Desactiver",
-  "reset":"Réinitialiser"
+  "disabled":"Désactiver",
+  "reset":"Réinitialiser",
+  "waiting":"En attente",
+  "nurse":"Infirmier",
+  "nurseM": "Infirmier",
+  "nurseF":"Infirmière",
+  "doctor":"Médecin",
+  "admin":"administrateur",
+  "unknown":"Inconnu"
 }

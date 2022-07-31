@@ -10,7 +10,7 @@ import { GivenNameField } from './name/givenname-field.component';
 import { PasswordConfirmField } from './password/password-confirm-field.component';
 import { PasswordField } from './password/password-field.component';
 import { PhoneField } from './phone/phone-field.component';
-import { ProfilField } from './profil/profil';
+import { ProfileField } from './profile/profile';
 import { StatusField } from './status/status';
 import { UsernameField } from './username/username-field.component';
 
@@ -32,14 +32,14 @@ const FieldForm = (name: string) => {
       return <GenderField />;
     case 'phone':
       return <PhoneField name={name} />;
-    case 'retired':
+    case 'status':
       return <StatusField />;
     case 'locale':
       return <LocaleField />;
     case 'roles':
       return <ModuleField />;
-    case 'profil':
-      return <ProfilField />;
+    case 'profile':
+      return <ProfileField />;
     case 'forcePassword':
       return <ForcePasswordField />;
     default:

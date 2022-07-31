@@ -1,3 +1,4 @@
+import { useField } from "formik";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SelectInput } from "../../input/basic-input/select/select-input.component";
@@ -25,8 +26,13 @@ export const ModuleField: React.FC = () => {
       <MultiSelectField
         options={roles}
         placeholder="Droit d'accès"
-        // label="Droit d'accès"
-        name="roles"
+        label="Droit d'accès"
+        // id="roles"
+        name="roles" 
+        className={styles.margin_field}
+        items={roles}
+        itemToString={(role) => (role ? role.display : '')}
+
       />
     </>
   );

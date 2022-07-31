@@ -2,31 +2,33 @@ import React, { useContext } from "react";
 import styles from "./user-data-table.scss";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
-import { navigate, NavigateOptions } from "@openmrs/esm-framework";
 import {
     DataTable, TableContainer, TableToolbar, TableBatchActions,
     TableToolbarMenu,
     TableToolbarAction, Table, TableHead, TableRow, TableSelectAll,
     TableHeader, TableBody, TableSelectRow, TableCell, Pagination
 } from "carbon-components-react";
-import { Settings32, UserAccess24, Queued32 } from '@carbon/icons-react';
+import { Settings32, UserAccess24, CertificateCheck32 } from '@carbon/icons-react';
 import { SearchInput, Toolbar_Button } from "../toolbar_search_container/toolbar_search_container";
 import MultiSelectField from "./multi-select-component";
 import { UserRegistrationContext } from "../../user-context";
-import { getSizeUsers, getAllUserPages, getUsers } from "../user-form/register-form/user-ressource";
+import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, updateUserRoles, getStatusUser, profiles, status } from "../user-form/register-form/user-ressource";
 
 export interface DeathListProps {
-    headers: { key: string; header: string; }[]
+    refresh?: boolean
 }
-const UserDataTable: React.FC = () => {
+
+const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
     const [rowsTable, setRows] = useState([]);
     const { colSize } = useContext(UserRegistrationContext);
     const [totalpageSize, setTotalPageSize] = useState(1);
     const [[pageSize, page], setPaginationPageSize] = useState([5, 1]);
     const paginationPageSizes = [1, 5, 10, 20, 30, 40];
+    const [roles, setRoles] = useState([]);
+    let { userUuid } = useContext(UserRegistrationContext);
+    const abortController = new AbortController();
     const { t } = useTranslation();
-    const toDeclared: NavigateOptions = { to: window.spaBase + "/death/search" };
-    let { username } = useContext(UserRegistrationContext);
+
     const headers = [
         {
             key: 'Username',
@@ -47,8 +49,8 @@ const UserDataTable: React.FC = () => {
             header: t('gender')
         },
         {
-            key: 'profil',
-            header: t('profil')
+            key: 'profile',
+            header: t('profile')
         },
         {
             key: 'statut',
@@ -66,32 +68,56 @@ const UserDataTable: React.FC = () => {
 
 
     ];
-    const profils = [
-        {
-            display: t("doctor"),
-            value: "doctor"
-        },
-        {
-            display: t("nurse"),
-            value: "nurse"
-        }
-    ]
 
-    function onTableRowHandleClick(e, rowSelected) {
-        rowsTable.forEach(row => {
-            const toValided: NavigateOptions = { to: window.spaBase + "/death/validate/patient/" + row.uuid };
-            if (row.No_dossier == rowSelected.cells[0].value) {
-                navigate(toValided)
-            }
-        })
+
+    const checkTranslation = (text: string) => {
+        switch (text) {
+            case "nurse":
+                return t("nurse")
+            case "nurseM":
+                return t("nurseM")
+            case "nurseF":
+                return t("nurseF")
+            case "doctorM":
+                return t("doctor")
+            case "doctorF":
+                return t("doctor")
+            case "doctor":
+                return t("doctor")
+            case "adminM":
+                return t("admin")
+            case "M":
+                return t("maleLabel")
+            case "F":
+                return t("femaleLabel")
+            default:
+                console.log("Unknown translation",text);
+                return t("unknown")
+        }
+    }
+
+    const formatUser = (users) => {
+        return Promise.all(
+            users.map(async (user, i) => {
+                return {
+                    id: i,
+                    uuid: user?.uuid,
+                    Username: user?.username,
+                    fullName: user?.person.display,
+                    gender: checkTranslation(user?.person.gender),
+                    statut: t(getStatusUser(user?.retired, user?.userProperties?.forcePassword)),
+                    profile: checkTranslation(user.systemId.split('-')[0] + user?.person.gender),
+                    roles: user?.roles?.length > 1 ? user.roles[0].display + ", " + user.roles[1].display + " (" + user?.roles?.length + ")" : user?.roles[0]?.display,
+                    phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
+                }
+            }))
     }
 
 
     useEffect(function () {
-        changeRows(pageSize, 1);
+        changeRows(pageSize, page ? page : 1);
         getSizeUsers().then(res => setTotalPageSize(res.data.results.length))
-
-    }, []);
+    }, [refresh]);
 
     function changeRows(size, page) {
         let start = ((page - 1) * size);
@@ -99,14 +125,14 @@ const UserDataTable: React.FC = () => {
         setPaginationPageSize([size, page]);
         getAllUserPages(size, start)
             .then(response => response.data.results)
-            .then(async json => getUsers(json).then(data => setRows(data)))
+            .then(async json => formatUser(json).then(data => setRows(data)))
     }
 
     function onPaginationChange(e) {
         changeRows(e.pageSize, e.page);
     }
     function Toolbar_ButtonOnclick(e) {
-      
+
     }
     function OnHandleChangeProfil(e) {
 
@@ -139,33 +165,33 @@ const UserDataTable: React.FC = () => {
                                             className={styles['search-1']}
                                             onChange={(e) => ((e.currentTarget.value.trim().length) > 0) && onInputChange(e)} />
                                         <Toolbar_Button
-                                            onClickChange={()=>  colSize([7, 5])}
+                                            onClickChange={() => { colSize([7, 5]); userUuid(undefined); }}
                                         />
                                     </div>
-
                                     <TableBatchActions className={styles.TableBatchActions} {...batchActionProps} >
+                                        <MultiSelectField
+                                            placeholder="Droit d'accès"
+                                            onChange={(data) => { setRoles(data) }}
+
+                                        />
                                         <TableToolbarMenu
                                             className={styles.TableToolbarMenu}
-                                            renderIcon={Queued32}
-                                            iconDescription={t("statut")}
-                                            tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
-                                            <TableToolbarAction onClick={(e) => { console.log(selectedRows) }}>
-                                                {t("enable")}
-                                            </TableToolbarAction>
-                                            <TableToolbarAction onClick={() => alert('Alert 2')}>
-                                                {t("disable")}
-                                            </TableToolbarAction>
-                                            <TableToolbarAction onClick={() => alert('Alert 3')}>
-                                                {t("reset")}
-                                            </TableToolbarAction>
+                                            renderIcon={CertificateCheck32}
+                                            tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
+                                            iconDescription={t("roles")}
+                                            disabled={!(roles.length > 0)}
+                                            onClick={e => {
+                                                updateUserRoles(abortController, selectedRows, roles).then(() => changeRows(pageSize, page))
+                                            }}
+                                        >
                                         </TableToolbarMenu>
-
                                         <TableToolbarMenu
                                             className={styles.TableToolbarMenu}
                                             renderIcon={UserAccess24}
+                                            iconDescription={t("profileLabel")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
-                                            {profils.map((element) => {
-                                                return <TableToolbarAction onClick={OnHandleChangeProfil} >
+                                            {profiles.map((element) => {
+                                                return <TableToolbarAction onClick={(e) => changeUserProfile(abortController, selectedRows, element.value).then(() => changeRows(pageSize, page))}>
                                                     {t(element.display)}
                                                 </TableToolbarAction>
                                             })}
@@ -173,7 +199,16 @@ const UserDataTable: React.FC = () => {
                                         <TableToolbarMenu
                                             className={styles.TableToolbarMenu}
                                             renderIcon={Settings32}
+                                            iconDescription={t("status")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
+                                            {status.map((s) => {
+                                                return (<TableToolbarAction onClick={(e) => {
+                                                    changeUserStatus(abortController, selectedRows, s.value).then(() => changeRows(pageSize, page))
+                                                }}>
+                                                    {t(s.display == "waiting" ? "reset" : s.display)}
+                                                </TableToolbarAction>
+                                                )
+                                            })}
                                         </TableToolbarMenu>
                                     </TableBatchActions>
                                 </TableToolbar>
@@ -197,7 +232,7 @@ const UserDataTable: React.FC = () => {
                                             {row.cells.map((cell, i) => (
                                                 (cell.id.split(":")[1] !== "uuid") &&
                                                 <TableCell onClick={(e) => {
-                                                    username(row.cells[0].value);
+                                                    userUuid(row.cells[7].value);
                                                     colSize([7, 5])
                                                 }} key={cell.id}>{cell.value}</TableCell>
                                             ))}

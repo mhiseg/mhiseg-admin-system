@@ -1,36 +1,44 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useField } from 'formik';
-import { SelectItem, Select, MultiSelect } from 'carbon-components-react';
+import { MultiSelect } from 'carbon-components-react';
 import { useTranslation } from 'react-i18next';
-import { getAllRoles } from '../../../register-form/user-ressource';
-import styles from '../../../field/field.scss';
-import { Plane16 } from '@carbon/icons-react';
 
 interface InputSelectProps {
     name: string;
     placeholder?: string;
     label?: string;
     options: any[];
+    hideLabel?: boolean;
+    id?: string;
+    titleText?: string;
+    items?: any[];
+    light?: boolean;
+    itemToString(item: any): string;
+    className?: string;
 }
 
-export const MultiSelectField: React.FC<InputSelectProps> = ({ name, label,options, placeholder}) => {
-    const [field, meta, helpers] = useField(name);
-    const { setValue } = helpers;
+export const MultiSelectField: React.FC<InputSelectProps> = (props) => {
+    const [field, meta, helpers] = useField(props.name);
+    const { setValue, setError } = helpers;
     const { t } = useTranslation();
+
+    const compareItems = (a, b) =>{
+        
+    }
+
     return (
         <div >
             <MultiSelect.Filterable
+                {...field}
+                {...props}
+                items={props.items}
+                id={props.name}
                 initialSelectedItems={meta.value}
-                placeholder={placeholder}
-                label={label}
-                hideLabel={true}
-                id={name} 
-                titleText="Multiselect title"
-                items={options}
-                itemToString={(role) => (role ? role.display : '')}
-                selectionFeedback="top-after-reopen"
-               onChange={(e) => { setValue(e.selectedItems) }}
+                placeholder={props.placeholder}
+                onChange={(e) => { setValue(e.selectedItems) }}
             />
+            <span>{meta.error}</span>
+
         </div>
     );
 }

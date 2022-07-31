@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useField } from 'formik';
 import { SelectItem, Select } from 'carbon-components-react';
 import { useTranslation } from 'react-i18next';
@@ -19,8 +19,7 @@ export const SelectCustom: React.FC<InputSelectProps> = ({ name, options, label,
     ...options.map((currentOption, index) => <SelectItem text={t(currentOption.display)} value={currentOption.value} key={index} />
     ),
   ];
-
-
+  
   return (
     <div>
       <Select

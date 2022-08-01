@@ -123,16 +123,10 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                 totalSelected,
                 getTableContainerProps,
             }) => {
-                let batchActionProps = getBatchActionProps();
-                // batchActionProps = {
-
-
-                // console.log(getTableContainerProps(), '====');
+                const batchActionProps = getBatchActionProps();
                 return (
                     <>
-                        <TableContainer  {...getTableContainerProps()}
-
-                        >
+                        <TableContainer  {...getTableContainerProps()} >
                             <div className={styles.TableContainer}>
                                 <TableToolbar {...getToolbarProps()} >
                                     <div id={styles["toolbar-content"]} className={"bx--toolbar-content"}>
@@ -145,10 +139,8 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                         className={styles.TableBatchActions}
                                         {...batchActionProps}
                                     >
-                                        <Roles
-                                            placeholder={t("roles")}
-                                            onChange={(data) => { setRoles(data) }}
-                                        />
+
+
                                         <TableToolbarMenu
                                             className={styles.TableToolbarMenu}
                                             renderIcon={CertificateCheck32}
@@ -172,6 +164,10 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                                     </TableToolbarAction>
                                                 )
                                             })}
+                                            <Roles
+                                                placeholder={t("roles")}
+                                                onChange={(data) => { setRoles(data) }}
+                                            />
                                         </TableToolbarMenu>
                                         <TableToolbarMenu
                                             className={styles.TableToolbarMenu}

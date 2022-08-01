@@ -19,13 +19,15 @@
   "lastName": "Prenom",
   "gender": "Sexe",
   "statut"  : "Statut",
-  "profil": "profil",
   "Search": "Rechercher...",
   "fullName":"Nom complet",
-  "phone":"telephone",
+  "phone":"Téléphone",
+  "fr": "Français",
+  "en": "Anglais",
+  "kr":"Créole",
   "french": "Français",
   "english": "Anglais",
-  "creole":"Créole",
+  "creole": "Créole",
   "enable":"Activer",
   "disabled":"Désactiver",
   "reset":"Réinitialiser",
@@ -35,5 +37,6 @@
   "nurseF":"Infirmière",
   "doctor":"Médecin",
   "admin":"administrateur",
-  "unknown":"Inconnu"
+  "unknown":"Inconnu",
+  "locale": "Langue"
 }

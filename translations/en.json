@@ -22,15 +22,20 @@
   "NextPage": "Next Page",
   "fullName":"Full name",
   "phone":"phone",
+  "fr": "French",
+  "en": "English",
+  "kr":"Creole",
   "french": "French",
   "english": "English",
-  "creole":"Creole",
+  "creole": "Creole",
   "enable":"Enable",
   "disabled":"disabled",
   "reset":"Reset",
   "waiting":"Waiting",
   "nurse": "Nurse",
+  "nurseM": "Nurse",
   "doctor":"Physician",
   "admin":"Administrator",
-  "unknown":"Unknown"
+  "unknown":"Unknown",
+  "locale": "Language"
 }

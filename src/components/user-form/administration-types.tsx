@@ -14,12 +14,13 @@ export interface User {
   systemId: string;
   password?: string;
   userProperties?: {
-    defaultLocale?: string;
-    forcePassword?: string;
+    defaultLocale: string;
+    forcePassword: string;
+    allowedLocales?: Array<string>;
   };
   person: Person;
   privileges?: Array<Privilege>;
-  roles: Array<Role>;
+  roles?: Array<Role>;
   retired?: boolean;
   retireReason?: string;
   locale?: string;

@@ -10,7 +10,7 @@ import { UserRegistrationContext } from "./user-context";
 
 const AdminSys: React.FC = () => {
     const { t } = useTranslation();
-    const [lgValue,setLgValue]=useState([7,5]);
+    const [lgValue,setLgValue]=useState([12,0]);
     const [ userUuid, setUserUuid ] = useState("");
     const [refreshTable, setRefreshTable] = useState();
 

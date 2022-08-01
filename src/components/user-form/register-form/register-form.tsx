@@ -8,7 +8,7 @@ import { Form, Formik, validateYupSchema } from "formik";
 import FieldForm from "../field/field.component";
 import { uuidPhoneNumber } from "../constante";
 import { User } from "../administration-types";
-import { changeUserStatus, formatUser, getPerson, geUserByUuid, saveUser } from "./user-ressource";
+import { changeUserStatus, formatRole, formatUser, getPerson, geUserByUuid, saveUser } from "./user-ressource";
 import { showToast } from "@openmrs/esm-framework";
 import { UserRegistrationContext } from "../../../user-context";
 import { Icon } from "@iconify/react";
@@ -56,6 +56,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     }),
     userProperties: Yup.object({
       defaultLocale: Yup.string(),
+      forcePassword: Yup.string()
     }),
     status: Yup.string().required("messageErrorprofile"),
     profile: Yup.string().required("messageErrorprofile"),
@@ -65,7 +66,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     ,
   });
 
-  const save = (values, resetForm) => {
+  const save = (values) => {
     const systemId = values.systemId && values.systemId?.split("-")[0] == values.profile ? values.systemId : values.profile + "-" + new Date().getTime();
     let user: User = {
       username: values.username,
@@ -77,28 +78,24 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         }],
         gender: values.person.gender
       },
-      roles: values.roles,
+      userProperties: values.userProperties
     }
-    user.person.attributes = [];
+    if (values?.roles?.length > 0) {
+      user.roles = values.roles.map(r => r.uuid);
+    }
     if (values.person.phone) {
+      user.person.attributes = [];
       user.person.attributes.push({ attributeType: uuidPhoneNumber, value: values.person.phone, })
     }
-    if (values.userProperties.defaultLocale) {
-      user.userProperties = values.userProperties;
-    }
-    if (!values.uuid) {
-      user.password = values.username + "A123"
-    }
-    console.log(user,'to save');
-    saveUser(abortController, user, values.uuid).then(async (user) => {
-        await changeUserStatus(abortController, user.data.uuid, values.status);
+    saveUser(abortController, user, values.uuid).then(async (res) => {
+      const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid }]
+      await changeUserStatus(abortController, users, values.status);
       showToast({
         title: t('successfullyAdded', 'Successfully added'),
         kind: 'success',
         description: 'Patient save succesfully',
       })
-      // resetForm();
-      setRefresh(user.data.systemId + new Date().getTime())
+      setRefresh(res.data.systemId + new Date().getTime())
     }
     ).catch(
       error => {
@@ -115,7 +112,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       validationSchema={userSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         setSubmitting(false);
-        save(values, resetForm)
+        save(values)
       }}>
       {(formik) => {
         const { handleSubmit, isValid, dirty, values, resetForm } = formik;

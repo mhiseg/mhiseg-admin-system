@@ -6,7 +6,7 @@ const BASE_WS_API_URL = '/ws/rest/v1/';
 
 export const profiles = [{ display: "doctor", value: "doctor" }, { display: "nurse", value: "nurse" }, { display: "admin", value: "admin" }];
 export const status = [{ display: "enable", value: "enable" }, { display: "disabled", value: "disabled" }, { display: "waiting", value: "waiting" }]
-
+export const locales = [{display:"french", value:"fr"},{display:"english", value:"en"},{display:"creole", value:"kr"}];
 export function performLogin(username, password) {
   const token = window.btoa(`${username}:${password}`);
   return openmrsFetch(`${BASE_WS_API_URL}session`, {
@@ -38,53 +38,35 @@ export function getAllRoles() {
 
 
 
-export async function changeUserStatus(abortController: AbortController, users: string | any[], status: string) {
-
-  let usersToEdit = [{ uuid: "", username: "" }];
-  if (typeof users === "string")
-    usersToEdit.push({ uuid: users, username: null });
-  else
-    usersToEdit = users.map(user => ({ uuid: user.cells[7].value, username: user.cells[6].value }))
-  const res = await Promise.all(usersToEdit.map(async user => {
-    console.log("changeUserStatus", status," users=====",user);
-
-    if (status == "enable")
-      await openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid}`, {
-        method: 'POST',
-        body: {
-          retired: false,
-          userProperties: {
-            forcePassword: "false"
-          },
-        },
-        headers: { 'Content-Type': 'application/json' },
-        signal: abortController.signal
-      });
-    else if (status == "disabled")
-      await openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid}`, {
+export async function changeUserStatus(abortController: AbortController, users: any[], status: string) {
+  const res = await Promise.all(users.map(async user => {
+    if (status == "disabled") {
+      return openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid || user.id}`, {
         "method": "DELETE",
       })
+    }
+    else if (status == "enable")
+      user.userProperties = {
+        ...user.userProperties,
+        forcePassword: "false",
+        // defaultLocale: user.userProperties.defaultLocale 
+      }
     else
-      await openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid}`, {
-        method: 'POST',
-        body: {
-          userProperties: {
-            forcePassword: "true"
-          },
-          password: user.username + "A123",
-        },
-        headers: { 'Content-Type': 'application/json' },
-        signal: abortController.signal
-      });
+      user.userProperties = {
+
+        ...user.userProperties,
+        forcePassword: "true",
+        // defaultLocale: user.userProperties.defaultLocale
+      }
+    user.retired = false;
+    return saveUser(abortController, user, user.uuid);
   }));
 }
 
 export async function changeUserProfile(abortController: AbortController, users: any[], profile: string) {
-  const usersToEdit = users.map(user => ({ uuid: user.cells[7].value, profile: user.cells[4].value }))
-  await Promise.all(usersToEdit.map(async (user, i) => {
-    if (user.profile !== profile) {
+  await Promise.all(users.map(async (user, i) => {
       const id = profile + '-' + i + new Date().getTime();
-      await openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid}`, {
+      await openmrsFetch(`${BASE_WS_API_URL}user/${user.id}`, {
         method: 'POST',
         body: {
           systemId: id,
@@ -92,7 +74,6 @@ export async function changeUserProfile(abortController: AbortController, users:
         headers: { 'Content-Type': 'application/json' },
         signal: abortController.signal
       });
-    }
   }));
 }
 
@@ -100,9 +81,9 @@ export async function updateUserRoles(abortController: AbortController, users: a
   if (users.length > 0 && roles.length > 0) {
     let userRoles = new Set([...roles.map(role => role.uuid)])
     await Promise.all(users.map(async (user, i) => {
-      const rolesUser = await (await geUserByUuid(user.cells[7].value)).data.roles;
+      const rolesUser = await (await geUserByUuid(user.id || user.uuid)).data.roles;
       Promise.all(rolesUser.map(role => userRoles.add(role.uuid)));
-      await openmrsFetch(`${BASE_WS_API_URL}user/${user.cells[7].value}`, {
+      await openmrsFetch(`${BASE_WS_API_URL}user/${user.id || user.uuid}`, {
         method: 'POST',
         body: {
           roles: [...userRoles],
@@ -131,8 +112,8 @@ export function formatUser(user: User, person?: any) {
     uuid: user?.uuid || "",
     username: user?.username || "",
     userProperties: {
-      defaultLocale: user?.userProperties.defaultLocale || "",
-      forcePassword: user?.userProperties.forcePassword || ""
+      defaultLocale: user?.userProperties?.defaultLocale || "",
+      forcePassword: user?.userProperties?.forcePassword || null,
     },
     person: {
       givenName: person?.names[0]?.givenName || "",
@@ -147,19 +128,7 @@ export function formatUser(user: User, person?: any) {
   }
 }
 
-export function forcePassword(abortController: AbortController, uuid: string, username: string, password: string) {
-  return openmrsFetch(`${BASE_WS_API_URL}user/${uuid ? uuid : ""}`, {
-    method: 'POST',
-    body: {
-      userProperties: {
-        forcePassword: "true"
-      },
-      password: username + "A123",
-    },
-    headers: { 'Content-Type': 'application/json' },
-    signal: abortController.signal
-  });
-}
+
 
 export function resetPassword(abortController: AbortController, user: User, uuid?: string) {
   return openmrsFetch(`${BASE_WS_API_URL}password/${uuid}`, {
@@ -204,10 +173,10 @@ export function getSizeUsers() {
 
 export function getStatusUser(retired, forcePassword) {
   if (retired !== undefined || forcePassword !== undefined) {
-    if (forcePassword == "true")
-      return "waiting"
-    else if (retired === true)
+    if (retired === true)
       return "disabled";
+    else if (forcePassword == "true")
+      return "waiting"
     else
       return "enable";
   }

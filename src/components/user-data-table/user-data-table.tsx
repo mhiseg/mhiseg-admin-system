@@ -10,9 +10,9 @@ import {
 } from "carbon-components-react";
 import { Settings32, UserAccess24, CertificateCheck32 } from '@carbon/icons-react';
 import { SearchInput, Toolbar_Button } from "../toolbar_search_container/toolbar_search_container";
-import MultiSelectField from "./multi-select-component";
+import MultiSelectField, { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
-import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, updateUserRoles, getStatusUser, profiles, status } from "../user-form/register-form/user-ressource";
+import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, updateUserRoles, getStatusUser, profiles, status, locales } from "../user-form/register-form/user-ressource";
 
 export interface DeathListProps {
     refresh?: boolean
@@ -28,7 +28,6 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
     let { userUuid } = useContext(UserRegistrationContext);
     const abortController = new AbortController();
     const { t } = useTranslation();
-
     const headers = [
         {
             key: 'Username',
@@ -50,25 +49,22 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
         },
         {
             key: 'profile',
-            header: t('profile')
+            header: t('profilLabel')
         },
-        {
-            key: 'statut',
-            header: t('statut')
-        },
+
         {
             key: 'roles',
             header: t('roles')
-        }
-        ,
+        },
         {
-            key: "uuid",
-            header: "uuid"
-        }
-
-
+            key: "locale",
+            header: t("locale")
+        },
+        {
+            key: 'status',
+            header: t('status')
+        },
     ];
-
 
     const checkTranslation = (text: string) => {
         switch (text) {
@@ -86,40 +82,56 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                 return t("doctor")
             case "adminM":
                 return t("admin")
+            case "admin":
+                return t("admin")
             case "M":
                 return t("maleLabel")
             case "F":
                 return t("femaleLabel")
             default:
-                console.log("Unknown translation",text);
                 return t("unknown")
         }
     }
 
     const formatUser = (users) => {
         return Promise.all(
-            users.map(async (user, i) => {
+            users.map(async (user) => {
                 return {
-                    id: i,
-                    uuid: user?.uuid,
+                    id: user?.uuid,
                     Username: user?.username,
                     fullName: user?.person.display,
                     gender: checkTranslation(user?.person.gender),
-                    statut: t(getStatusUser(user?.retired, user?.userProperties?.forcePassword)),
-                    profile: checkTranslation(user.systemId.split('-')[0] + user?.person.gender),
+                    profile: checkTranslation(user.systemId.split('-')[0]),
                     roles: user?.roles?.length > 1 ? user.roles[0].display + ", " + user.roles[1].display + " (" + user?.roles?.length + ")" : user?.roles[0]?.display,
                     phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
+                    status: t(getStatusUser(user?.retired, user?.userProperties?.forcePassword)),
+                    locale: t(user?.userProperties?.defaultLocale)
                 }
             }))
     }
 
+    const formatRows = (rows, status) => {
+
+        const users = rows.map(row => {
+            const locale = locales.find(locale => t(locale.display) == row.cells[6].value)?.value;
+            
+            return {
+                uuid: row.id,
+                userProperties: {
+                    defaultLocale: locale
+                },
+                username: row.cells[0].value
+            }
+        })
+        changeUserStatus(abortController, users, status).then(() => changeRows(pageSize, page))
+    }
 
     useEffect(function () {
         changeRows(pageSize, page ? page : 1);
         getSizeUsers().then(res => setTotalPageSize(res.data.results.length))
     }, [refresh]);
 
-    function changeRows(size, page) {
+    const changeRows = (size, page) => {
         let start = ((page - 1) * size);
         start = start <= 1 ? 1 : start;
         setPaginationPageSize([size, page]);
@@ -128,15 +140,6 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
             .then(async json => formatUser(json).then(data => setRows(data)))
     }
 
-    function onPaginationChange(e) {
-        changeRows(e.pageSize, e.page);
-    }
-    function Toolbar_ButtonOnclick(e) {
-
-    }
-    function OnHandleChangeProfil(e) {
-
-    }
     return (
         <DataTable rows={rowsTable} headers={headers} useZebraStyles={true} >
             {({
@@ -169,9 +172,9 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                         />
                                     </div>
                                     <TableBatchActions className={styles.TableBatchActions} {...batchActionProps} >
-                                        <MultiSelectField
-                                            placeholder="Droit d'accès"
-                                            onChange={(data) => { setRoles(data) }}
+                                        <Roles
+                                            placeholder={t("roles")}
+                                            onChange={(data) => { setRoles(data)}}
 
                                         />
                                         <TableToolbarMenu
@@ -191,9 +194,11 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                             iconDescription={t("profileLabel")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
                                             {profiles.map((element) => {
-                                                return <TableToolbarAction onClick={(e) => changeUserProfile(abortController, selectedRows, element.value).then(() => changeRows(pageSize, page))}>
-                                                    {t(element.display)}
-                                                </TableToolbarAction>
+                                                return (
+                                                    <TableToolbarAction onClick={(e) => changeUserProfile(abortController, selectedRows, element.value).then(() => changeRows(pageSize, page))}>
+                                                        {t(element.display)}
+                                                    </TableToolbarAction>
+                                                )
                                             })}
                                         </TableToolbarMenu>
                                         <TableToolbarMenu
@@ -202,21 +207,27 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                             iconDescription={t("status")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
                                             {status.map((s) => {
-                                                return (<TableToolbarAction onClick={(e) => {
-                                                    changeUserStatus(abortController, selectedRows, s.value).then(() => changeRows(pageSize, page))
-                                                }}>
-                                                    {t(s.display == "waiting" ? "reset" : s.display)}
-                                                </TableToolbarAction>
+                                                return (
+                                                    <TableToolbarAction onClick={(e) => formatRows(selectedRows, s.value)}>
+                                                        {t(s.display == "waiting" ? "reset" : s.display)}
+                                                    </TableToolbarAction>
                                                 )
                                             })}
                                         </TableToolbarMenu>
                                     </TableBatchActions>
                                 </TableToolbar>
                             </div>
-                            <Table {...getTableProps()}>
+                            <Table {...getTableProps()} size='lg'>
                                 <TableHead className={styles.TableRowHeader}>
                                     <TableRow>
-                                        <TableSelectAll {...getSelectionProps()} />
+                                        <TableSelectAll
+                                            onSelect={
+                                                (e) => {
+                                                    colSize([12, 0])
+                                                }
+                                            }
+                                            {...getSelectionProps()}
+                                        />
                                         {headers.map((header) => (
                                             (header.key !== "uuid") &&
                                             <TableHeader key={header.uuid} {...getHeaderProps({ header, isSortable: true })}>
@@ -226,36 +237,33 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {rows.map((row, i) => (
-                                        <TableRow id={row.cells[6].value} key={i} {...getRowProps({ row })} >
-                                            <TableSelectRow {...getSelectionProps({ row })} />
-                                            {row.cells.map((cell, i) => (
-                                                (cell.id.split(":")[1] !== "uuid") &&
-                                                <TableCell onClick={(e) => {
-                                                    userUuid(row.cells[7].value);
-                                                    colSize([7, 5])
-                                                }} key={cell.id}>{cell.value}</TableCell>
-                                            ))}
+                                    {rows.map((row) => (
+                                        <TableRow key={row.id} onClick={(e) => {
+                                            userUuid(row.id);
+                                            colSize([7, 5])
+                                        }} >
+                                            <TableSelectRow
+                                                className={styles.testRows}
+                                                {...getSelectionProps({ row })}
+                                                onChange={(e) => colSize([12, 0])}
+                                            />
+                                            {row.cells.map((cell) => <TableCell key={cell.id}>{cell.value}</TableCell>)}
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        <div>
-                            <div>
-                                <Pagination
-                                    backwardText={t("PreviousPage")}
-                                    forwardText={t("NextPage")}
-                                    itemsPerPageText={t("Show")}
-                                    onChange={onPaginationChange}
-                                    page={page}
-                                    pageSize={pageSize}
-                                    pageSizes={paginationPageSizes}
-                                    size="sm"
-                                    totalItems={totalpageSize}
-                                />
-                            </div>
-                        </div>
+                        <Pagination
+                            backwardText={t("PreviousPage")}
+                            forwardText={t("NextPage")}
+                            itemsPerPageText={t("Show")}
+                            onChange={e => changeRows(e.pageSize, e.page)}
+                            page={page}
+                            pageSize={pageSize}
+                            pageSizes={paginationPageSizes}
+                            size="sm"
+                            totalItems={totalpageSize}
+                        />
                     </>
                 );
             }}

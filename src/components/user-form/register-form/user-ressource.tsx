@@ -6,7 +6,7 @@ const BASE_WS_API_URL = '/ws/rest/v1/';
 
 export const profiles = [{ display: "doctor", value: "doctor" }, { display: "nurse", value: "nurse" }, { display: "admin", value: "admin" }];
 export const status = [{ display: "enable", value: "enable" }, { display: "disabled", value: "disabled" }, { display: "waiting", value: "waiting" }]
-export const locales = [{display:"french", value:"fr"},{display:"english", value:"en"},{display:"creole", value:"kr"}];
+export const locales = [{ display: "french", value: "fr" }, { display: "english", value: "en" }, { display: "creole", value: "kr" }];
 export function performLogin(username, password) {
   const token = window.btoa(`${username}:${password}`);
   return openmrsFetch(`${BASE_WS_API_URL}session`, {
@@ -65,15 +65,15 @@ export async function changeUserStatus(abortController: AbortController, users: 
 
 export async function changeUserProfile(abortController: AbortController, users: any[], profile: string) {
   await Promise.all(users.map(async (user, i) => {
-      const id = profile + '-' + i + new Date().getTime();
-      await openmrsFetch(`${BASE_WS_API_URL}user/${user.id}`, {
-        method: 'POST',
-        body: {
-          systemId: id,
-        },
-        headers: { 'Content-Type': 'application/json' },
-        signal: abortController.signal
-      });
+    const id = profile + '-' + i + new Date().getTime();
+    await openmrsFetch(`${BASE_WS_API_URL}user/${user.id}`, {
+      method: 'POST',
+      body: {
+        systemId: id,
+      },
+      headers: { 'Content-Type': 'application/json' },
+      signal: abortController.signal
+    });
   }));
 }
 
@@ -111,10 +111,8 @@ export function formatUser(user: User, person?: any) {
   return {
     uuid: user?.uuid || "",
     username: user?.username || "",
-    // userProperties: {
-      defaultLocale: user?.userProperties?.defaultLocale || "",
-      forcePassword: user?.userProperties?.forcePassword || null,
-    // },
+    defaultLocale: user?.userProperties?.defaultLocale || "",
+    forcePassword: user?.userProperties?.forcePassword || null,
     person: {
       givenName: person?.names[0]?.givenName || "",
       familyName: person?.names[0]?.familyName || "",

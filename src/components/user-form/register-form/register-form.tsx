@@ -51,16 +51,15 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     person: Yup.object().shape({
       givenName: Yup.string().required('messageErrorGivenName'),
       familyName: Yup.string().required('messageErrorFamilyName'),
-      gender: Yup.string().required("messageErrorPhoneNumber"),
+      gender: Yup.string().required("messageErrorGender"),
       phone: Yup.string().min(9, ("messageErrorPhoneNumber")),
     }),
     defaultLocale: Yup.string().required("messageErrorLocale"),
-    status: Yup.string().required("messageErrorprofile"),
-    profile: Yup.string().required("messageErrorprofile"),
+    status: Yup.string().required("messageErrorStatus"),
+    profile: Yup.string().required("messageErrorProfile"),
     roles: Yup.array()
       .of(Yup.object()
       ).min(1)
-    ,
   });
 
   const save = (values) => {
@@ -124,7 +123,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
             }} />
             <Grid fullWidth={true} className={styles.p0}>
               <div id={styles.person}>
-                <h5>Info personne</h5>
+                <h5>{t("fieldset1Label")}</h5>
                 <Row>
                   <Column className={styles.firstColSyle} lg={6}>
                     {FieldForm('givenName')}

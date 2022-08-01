@@ -15,7 +15,7 @@ export const ProfileField: React.FC = () => {
       <SelectCustom
         className={styles.margin_field}
         options={profiles}
-        label={t("profilLabel")}
+        label={t("profileLabel")}
         name="profile"
       />
     </>

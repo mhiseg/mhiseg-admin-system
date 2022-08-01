@@ -30,7 +30,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
     const { t } = useTranslation();
     const headers = [
         { key: 'Username', header: t('Username') }, { key: 'fullName', header: t('fullName') }, { key: 'phone', header: t('phone') },
-        { key: 'gender', header: t('gender') }, { key: 'profile', header: t('profilLabel') }, { key: 'roles', header: t('roles') },
+        { key: 'gender', header: t('gender') }, { key: 'profile', header: t('profileLabel') }, { key: 'roles', header: t('roles') },
         { key: "locale", header: t("locale") }, { key: 'status', header: t('status') },
     ];
 

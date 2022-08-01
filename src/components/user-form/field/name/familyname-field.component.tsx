@@ -18,9 +18,9 @@ export const FamilyNameField: React.FC<FamilyNameFieldProps> = ({name, className
         className={className}
         id={name}
         name={"person.familyName"}
-        labelText={t("familyNameLabelText", "Nom")+star}
+        labelText={t("familyNameLabel", "Nom")+star}
         light={true}
-        placeholder={t("familyNameLabelText", "Nom")+star}
+        placeholder={t("familyNameLabel", "Nom")+star}
         hideLabel={true}
       />
     </>

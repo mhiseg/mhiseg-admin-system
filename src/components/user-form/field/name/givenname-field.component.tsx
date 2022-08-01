@@ -20,9 +20,9 @@ export const GivenNameField:React.FC<GivenNameFieldProps> = ({name, className,re
         className={className}
         id={name}
         name="person.givenName"
-        labelText={t("givenNameLabelText","Prénom")+star}
+        labelText={t("givenNameLabel","Prénom")+star}
         light={true}
-        placeholder={t("givenNameLabelText","Prénom")+star}
+        placeholder={t("givenNameLabel","Prénom")+star}
         hideLabel={true}
       />
     </>

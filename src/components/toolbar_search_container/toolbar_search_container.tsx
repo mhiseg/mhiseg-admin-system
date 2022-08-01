@@ -65,7 +65,7 @@ export function SearchInput({ onChange, className }) {
 }
 
 export function Toolbar_Button() {
-    const {colSize} = useContext(UserRegistrationContext);
+    const {colSize, userUuid} = useContext(UserRegistrationContext);
 
 
     return <>
@@ -73,6 +73,7 @@ export function Toolbar_Button() {
             hasIconOnly
             renderIcon={UserFollow32}
             onClick={() => {
+                userUuid(undefined)
                 colSize([7,5])
               }}
             className={styles.Button}

@@ -243,7 +243,9 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                             <TableSelectRow
                                                 className={styles.testRows}
                                                 {...getSelectionProps({ row })}
-                                                onChange={(e) => colSize([12, 0])}
+                                                onChange={(e) => {
+                                                    colSize([12, 0])
+                                                }}
                                             />
                                             {row.cells.map((cell) => <TableCell key={cell.id}>{cell.value}</TableCell>)}
                                         </TableRow>

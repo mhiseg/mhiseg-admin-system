@@ -15,7 +15,7 @@ export const LocaleField: React.FC = () => {
         className={styles.margin_field}
         options={locales}
         label={t("LocaleLabel")}
-        name="userProperties.defaultLocale"
+        name="defaultLocale"
       />
     </>
   );

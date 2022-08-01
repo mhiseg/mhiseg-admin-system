@@ -111,10 +111,10 @@ export function formatUser(user: User, person?: any) {
   return {
     uuid: user?.uuid || "",
     username: user?.username || "",
-    userProperties: {
+    // userProperties: {
       defaultLocale: user?.userProperties?.defaultLocale || "",
       forcePassword: user?.userProperties?.forcePassword || null,
-    },
+    // },
     person: {
       givenName: person?.names[0]?.givenName || "",
       familyName: person?.names[0]?.familyName || "",

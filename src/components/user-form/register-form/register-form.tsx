@@ -54,10 +54,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       gender: Yup.string().required("messageErrorPhoneNumber"),
       phone: Yup.string().min(9, ("messageErrorPhoneNumber")),
     }),
-    userProperties: Yup.object({
-      defaultLocale: Yup.string(),
-      forcePassword: Yup.string()
-    }),
+    defaultLocale: Yup.string().required("messageErrorLocale"),
     status: Yup.string().required("messageErrorprofile"),
     profile: Yup.string().required("messageErrorprofile"),
     roles: Yup.array()
@@ -78,7 +75,10 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         }],
         gender: values.person.gender
       },
-      userProperties: values.userProperties
+      userProperties: {
+        defaultLocale: values.defaultLocale,
+        forcePassword: values.forcePassword,
+      }
     }
     if (values?.roles?.length > 0) {
       user.roles = values.roles.map(r => r.uuid);

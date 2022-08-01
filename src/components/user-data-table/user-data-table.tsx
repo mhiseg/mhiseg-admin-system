@@ -67,9 +67,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ headers }) => {
     function onPaginationChange(e) {
         changeRows(e.pageSize, e.page);
     }
-    function Toolbar_ButtonOnclick(e) {
-        alert("Click to change the toolbar buttonName ");
-    }
+
     function OnHandleChangeProfil(e) {
 
     }
@@ -100,9 +98,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ headers }) => {
                                         <SearchInput
                                             className={styles['search-1']}
                                             onChange={(e) => ((e.currentTarget.value.trim().length) > 0) && onInputChange(e)} />
-                                        <Toolbar_Button
-                                            onClickChange={Toolbar_ButtonOnclick}
-                                        />
+                                        <Toolbar_Button />
                                     </div>
 
                                     <TableBatchActions className={styles.TableBatchActions} {...batchActionProps} >

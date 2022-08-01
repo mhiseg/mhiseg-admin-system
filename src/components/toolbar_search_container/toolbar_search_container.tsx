@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./toolbar_search_container.scss";
-import IconPlus from "@carbon/icons-react/es/add/24";
 import SearchIcon from "@carbon/icons-react/es/search/20";
 import { UserFollow32 } from "@carbon/icons-react"
 import { useRef } from "react";
 import { Icon } from "@iconify/react";
 import { useTranslation } from "react-i18next";
 import { Button } from "carbon-components-react";
+import { UserRegistrationContext } from "../../user-context";
 
 
 export function SearchInput({ onChange, className }) {
@@ -16,6 +16,7 @@ export function SearchInput({ onChange, className }) {
     const [isClearInput, setActiveClearInput] = useState(true);
     const input = useRef(null)
     const { t } = useTranslation();
+
 
     const toggleClass = (e) => {
 
@@ -63,12 +64,17 @@ export function SearchInput({ onChange, className }) {
 
 }
 
-export function Toolbar_Button({ onClickChange }) {
+export function Toolbar_Button() {
+    const {colSize} = useContext(UserRegistrationContext);
+
+
     return <>
         <Button
             hasIconOnly
             renderIcon={UserFollow32}
-            onClick={onClickChange}
+            onClick={() => {
+                colSize([7,5])
+              }}
             className={styles.Button}
         />
     </>

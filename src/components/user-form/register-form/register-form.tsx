@@ -93,7 +93,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       showToast({
         title: t('successfullyAdded', 'Successfully added'),
         kind: 'success',
-        description: 'Patient save succesfully',
+        description: 'User save succesfully',
       })
       setRefresh(res.data.systemId + new Date().getTime())
     }

@@ -167,9 +167,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                         <SearchInput
                                             className={styles['search-1']}
                                             onChange={(e) => ((e.currentTarget.value.trim().length) > 0) && onInputChange(e)} />
-                                        <Toolbar_Button
-                                            onClickChange={() => { colSize([7, 5]); userUuid(undefined); }}
-                                        />
+                                        <Toolbar_Button    />
                                     </div>
                                     <TableBatchActions className={styles.TableBatchActions} {...batchActionProps} >
                                         <Roles

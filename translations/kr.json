@@ -17,6 +17,8 @@
   "Search": "Rechèche...",
   "fullName":"Non Konplè",
   "phone":"Telefòn",
+  "status"  : "Estati",
+  "roles": "Dwa ou genyen",
   "fr": "Franse",
   "en": "Angle",
   "kr":"Kreyòl",
@@ -32,5 +34,6 @@
   "doctor":"Doktè",
   "admin":"administratè",
   "unknown":"Enkoni",
-  "locale": "Lang"
+  "locale": "Lang",
+  "carbon.table.batch.cancel": "test"
 }

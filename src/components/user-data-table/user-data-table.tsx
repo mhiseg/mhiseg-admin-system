@@ -6,7 +6,7 @@ import {
     DataTable, TableContainer, TableToolbar, TableBatchActions,
     TableToolbarMenu,
     TableToolbarAction, Table, TableHead, TableRow, TableSelectAll,
-    TableHeader, TableBody, TableSelectRow, TableCell, Pagination
+    TableHeader, TableBody, TableSelectRow, TableCell, Pagination, TableBatchActionsTranslationKey
 } from "carbon-components-react";
 import { Settings32, UserAccess24, CertificateCheck32 } from '@carbon/icons-react';
 import { SearchInput, Toolbar_Button } from "../toolbar_search_container/toolbar_search_container";
@@ -29,41 +29,9 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
     const abortController = new AbortController();
     const { t } = useTranslation();
     const headers = [
-        {
-            key: 'Username',
-            header: t('Username')
-        },
-        {
-            key: 'fullName',
-            header: t('fullName')
-        },
-
-        {
-            key: 'phone',
-            header: t('phone')
-
-        },
-        {
-            key: 'gender',
-            header: t('gender')
-        },
-        {
-            key: 'profile',
-            header: t('profilLabel')
-        },
-
-        {
-            key: 'roles',
-            header: t('roles')
-        },
-        {
-            key: "locale",
-            header: t("locale")
-        },
-        {
-            key: 'status',
-            header: t('status')
-        },
+        { key: 'Username', header: t('Username') }, { key: 'fullName', header: t('fullName') }, { key: 'phone', header: t('phone') },
+        { key: 'gender', header: t('gender') }, { key: 'profile', header: t('profilLabel') }, { key: 'roles', header: t('roles') },
+        { key: "locale", header: t("locale") }, { key: 'status', header: t('status') },
     ];
 
     const checkTranslation = (text: string) => {
@@ -89,7 +57,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
             case "F":
                 return t("femaleLabel")
             default:
-                return t("unknown")
+                return t(text);
         }
     }
 
@@ -100,12 +68,12 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                     id: user?.uuid,
                     Username: user?.username,
                     fullName: user?.person.display,
-                    gender: checkTranslation(user?.person.gender),
-                    profile: checkTranslation(user.systemId.split('-')[0]),
+                    gender: user?.person.gender,
+                    profile: user.systemId.split('-')[0],
                     roles: user?.roles?.length > 1 ? user.roles[0].display + ", " + user.roles[1].display + " (" + user?.roles?.length + ")" : user?.roles[0]?.display,
                     phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
-                    status: t(getStatusUser(user?.retired, user?.userProperties?.forcePassword)),
-                    locale: t(user?.userProperties?.defaultLocale)
+                    status: getStatusUser(user?.retired, user?.userProperties?.forcePassword),
+                    locale: user?.userProperties?.defaultLocale
                 }
             }))
     }
@@ -114,7 +82,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
 
         const users = rows.map(row => {
             const locale = locales.find(locale => t(locale.display) == row.cells[6].value)?.value;
-            
+
             return {
                 uuid: row.id,
                 userProperties: {
@@ -146,34 +114,40 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                 rows,
                 headers,
                 getHeaderProps,
-                getRowProps,
                 getSelectionProps,
                 getToolbarProps,
                 getBatchActionProps,
                 onInputChange,
                 selectedRows,
                 getTableProps,
+                totalSelected,
                 getTableContainerProps,
             }) => {
-                const batchActionProps = getBatchActionProps();
+                let batchActionProps = getBatchActionProps();
+                // batchActionProps = {
 
+
+                // console.log(getTableContainerProps(), '====');
                 return (
                     <>
-                        <TableContainer
-                            {...getTableContainerProps()}>
+                        <TableContainer  {...getTableContainerProps()}
+
+                        >
                             <div className={styles.TableContainer}>
-                                <TableToolbar {...getToolbarProps()}>
+                                <TableToolbar {...getToolbarProps()} >
                                     <div id={styles["toolbar-content"]} className={"bx--toolbar-content"}>
                                         <SearchInput
                                             className={styles['search-1']}
                                             onChange={(e) => ((e.currentTarget.value.trim().length) > 0) && onInputChange(e)} />
-                                        <Toolbar_Button    />
+                                        <Toolbar_Button />
                                     </div>
-                                    <TableBatchActions className={styles.TableBatchActions} {...batchActionProps} >
+                                    <TableBatchActions
+                                        className={styles.TableBatchActions}
+                                        {...batchActionProps}
+                                    >
                                         <Roles
                                             placeholder={t("roles")}
-                                            onChange={(data) => { setRoles(data)}}
-
+                                            onChange={(data) => { setRoles(data) }}
                                         />
                                         <TableToolbarMenu
                                             className={styles.TableToolbarMenu}
@@ -247,7 +221,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                                     colSize([12, 0])
                                                 }}
                                             />
-                                            {row.cells.map((cell) => <TableCell key={cell.id}>{cell.value}</TableCell>)}
+                                            {row.cells.map((cell, i) => <TableCell key={cell.id}>{i > 2 ? checkTranslation(cell.value) : cell.value}</TableCell>)}
                                         </TableRow>
                                     ))}
                                 </TableBody>

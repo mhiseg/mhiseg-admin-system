@@ -5,6 +5,8 @@
   "messageErrorPhoneNumber": "Fòma telefòn ou an pa bon",
   "messageErrorProfile":"Fòk ou chwazi yon profil",
   "messageErrorUsername": "Fòk ou gen yon non itilizatè",
+  "messageErrorUsernameMinVal": "Fòk ou genyen pou piti 5 karaktè pou non itilizatè a",
+  "messageErrorUsernameExists": " Non itilizatè sa deja ap itilize pa yon lòt moun",
   "messageErrorStatus": "Fok ou chwazi ki Estati pou itilizatè a",
   "messageErrorLocale": "Fòk ou chwazi ki lang pa defo pou itilizatè a",
   "roles field must have at least 1 items": "Fòk ou chwazi omwen yon wòl pou itilizatè a",

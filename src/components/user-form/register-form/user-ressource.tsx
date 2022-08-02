@@ -109,10 +109,10 @@ export function formatRole(roles, object?) {
 
 export function formatUser(user: User, person?: any) {
   return {
-    uuid: user?.uuid || "",
+    uuid: user?.uuid || undefined,
     username: user?.username || "",
     defaultLocale: user?.userProperties?.defaultLocale || "",
-    forcePassword: user?.userProperties?.forcePassword || null,
+    forcePassword: user?.userProperties?.forcePassword || "false",
     person: {
       givenName: person?.names[0]?.givenName || "",
       familyName: person?.names[0]?.familyName || "",

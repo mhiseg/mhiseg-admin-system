@@ -5,6 +5,8 @@
   "messageErrorPhoneNumber": "The phone number format is invalid",
   "messageErrorProfile": "The user must have a profile",
   "messageErrorUsername": "Username can't be null",
+  "messageErrorUsernameMinVal": "There username be at least 5 caracteres",
+  "messageErrorUsernameExists": "Username already exists",
   "messageErrorStatus": "The user must have a status",
   "messageErrorLocale": "The user must have a default locale",
   "roles field must have at least 1 items": "There must be at least one role for the user",

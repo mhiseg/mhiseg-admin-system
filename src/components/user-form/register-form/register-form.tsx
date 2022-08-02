@@ -45,6 +45,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     username: Yup.string()
       .required('messageErrorUsername')
       .lowercase("minuscule")
+      .min(5, ("messageErrorUsernameMinVal"))
       .test('search exist user', (value, { createError, parent }) => {
         return validateIdentifier(value, createError, parent);
       }),
@@ -78,6 +79,9 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         defaultLocale: values.defaultLocale,
         forcePassword: values.forcePassword,
       }
+    }
+    if(!values.uuid){
+      user.password = user.username.charAt(0).toUpperCase()+user.username.substring(1)+"123"
     }
     if (values?.roles?.length > 0) {
       user.roles = values.roles.map(r => r.uuid);
@@ -160,9 +164,12 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                   </Column>
                 </Row>
                 <Row>
-                  <Column className={styles.firstColSyle} lg={12}>
-                    {FieldForm('roles')}
-                  </Column>
+                  {/* {
+                    values.uuid && */}
+                      <Column className={styles.firstColSyle} lg={12}>
+                        {FieldForm('roles')}
+                      </Column>
+                  {/* } */}
                 </Row>
               </div>
             </Grid>

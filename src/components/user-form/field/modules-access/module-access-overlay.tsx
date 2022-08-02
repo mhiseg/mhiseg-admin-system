@@ -8,7 +8,7 @@ import styles from '../field.scss';
 
 
 
-export const ModuleField: React.FC = () => {
+export const ModuleField: React.FC = (props) => {
   const { t } = useTranslation();
   const [roles, setRoles] = useState([{ uuid: "", display: "" }]);
   const [field,meta] = useField("roles");

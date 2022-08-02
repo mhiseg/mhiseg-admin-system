@@ -21,13 +21,14 @@ interface InputSelectProps {
 
 export const MultiSelectField: React.FC<InputSelectProps> = (props) => {
     const [field, meta, helpers] = useField(props.name);
-    const { setValue, setError } = helpers;
+    const { setValue } = helpers;
     const { t } = useTranslation();
 
-    const compareItems = (a, b) =>{
-        
-    }
+    // useEffect(() => {
 
+    //     alert(1)
+
+    // },[meta.value])
     return (
         <div className={props.classNameField}>
             <MultiSelect.Filterable

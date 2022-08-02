@@ -1,16 +1,23 @@
 {
+  "formAddTitle": "Add a new user",
+  "formEditTitle": "Edit a user",
   "messageErrorGivenName": "Given name can't be null",
   "messageErrorFamilyName": "Family name can't be null",
   "messageErrorGender": "The user must have a gender",
   "messageErrorPhoneNumber": "The phone number format is invalid",
-  "messageErrorProfil": "The user must have a profil",
+  "messageErrorProfile": "The user must have a profil",
   "messageErrorUsername": "Username can't be null",
+  "messageErrorStatus": "The user account must have a status",
+  "messageErrorUsernameExists": "Username already exists",
+  "familyNameLabelText": "Family name",
+  "givenNameLabelText": "Given name",
   "fieldset1Label": "Person info",
   "fieldset2Label": "Access management",
   "maleLabel": "Male",
   "femaleLabel": "Female",
   "genderLabel": "Gender",
   "profileLabel": "Profil",
+  "statusLabel": "Status",
   "adminSystem": "System administration panel",
   "Username": "Username",
   "gender": "Gender",
@@ -38,5 +45,7 @@
   "doctor": "Physician",
   "admin": "Administrator",
   "unknown": "Unknown",
-  "locale": "Language"
+  "locale": "Language",
+  "cancelButton": "Cancel",
+  "confirmButton": "Confirm"
 }

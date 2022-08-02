@@ -1,12 +1,22 @@
 { 
+  "formAddTitle": "Ajoute yon nouvo itilizatè",
+  "formEditTitle": "Modifye yon itilizatè",
   "messageErrorGivenName": "Fòk ou mete yon non",
   "messageErrorGender": "itilizatè a dwe gen yon sèks",
   "messageErrorFamilyName": "Fòk ou gen yon siyati",
   "messageErrorPhoneNumber": "Fòma telefòn ou an pa bon",
-  "messageErrorProfil":"Fòk ou chwazi yon profil",
+  "messageErrorProfile":"Fòk ou chwazi yon profil",
   "messageErrorUsername": "Fòk ou gen yon non itilizatè",
+  "messageErrorStatus": "Kont itilizatè an dwe gen yon eta",
+  "messageErrorUsernameExists": "Non itilizatè sa ekziste deja",
+  "givenNameLabelText":"Non",
+  "familyNameLabelText": "Siyati",
+  "fieldset1Label":"Enfomasyon mounn nn",
+  "fieldset2Label":"Jere aksè",
   "maleLabel": "Gason",
   "femaleLabel": "Fi",
+  "profileLabel": "Pwofil",
+  "statusLabel": "Eta kont lan",
   "adminSystem": "Jesyon itilizatè yo",
   "Username": "Non itilizatè",
   "PreviousPage": "Paj avan",
@@ -35,5 +45,7 @@
   "admin":"administratè",
   "unknown":"Enkoni",
   "locale": "Lang",
-  "carbon.table.batch.cancel": "test"
+  "carbon.table.batch.cancel": "test",
+  "cancelButton": "Anile",
+  "confirmButton": "Anrejistre"
 }

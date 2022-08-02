@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useField } from 'formik';
-import { SelectItem, Select, MultiSelect, TableToolbarMenu, Button } from 'carbon-components-react';
+import { SelectItem, Select, MultiSelect, TableToolbarMenu, Button, Column, Row } from 'carbon-components-react';
 import { useTranslation } from 'react-i18next';
 import { Plane16 } from '@carbon/icons-react';
 import { getAllRoles } from '../user-form/register-form/user-ressource';
 import styles from "./user-data-table.scss";
-import { UserFollow32 } from "@carbon/icons-react"
+import { CheckmarkOutline32 } from "@carbon/icons-react"
 
 interface RolesProps {
     placeholder?: string;
@@ -28,22 +28,31 @@ export const Roles: React.FC<RolesProps> = ({ label, onChange, placeholder }) =>
 
     return (
         <div className={styles.roles}>
-            <MultiSelect.Filterable
-                light={true}
-                placeholder={placeholder}
-                label={label}
-                initialSelectedItems={roleSelected}
-                hideLabel={true}
-                id="role-select"
-                titleText="Multiselect title"
-                items={roles}
-                itemToString={(role) => (role ? role.display : '')}
-                selectionFeedback="top-after-reopen"
-                onChange={(e) => {
-                    onChange(e.selectedItems)
-                    setRoleSelected([])
-                }}
-            />
+            <Row className={styles.p0}>
+                <Column className={styles.p0} lg={11}>
+                    <MultiSelect.Filterable
+                        light={true}
+                        placeholder={placeholder}
+                        label={label}
+                        initialSelectedItems={roleSelected}
+                        hideLabel={true}
+                        id="role-select"
+                        titleText="Multiselect title"
+                        items={roles}
+                        itemToString={(role) => (role ? role.display : '')}
+                        selectionFeedback="top-after-reopen"
+                        onChange={(e) => {
+                            onChange(e.selectedItems)
+                            setRoleSelected([])
+                        }}
+                    />
+                </Column>
+                <Column lg={1}>
+                {/* <WatsonHealthNominate /> */}
+                    <CheckmarkOutline32 onClick={() => alert(0)} className={styles.colIcon}/>
+                    {/* <UserFollow32 /> */}
+                </Column>
+            </Row>
         </div>
     );
 }

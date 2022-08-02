@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Input } from '../../input/basic-input/input/input.component';
 import styles from '../field.scss';
 
@@ -8,7 +9,12 @@ interface UsernameFieldProps {
   required?: boolean;
 }
 
-export const UsernameField: React.FC<UsernameFieldProps> = ({ name }) => {
+export const UsernameField: React.FC<UsernameFieldProps> = ({ name ,required}) => {
+  const { t } = useTranslation();
+  let star = "";
+  required == true ? star = " *" : star = "";
+
+
   return (
     <>
       <Input
@@ -18,7 +24,7 @@ export const UsernameField: React.FC<UsernameFieldProps> = ({ name }) => {
         labelText={name}
         hideLabel={true}
         light={true}
-        placeholder="Username"
+        placeholder={t("Username","Nom d'utilisateur")+ star}
       />
     </>
   );

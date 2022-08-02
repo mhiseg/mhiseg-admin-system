@@ -8,7 +8,7 @@ import {
     TableToolbarAction, Table, TableHead, TableRow, TableSelectAll,
     TableHeader, TableBody, TableSelectRow, TableCell, Pagination, TableBatchActionsTranslationKey
 } from "carbon-components-react";
-import { Settings32, UserAccess24, CertificateCheck32 } from '@carbon/icons-react';
+import { Settings32, UserAccess24, CertificateCheck32, WatsonHealthNominate16 } from '@carbon/icons-react';
 import { SearchInput, Toolbar_Button } from "../toolbar_search_container/toolbar_search_container";
 import MultiSelectField, { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
@@ -141,9 +141,9 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                     >
 
 
-                                        <TableToolbarMenu
+                                        {/* <TableToolbarMenu
                                             className={styles.TableToolbarMenu}
-                                            renderIcon={CertificateCheck32}
+                                            renderIcon={WatsonHealthNominate64}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
                                             iconDescription={t("roles")}
                                             disabled={!(roles.length > 0)}
@@ -151,9 +151,23 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                                 updateUserRoles(abortController, selectedRows, roles).then(() => changeRows(pageSize, page))
                                             }}
                                         >
-                                        </TableToolbarMenu>
+                                        </TableToolbarMenu> */}
+
                                         <TableToolbarMenu
-                                            className={styles.TableToolbarMenu}
+                                            //className={styles.TableToolbarMenu}
+                                            renderIcon={WatsonHealthNominate16}
+                                            iconDescription={t("profileLabel")}
+                                            tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
+                                                    <TableToolbarAction  className={styles.TableToolbarMenu}>
+                                                        <Roles
+                                                            placeholder={t("roles")}
+                                                            onChange={(data) => { setRoles(data) }}
+                                                        />
+                                                    </TableToolbarAction>
+                                        </TableToolbarMenu>
+
+                                        <TableToolbarMenu
+                                            //className={styles.TableToolbarMenu}
                                             renderIcon={UserAccess24}
                                             iconDescription={t("profileLabel")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
@@ -164,13 +178,9 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                                     </TableToolbarAction>
                                                 )
                                             })}
-                                            <Roles
-                                                placeholder={t("roles")}
-                                                onChange={(data) => { setRoles(data) }}
-                                            />
                                         </TableToolbarMenu>
                                         <TableToolbarMenu
-                                            className={styles.TableToolbarMenu}
+                                            //className={styles.TableToolbarMenu}
                                             renderIcon={Settings32}
                                             iconDescription={t("status")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>

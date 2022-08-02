@@ -17,11 +17,11 @@ import { UsernameField } from './username/username-field.component';
 const FieldForm = (name: string) => {
   switch (name) {
     case 'givenName':
-      return <GivenNameField name={name} />;
+      return <GivenNameField name={name} required={true}/>;
     case 'familyName':
-      return <FamilyNameField name={name} />;
+      return <FamilyNameField name={name} required={true}/>;
     case 'username':
-      return <UsernameField name={name} />;
+      return <UsernameField name={name} required={true}/>;
     case 'password':
       return <PasswordField name={name} />;
     case 'email':

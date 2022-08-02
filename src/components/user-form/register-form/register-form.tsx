@@ -51,15 +51,15 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     person: Yup.object().shape({
       givenName: Yup.string().required('messageErrorGivenName'),
       familyName: Yup.string().required('messageErrorFamilyName'),
-      gender: Yup.string().required("messageErrorPhoneNumber"),
+      gender: Yup.string().required("messageErrorGender"),
       phone: Yup.string().min(9, ("messageErrorPhoneNumber")),
     }),
     userProperties: Yup.object({
       defaultLocale: Yup.string(),
       forcePassword: Yup.string()
     }),
-    status: Yup.string().required("messageErrorprofile"),
-    profile: Yup.string().required("messageErrorprofile"),
+    status: Yup.string().required("messageErrorStatus"),
+    profile: Yup.string().required("messageErrorProfile"),
     roles: Yup.array()
       .of(Yup.object()
       ).min(1)
@@ -104,6 +104,13 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     )
   }
 
+  function displayTitle(values) {
+    if (values.uuid)
+      return <h4>{t("formEditTitle","Modification d'utilisateur")}</h4>
+    else
+      return <h4>{t("formAddTitle","Ajout d'utilisateur")}</h4>
+  }
+
   return (
 
     <Formik
@@ -122,9 +129,10 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
               resetForm();
               colSize([12, 0])
             }} />
+            {displayTitle(values)}
             <Grid fullWidth={true} className={styles.p0}>
               <div id={styles.person}>
-                <h5>Info personne</h5>
+                <h5 className={styles.field1Style}>{t("fieldset1Label", "Info personne")}</h5>
                 <Row>
                   <Column className={styles.firstColSyle} lg={6}>
                     {FieldForm('givenName')}

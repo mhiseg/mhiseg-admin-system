@@ -83,14 +83,12 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
     }
 
     const formatRows = (rows, status) => {
-
         const users = rows.map(row => {
-            const locale = locales.find(locale => t(locale.display) == row.cells[6].value)?.value;
-
+            const locale = locales.find(locale => t(locale.display) == t(row.cells[6].value))?.value;
             return {
                 uuid: row.id,
                 userProperties: {
-                    defaultLocale: locale
+                    defaultLocale: locale || ""
                 },
                 username: row.cells[0].value
             }

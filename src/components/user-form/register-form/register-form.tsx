@@ -151,7 +151,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                 </Row>
               </div>
               <div id={styles.access}>
-                <h5>{t("fieldset2Label", "Gestion d'accès")}</h5>
+                <h5 className={styles.field2Style}>{t("fieldset2Label", "Gestion d'accès")}</h5>
                 <Row>
                   <Column className={styles.firstColSyle} lg={6}>
                     {FieldForm('username')}

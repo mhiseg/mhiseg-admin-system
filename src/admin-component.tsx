@@ -1,4 +1,3 @@
-
 import { Column, Grid, Row } from "carbon-components-react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,10 +10,8 @@ import { UserRegistrationContext } from "./user-context";
 const AdminSys: React.FC = () => {
     const { t } = useTranslation();
     const [lgValue,setLgValue]=useState([12,0]);
-    const [ userUuid, setUserUuid ] = useState("");
+    const [ userUuid, setUserUuid ] = useState(undefined);
     const [refreshTable, setRefreshTable] = useState();
-
-   
   
     return (
         <>
@@ -24,7 +21,7 @@ const AdminSys: React.FC = () => {
                     <Grid fullWidth={true} className={styles.p0}>
                         <Row>
                             <Column sm={lgValue[1]} lg={lgValue[0]} className={lgValue[0] < 12 ? styles.pr0 : ''}>
-                            <UserDataTable refresh={refreshTable}/>
+                            <UserDataTable refresh={refreshTable} lg={lgValue}  uuid={userUuid}/>
 
                             </Column>
                             <Column sm={lgValue[0]} lg={lgValue[1]}>

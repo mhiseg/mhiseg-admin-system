@@ -8,10 +8,10 @@ import styles from '../field.scss';
 
 
 
-export const ModuleField: React.FC = () => {
+export const ModuleField: React.FC = (props) => {
   const { t } = useTranslation();
   const [roles, setRoles] = useState([{ uuid: "", display: "" }]);
-
+  const [field,meta] = useField("roles");
 
   useEffect(() => {
     const userRoles = getAllRoles().then(roles => setRoles(formatRole(roles.data.results)));
@@ -25,14 +25,14 @@ export const ModuleField: React.FC = () => {
     <>
       <MultiSelectField
         options={roles}
-        placeholder="Droit d'accès"
-        label="Droit d'accès"
-        // id="roles"
+        placeholder={t("roles")}
+        label={t("roles")}
         name="roles" 
-        className={styles.margin_field}
+        classNameField={styles.margin_field}
+        className={meta.error ? styles.roles:""}
+        classNameError={styles.error}
         items={roles}
         itemToString={(role) => (role ? role.display : '')}
-
       />
     </>
   );

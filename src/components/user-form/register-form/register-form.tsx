@@ -21,7 +21,7 @@ interface UserRegisterFormuser {
 const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh }) => {
   const { t } = useTranslation();
   const abortController = new AbortController();
-  const { colSize, setRefresh } = useContext(UserRegistrationContext);
+  const { colSize, setRefresh, userUuid } = useContext(UserRegistrationContext);
   const [initialV, setInitialV] = useState(formatUser(user));
 
 
@@ -45,6 +45,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     username: Yup.string()
       .required('messageErrorUsername')
       .lowercase("minuscule")
+      .min(5, ("messageErrorUsernameMinVal"))
       .test('search exist user', (value, { createError, parent }) => {
         return validateIdentifier(value, createError, parent);
       }),
@@ -58,12 +59,12 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       defaultLocale: Yup.string(),
       forcePassword: Yup.string()
     }),
+    defaultLocale: Yup.string().required("messageErrorLocale"),
     status: Yup.string().required("messageErrorStatus"),
     profile: Yup.string().required("messageErrorProfile"),
     roles: Yup.array()
       .of(Yup.object()
       ).min(1)
-    ,
   });
 
   const save = (values) => {
@@ -78,7 +79,13 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         }],
         gender: values.person.gender
       },
-      userProperties: values.userProperties
+      userProperties: {
+        defaultLocale: values.defaultLocale,
+        forcePassword: values.forcePassword,
+      }
+    }
+    if (!values.uuid) {
+      user.password = user.username.charAt(0).toUpperCase() + user.username.substring(1) + "123"
     }
     if (values?.roles?.length > 0) {
       user.roles = values.roles.map(r => r.uuid);
@@ -104,12 +111,6 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     )
   }
 
-  function displayTitle(values) {
-    if (values.uuid)
-      return <h4>{t("formEditTitle","Modification d'utilisateur")}</h4>
-    else
-      return <h4>{t("formAddTitle","Ajout d'utilisateur")}</h4>
-  }
 
   return (
 
@@ -128,8 +129,9 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
             <Icon type="reset" className={styles.closeButton} icon="carbon:close-outline" onClick={() => {
               resetForm();
               colSize([12, 0])
+              userUuid(undefined)
             }} />
-            {displayTitle(values)}
+            <h4>{t(uuid ? "editUser" : "newUser")}</h4>
             <Grid fullWidth={true} className={styles.p0}>
               <div id={styles.person}>
                 <h5 className={styles.field1Style}>{t("fieldset1Label", "Info personne")}</h5>
@@ -169,9 +171,12 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                   </Column>
                 </Row>
                 <Row>
+                  {/* {
+                    values.uuid && */}
                   <Column className={styles.firstColSyle} lg={12}>
                     {FieldForm('roles')}
                   </Column>
+                  {/* } */}
                 </Row>
               </div>
             </Grid>
@@ -186,7 +191,10 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                         type="reset"
                         size="sm"
                         isSelected={true}
-                        onClick={() => colSize([12, 0])}                      >
+                        onClick={() => {
+                          colSize([12, 0])
+                          userUuid(undefined)
+                        }}                      >
 
                         {t("cancelButton", "Annuler")}
                       </Button>

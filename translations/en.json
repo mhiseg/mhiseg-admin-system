@@ -44,5 +44,7 @@
   "doctor": "Physician",
   "admin": "Administrator",
   "unknown": "Unknown",
-  "locale": "Language"
+  "locale": "Language",
+  "newUser": "New User",
+  "editUser": "Edit this user"
 }

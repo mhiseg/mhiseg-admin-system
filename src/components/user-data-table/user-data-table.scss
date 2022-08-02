@@ -23,7 +23,17 @@
   max-height: 60vh;
   overflow: scroll;
 }
+.Button {
+  position: relative;
+  background-color:white;
+  color: rgb(0, 0, 0);
+  font-family: 'Poppins';
+  left: -5px;
+}
 
+.Button:hover {
+  background-color: #005d5d;
+}
 #toolbar-content {
   margin-top: 5px;
   padding-bottom: 10px;

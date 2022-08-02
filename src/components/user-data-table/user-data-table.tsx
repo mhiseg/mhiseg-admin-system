@@ -6,19 +6,22 @@ import {
     DataTable, TableContainer, TableToolbar, TableBatchActions,
     TableToolbarMenu,
     TableToolbarAction, Table, TableHead, TableRow, TableSelectAll,
-    TableHeader, TableBody, TableSelectRow, TableCell, Pagination, TableBatchActionsTranslationKey
+    TableHeader, TableBody, TableSelectRow, TableCell, Pagination, Button
 } from "carbon-components-react";
 import { Settings32, UserAccess24, CertificateCheck32 } from '@carbon/icons-react';
-import { SearchInput, Toolbar_Button } from "../toolbar_search_container/toolbar_search_container";
-import MultiSelectField, { Roles } from "./role-component";
+import { SearchInput } from "../toolbar_search_container/toolbar_search_container";
+import { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
 import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, updateUserRoles, getStatusUser, profiles, status, locales } from "../user-form/register-form/user-ressource";
+import { UserFollow32 } from "@carbon/icons-react"
 
 export interface DeathListProps {
-    refresh?: boolean
+    refresh?: boolean;
+    lg?: any;
+    uuid?: string;
 }
 
-const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
+const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
     const [rowsTable, setRows] = useState([]);
     const { colSize } = useContext(UserRegistrationContext);
     const [totalpageSize, setTotalPageSize] = useState(1);
@@ -26,6 +29,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
     const paginationPageSizes = [1, 5, 10, 20, 30, 40];
     const [roles, setRoles] = useState([]);
     let { userUuid } = useContext(UserRegistrationContext);
+    const [showAddUser, setShowAddUser] = useState((uuid == undefined));
     const abortController = new AbortController();
     const { t } = useTranslation();
     const headers = [
@@ -133,7 +137,19 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                         <SearchInput
                                             className={styles['search-1']}
                                             onChange={(e) => ((e.currentTarget.value.trim().length) > 0) && onInputChange(e)} />
-                                        <Toolbar_Button />
+                                        {
+                                            (showAddUser || uuid) &&
+                                            <Button
+                                                hasIconOnly
+                                                renderIcon={UserFollow32}
+                                                onClick={() => {
+                                                    userUuid(undefined)
+                                                    colSize([7, 5])
+                                                    setShowAddUser(false)
+                                                }}
+                                                className={styles.Button}
+                                            />
+                                        }
                                     </div>
                                     <TableBatchActions
                                         className={styles.TableBatchActions}
@@ -189,11 +205,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                 <TableHead className={styles.TableRowHeader}>
                                     <TableRow>
                                         <TableSelectAll
-                                            onSelect={
-                                                (e) => {
-                                                    colSize([12, 0])
-                                                }
-                                            }
+                                            onSelect={(e) => colSize([12, 0])}
                                             {...getSelectionProps()}
                                         />
                                         {headers.map((header) => (
@@ -213,9 +225,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh }) => {
                                             <TableSelectRow
                                                 className={styles.testRows}
                                                 {...getSelectionProps({ row })}
-                                                onChange={(e) => {
-                                                    colSize([12, 0])
-                                                }}
+                                                onChange={(e) => colSize([12, 0])}
                                             />
                                             {row.cells.map((cell, i) => <TableCell key={cell.id}>{i > 2 ? checkTranslation(cell.value) : cell.value}</TableCell>)}
                                         </TableRow>

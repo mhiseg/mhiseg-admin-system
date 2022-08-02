@@ -1,12 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styles from "./toolbar_search_container.scss";
 import SearchIcon from "@carbon/icons-react/es/search/20";
-import { UserFollow32 } from "@carbon/icons-react"
 import { useRef } from "react";
 // import { Icon } from "@iconify/react";
 import { useTranslation } from "react-i18next";
-import { Button } from "carbon-components-react";
-import { UserRegistrationContext } from "../../user-context";
 
 
 export function SearchInput({ onChange, className }) {
@@ -60,24 +57,6 @@ export function SearchInput({ onChange, className }) {
         <input ref={input} type="text" className={className} name="search" autoComplete="off"
             onChange={onChange} onInput={onInputChange}
             placeholder={t("Search", "Search...")} />
-    </>
-
-}
-
-export function Toolbar_Button() {
-    const {colSize, userUuid} = useContext(UserRegistrationContext);
-
-
-    return <>
-        <Button
-            hasIconOnly
-            renderIcon={UserFollow32}
-            onClick={() => {
-                userUuid(undefined)
-                colSize([7,5])
-              }}
-            className={styles.Button}
-        />
     </>
 
 }

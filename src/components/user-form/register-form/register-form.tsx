@@ -21,7 +21,7 @@ interface UserRegisterFormuser {
 const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh }) => {
   const { t } = useTranslation();
   const abortController = new AbortController();
-  const { colSize, setRefresh } = useContext(UserRegistrationContext);
+  const { colSize, setRefresh, userUuid } = useContext(UserRegistrationContext);
   const [initialV, setInitialV] = useState(formatUser(user));
 
 
@@ -80,8 +80,8 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         forcePassword: values.forcePassword,
       }
     }
-    if(!values.uuid){
-      user.password = user.username.charAt(0).toUpperCase()+user.username.substring(1)+"123"
+    if (!values.uuid) {
+      user.password = user.username.charAt(0).toUpperCase() + user.username.substring(1) + "123"
     }
     if (values?.roles?.length > 0) {
       user.roles = values.roles.map(r => r.uuid);
@@ -124,7 +124,10 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
             <Icon type="reset" className={styles.closeButton} icon="carbon:close-outline" onClick={() => {
               resetForm();
               colSize([12, 0])
+              userUuid(undefined)
             }} />
+            <h4>{t(uuid ? "editUser" : "newUser")}</h4>
+
             <Grid fullWidth={true} className={styles.p0}>
               <div id={styles.person}>
                 <h5>{t("fieldset1Label")}</h5>
@@ -166,9 +169,9 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                 <Row>
                   {/* {
                     values.uuid && */}
-                      <Column className={styles.firstColSyle} lg={12}>
-                        {FieldForm('roles')}
-                      </Column>
+                  <Column className={styles.firstColSyle} lg={12}>
+                    {FieldForm('roles')}
+                  </Column>
                   {/* } */}
                 </Row>
               </div>
@@ -184,7 +187,10 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                         type="reset"
                         size="sm"
                         isSelected={true}
-                        onClick={() => colSize([12, 0])}                      >
+                        onClick={() => {
+                          colSize([12, 0])
+                          userUuid(undefined)
+                        }}                      >
 
                         {t("cancelButton", "Annuler")}
                       </Button>

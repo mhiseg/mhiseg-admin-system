@@ -43,5 +43,7 @@
   "doctor":"Doktè",
   "admin":"administratè",
   "unknown":"Enkoni",
-  "locale": "Lang"
+  "locale": "Lang",
+  "newUser": "Nouvo itilizatè",
+  "editUser": "Modifye itilizatè sa"
 }

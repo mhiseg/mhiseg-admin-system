@@ -44,5 +44,7 @@
   "doctor":"Médecin",
   "admin":"administrateur",
   "unknown":"Inconnu",
-  "locale": "Langue"
+  "locale": "Langue",
+  "newUser": "Nouveau utilisateur",
+  "editUser": "Modification de cet utilisateur"
 }

@@ -13,7 +13,8 @@ import { SearchInput } from "../toolbar_search_container/toolbar_search_containe
 import { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
 import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, updateUserRoles, getStatusUser, profiles, status, locales } from "../user-form/register-form/user-ressource";
-import { UserFollow32 } from "@carbon/icons-react"
+import { UserFollow32, GenderFemale32 } from "@carbon/icons-react"
+import { Icon } from "@iconify/react";
 
 export interface DeathListProps {
     refresh?: boolean;
@@ -34,7 +35,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
     const { t } = useTranslation();
     const headers = [
         { key: 'Username', header: t('Username') }, { key: 'fullName', header: t('fullName') }, { key: 'phone', header: t('phone') },
-        { key: 'gender', header: t('gender') }, { key: 'profile', header: t('profileLabel') }, { key: 'roles', header: t('roles') },
+        { key: 'profile', header: t('profileLabel') }, { key: 'roles', header: t('roles') },
         { key: "locale", header: t("locale") }, { key: 'status', header: t('status') },
     ];
 
@@ -71,8 +72,8 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                 return {
                     id: user?.uuid,
                     Username: user?.username,
-                    fullName: user?.person.display,
-                    gender: user?.person.gender,
+                    fullName: user?.person.display + "-" + user?.person.gender,
+                    // gender: user?.person.gender,
                     profile: user.systemId.split('-')[0],
                     roles: user?.roles?.length > 1 ? user.roles[0].display + ", " + user.roles[1].display + " (" + user?.roles?.length + ")" : user?.roles[0]?.display,
                     phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
@@ -110,6 +111,10 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
             .then(async json => formatUser(json).then(data => setRows(data)))
     }
 
+    const getFullNameWithGender = (fullName: string) => {
+        const value = fullName.split('-');
+        return <>{value[0]}  <Icon className={styles.closeButton} icon={value[1] == "M" ? "emojione-monotone:man" : "emojione-monotone:woman"} /></>
+    }
     return (
         <DataTable rows={rowsTable} headers={headers} useZebraStyles={true} >
             {({
@@ -148,6 +153,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                                 className={styles.Button}
                                             />
                                         }
+
                                     </div>
                                     <TableBatchActions
                                         className={styles.TableBatchActions}
@@ -225,7 +231,11 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                                 {...getSelectionProps({ row })}
                                                 onChange={(e) => colSize([12, 0])}
                                             />
-                                            {row.cells.map((cell, i) => <TableCell key={cell.id}>{i > 2 ? checkTranslation(cell.value) : cell.value}</TableCell>)}
+                                            {row.cells.map((cell, i) => <TableCell key={cell.id}>
+                                                {i > 2 ? checkTranslation(cell.value) : (i == 1 ? getFullNameWithGender(cell.value) : cell.value)}
+                                            </TableCell>
+                                            )}
+
                                         </TableRow>
                                     ))}
                                 </TableBody>

@@ -24,11 +24,6 @@ export const MultiSelectField: React.FC<InputSelectProps> = (props) => {
     const { setValue } = helpers;
     const { t } = useTranslation();
 
-    // useEffect(() => {
-
-    //     alert(1)
-
-    // },[meta.value])
     return (
         <div className={props.classNameField}>
             <MultiSelect.Filterable
@@ -39,7 +34,9 @@ export const MultiSelectField: React.FC<InputSelectProps> = (props) => {
                 initialSelectedItems={meta.value}
                 placeholder={props.placeholder}
                 onChange={(e) => { setValue(e.selectedItems) }}
-                invalidText={meta.error}
+                invalidText={": React.ReactNode | undefined"}
+                light={true}
+                useTitleInItem={false}
             />
             <span className={props.classNameError}>{t(meta.error)}</span>
         </div>

@@ -15,8 +15,6 @@ interface InputSelectProps {
     light?: boolean;
     itemToString(item: any): string;
     className?: string;
-    classNameError?: string;
-    classNameField?: string;
 }
 
 export const MultiSelectField: React.FC<InputSelectProps> = (props) => {
@@ -25,7 +23,7 @@ export const MultiSelectField: React.FC<InputSelectProps> = (props) => {
     const { t } = useTranslation();
 
     return (
-        <div >
+        <>
             <MultiSelect.Filterable
                 {...field}
                 {...props}
@@ -38,8 +36,7 @@ export const MultiSelectField: React.FC<InputSelectProps> = (props) => {
                 invalid={!!(meta.error)}
                 light={true}
             />
-               
-        </div>
+        </>
     );
 }
 

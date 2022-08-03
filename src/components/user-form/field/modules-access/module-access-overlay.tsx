@@ -28,9 +28,7 @@ export const ModuleField: React.FC = (props) => {
         placeholder={t("roles")}
         label={t("roles")}
         name="roles" 
-        classNameField={styles.margin_field}
-        className={meta.error ? styles.roles:""}
-        classNameError={styles.error}
+        className={styles.margin_field}
         items={roles}
         itemToString={(role) => (role ? role.display : '')}
       />

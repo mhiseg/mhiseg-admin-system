@@ -55,6 +55,10 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       gender: Yup.string().required("messageErrorGender"),
       phone: Yup.string().min(9, ("messageErrorPhoneNumber")),
     }),
+    userProperties: Yup.object({
+      defaultLocale: Yup.string(),
+      forcePassword: Yup.string()
+    }),
     defaultLocale: Yup.string().required("messageErrorLocale"),
     status: Yup.string().required("messageErrorStatus"),
     profile: Yup.string().required("messageErrorProfile"),
@@ -107,6 +111,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     )
   }
 
+
   return (
 
     <Formik
@@ -127,10 +132,9 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
               userUuid(undefined)
             }} />
             <h4>{t(uuid ? "editUser" : "newUser")}</h4>
-
             <Grid fullWidth={true} className={styles.p0}>
               <div id={styles.person}>
-                <h5>{t("fieldset1Label")}</h5>
+                <h5 className={styles.field1Style}>{t("fieldset1Label", "Info personne")}</h5>
                 <Row>
                   <Column className={styles.firstColSyle} lg={6}>
                     {FieldForm('givenName')}
@@ -149,7 +153,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                 </Row>
               </div>
               <div id={styles.access}>
-                <h5>{t("fieldset2Label", "Gestion d'accès")}</h5>
+                <h5 className={styles.field2Style}>{t("fieldset2Label", "Gestion d'accès")}</h5>
                 <Row>
                   <Column className={styles.firstColSyle} lg={6}>
                     {FieldForm('username')}

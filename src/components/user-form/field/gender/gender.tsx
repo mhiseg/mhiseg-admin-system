@@ -4,7 +4,6 @@ import { SelectCustom } from "../../input/custom-input/custom-select/custom-sele
 import styles from '../field.scss';
 
 
-
 export const GenderField: React.FC = () => {
   const { t } = useTranslation();
 
@@ -15,6 +14,7 @@ export const GenderField: React.FC = () => {
         options={[{display:t("maleLabel","Masculin"), value:"M"},{display:t("femaleLabel","Feminin"), value:"F"}]}
         label={t("gender","Sexe")}
         name="person.gender"
+        required={true}
       />
     </>
   );

@@ -8,17 +8,21 @@
   border: 1px solid #B1B1B1;
   border-width: 1.1px 1.1px 0px 1.1px;
 }
-.testRows{
+
+.testRows {
   background-color: red;
 }
+
 .TableRowHeader {
   border: 2px solid #B1B1B1;
   border-width: 0px 1.1px 1.1px 1.1px;
 }
-.TableBatchActions{
+
+.TableBatchActions {
   background-color: rgb(255, 255, 255);
   color: #000;
 }
+
 .TableBody {
   max-height: 60vh;
   overflow: scroll;
@@ -38,14 +42,24 @@
   margin-top: 5px;
   padding-bottom: 10px;
 }
-.roles{
-  display: inline-block;
+
+.roles {
   position: absolute;
-  padding: 0.45em;
-  width: 29em;
+  width: 70em;
   height: 3.2em;
-  margin-left: -28em;
+  margin-left: -55em;
+  margin-top: 7px
 }
+
+.colIcon {
+  margin-top: 7.5px;
+  margin-right: 55px;
+  background-color: white;
+  color: green;
+  width: 24px;
+  height: 24px;
+}
+
 .search-1 {
   width: 30%;
   height: 34px;
@@ -67,4 +81,14 @@
   box-sizing: border-box;
   appearance: none;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.TableToolbarMenu {
+  width: 300px;
+  max-width: 100% !important;
+  background-color: white;
+}
+
+.p0 {
+  padding: 0;
 }

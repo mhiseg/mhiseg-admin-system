@@ -8,14 +8,17 @@ interface InputSelectProps {
   options: Array<any>;
   label: string;
   className?: string;
+  required?:boolean;
 }
 
-export const SelectCustom: React.FC<InputSelectProps> = ({ name, options, label, className }) => {
+export const SelectCustom: React.FC<InputSelectProps> = ({ name, options, label, className,required }) => {
   const [field, meta] = useField(name);
   const { t } = useTranslation();
+  let star = "";
+  required == true ? star = " *" : star = "";
 
   const selectOptions = [
-    <SelectItem text={label} key="" value={undefined} />,
+    <SelectItem text={label + star} key="" value={undefined} />,
     ...options.map((currentOption, index) => <SelectItem text={t(currentOption.display)} value={currentOption.value} key={index} />
     ),
   ];

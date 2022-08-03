@@ -132,7 +132,8 @@ p {
     padding: 20px;
     border: 0.5px solid rgb(209, 209, 209);
     border-radius: 5px;
-    padding-bottom: 40px;
+    padding-bottom: 50px;
+    padding-top: 50px;
     margin-bottom: 50px;
     margin-top: 50px;
 }
@@ -141,13 +142,28 @@ p {
     padding: 20px;
     border: 0.5px solid rgb(209, 209, 209);
     border-radius: 5px;
-    padding-bottom: 40px;
+    padding-bottom: 50px;
+    padding-top: 50px;
+    margin-top: 10px;
+}
+
+h4{
+    color: rgb(105, 105, 105);
+    font-weight: bold;
+    font-size: 16px;
     margin-top: 10px;
 }
 
 h5{
     color: rgb(105, 105, 105);
     background-color: white;
-    margin-top: -31px;
-    width: 115px;
+    margin-top: -61px;
+}
+
+.field1Style{
+    max-width: 26.5%;
+}
+
+.field2Style{
+    max-width: 25%;
 }

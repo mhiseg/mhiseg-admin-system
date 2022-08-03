@@ -16,6 +16,7 @@ export const LocaleField: React.FC = () => {
         options={locales}
         label={t("localeLabel")}
         name="defaultLocale"
+        required= {true}
       />
     </>
   );

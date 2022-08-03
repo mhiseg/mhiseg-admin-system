@@ -17,6 +17,7 @@ export const ProfileField: React.FC = () => {
         options={profiles}
         label={t("profileLabel")}
         name="profile"
+        required={true}
       />
     </>
   );

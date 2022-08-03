@@ -9,8 +9,11 @@ interface UsernameFieldProps {
   required?: boolean;
 }
 
-export const UsernameField: React.FC<UsernameFieldProps> = ({ name }) => {
+export const UsernameField: React.FC<UsernameFieldProps> = ({ name ,required}) => {
   const { t } = useTranslation();
+  let star = "";
+  required == true ? star = " *" : star = "";
+
 
   return (
     <>
@@ -21,7 +24,7 @@ export const UsernameField: React.FC<UsernameFieldProps> = ({ name }) => {
         labelText={name}
         hideLabel={true}
         light={true}
-        placeholder={t("Username")}
+        placeholder={t("Username","Nom d'utilisateur")+ star}
       />
     </>
   );

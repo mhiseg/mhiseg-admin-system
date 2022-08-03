@@ -13,8 +13,9 @@ export const StatusField: React.FC = () => {
       <SelectCustom
         className={styles.margin_field}
         options={status}
-        label={"status"}
+        label={t("statusLabel")}
         name="status"
+        required={true}
       />
     </>
   );

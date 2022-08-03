@@ -9,7 +9,7 @@
   "messageErrorUsernameExists": "Ce pseudo de l'utilisateur est associé à un autre compte",
   "messageErrorStatus": "Le statut de l'utilisateur doit être défini",
   "messageErrorLocale": "L'utilisateur doit avoir une langue par défaut",
-  "roles field must have at least 1 items": "Il faut au moins un rôle pour l'utilisateur",
+  "rolesError": "Il faut au moins un rôle pour l'utilisateur",
   "fieldset1Label":"Info personne",
   "fieldset2Label":"Gestion d'accès",
   "familyNameLabel": "Nom",

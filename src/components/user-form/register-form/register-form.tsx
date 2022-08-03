@@ -60,7 +60,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     profile: Yup.string().required("messageErrorProfile"),
     roles: Yup.array()
       .of(Yup.object()
-      ).min(1)
+      ).min(1 ,"rolesError")
   });
 
   const save = (values) => {
@@ -91,7 +91,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       user.person.attributes.push({ attributeType: uuidPhoneNumber, value: values.person.phone, })
     }
     saveUser(abortController, user, values.uuid).then(async (res) => {
-      const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid }]
+      const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username}]
       await changeUserStatus(abortController, users, values.status);
       showToast({
         title: t('successfullyAdded', 'Successfully added'),

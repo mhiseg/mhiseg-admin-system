@@ -9,7 +9,7 @@
   "messageErrorUsernameExists": " Non itilizatè sa deja ap itilize pa yon lòt moun",
   "messageErrorStatus": "Fok ou chwazi ki Estati pou itilizatè a",
   "messageErrorLocale": "Fòk ou chwazi ki lang pa defo pou itilizatè a",
-  "roles field must have at least 1 items": "Fòk ou chwazi omwen yon wòl pou itilizatè a",
+  "rolesError": "Fòk ou chwazi omwen yon wòl pou itilizatè a",
   "fieldset1Label":"Enfòmasyon sou moun nan ",
   "fieldset2Label":"Jere wòl pou itilizatè a",
   "familyNameLabel": "Siyati",

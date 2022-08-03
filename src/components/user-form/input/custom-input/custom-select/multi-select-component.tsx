@@ -25,20 +25,37 @@ export const MultiSelectField: React.FC<InputSelectProps> = (props) => {
     const { t } = useTranslation();
 
     return (
-        <div className={props.classNameField}>
+        <div >
             <MultiSelect.Filterable
                 {...field}
                 {...props}
+                label="test label"
+                
+                placeholder="test placeholder"
                 items={props.items}
                 id={props.name}
                 initialSelectedItems={meta.value}
-                placeholder={props.placeholder}
+                // placeholder={props.placeholder}
                 onChange={(e) => { setValue(e.selectedItems) }}
-                invalidText={": React.ReactNode | undefined"}
+                invalidText={t(meta.error)}
+                invalid={!!(meta.error)}
                 light={true}
+                locale="en"
+                hideLabel={false}
+                // onMenuChange={(e) => { alert(0)}}
                 useTitleInItem={false}
+                // useTitleInItem={true}
+                // selectionFeedback="fixed"
+                downshiftProps={["11","333"]}
+                sortItems={meta.value}
+                // onInput={(e) => {alert(20) }}
+                // mousedown={false}
+                // onBlur={(e) => { alert(20) }}
+                // translateWithId={translateWithId}
+                // setIsOpen={true}
+
             />
-            <span className={props.classNameError}>{t(meta.error)}</span>
+               
         </div>
     );
 }

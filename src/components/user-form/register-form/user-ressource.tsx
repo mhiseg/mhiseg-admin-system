@@ -45,19 +45,20 @@ export async function changeUserStatus(abortController: AbortController, users: 
         "method": "DELETE",
       })
     }
-    else if (status == "enable")
+    else if (status == "enable") {
       user.userProperties = {
         ...user.userProperties,
         forcePassword: "false",
-        // defaultLocale: user.userProperties.defaultLocale 
       }
-    else
+    }
+    else {
       user.userProperties = {
-
         ...user.userProperties,
         forcePassword: "true",
-        // defaultLocale: user.userProperties.defaultLocale
       }
+      const newPassword = user.username.charAt(0).toUpperCase() + user.username.substring(1) + "123";
+      await resetPassword(abortController, newPassword, user.uuid)
+    }
     user.retired = false;
     return saveUser(abortController, user, user.uuid);
   }));
@@ -120,7 +121,11 @@ export function formatUser(user: User, person?: any) {
       gender: user?.person?.gender || "",
     },
     status: getStatusUser(user?.retired, user?.userProperties?.forcePassword) || "",
-    roles: formatRole(user?.roles) || [],
+    roles: [{
+
+      display: 'Organizational: Registration Clerk',
+      uuid: 'ff9f328a-b4e3-48e1-9a09-cbeb710d02df',
+    }],//formatRole(user?.roles) || [],
     profile: user?.systemId?.split("-")[0] || "",
     systemId: user?.systemId || ""
   }
@@ -128,10 +133,24 @@ export function formatUser(user: User, person?: any) {
 
 
 
-export function resetPassword(abortController: AbortController, user: User, uuid?: string) {
+export function resetPassword(abortController: AbortController, newPassword: string, uuid?: string) {
   return openmrsFetch(`${BASE_WS_API_URL}password/${uuid}`, {
     method: 'POST',
-    body: user,
+    body: {
+      newPassword: newPassword
+    },
+    headers: { 'Content-Type': 'application/json' },
+    signal: abortController.signal
+  });
+}
+
+export function updatePassword(abortController: AbortController, oldPassword: string, newPassword: string) {
+  return openmrsFetch(`${BASE_WS_API_URL}password`, {
+    method: 'POST',
+    body: {
+      oldPassword: oldPassword,
+      newPassword: newPassword
+    },
     headers: { 'Content-Type': 'application/json' },
     signal: abortController.signal
   });

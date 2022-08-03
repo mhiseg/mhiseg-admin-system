@@ -115,6 +115,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
         const value = fullName.split('-');
         return <>{value[0]}  <Icon className={styles.closeButton} icon={value[1] == "M" ? "emojione-monotone:man" : "emojione-monotone:woman"} /></>
     }
+    
     return (
         <DataTable rows={rowsTable} headers={headers} useZebraStyles={true} >
             {({

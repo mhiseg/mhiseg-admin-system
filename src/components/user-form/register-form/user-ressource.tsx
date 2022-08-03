@@ -121,11 +121,7 @@ export function formatUser(user: User, person?: any) {
       gender: user?.person?.gender || "",
     },
     status: getStatusUser(user?.retired, user?.userProperties?.forcePassword) || "",
-    roles: [{
-
-      display: 'Organizational: Registration Clerk',
-      uuid: 'ff9f328a-b4e3-48e1-9a09-cbeb710d02df',
-    }],//formatRole(user?.roles) || [],
+    roles: formatRole(user?.roles) || [],
     profile: user?.systemId?.split("-")[0] || "",
     systemId: user?.systemId || ""
   }

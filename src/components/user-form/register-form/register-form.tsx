@@ -134,7 +134,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
             <h4>{t(uuid ? "editUser" : "newUser")}</h4>
             <Grid fullWidth={true} className={styles.p0}>
               <div id={styles.person}>
-                <h5 className={styles.field1Style}>{t("fieldset1Label", "Info personne")}</h5>
+                <label className={styles.labelsFields}>{t("fieldset1Label", "Info personne")}</label>
                 <Row>
                   <Column className={styles.firstColSyle} lg={6}>
                     {FieldForm('givenName')}
@@ -153,7 +153,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                 </Row>
               </div>
               <div id={styles.access}>
-                <h5 className={styles.field2Style}>{t("fieldset2Label", "Gestion d'accès")}</h5>
+                <label className={styles.labelsFields}>{t("fieldset2Label", "Gestion d'accès")}</label>
                 <Row>
                   <Column className={styles.firstColSyle} lg={6}>
                     {FieldForm('username')}
@@ -179,6 +179,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                   {/* } */}
                 </Row>
               </div>
+              
             </Grid>
             <Row>
               <Column>
@@ -213,6 +214,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                 </Row>
               </Column>
             </Row>
+
           </Form>
         );
       }}

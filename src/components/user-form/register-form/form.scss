@@ -89,7 +89,6 @@
 
 .fieldStyle {
     padding-left: 0;
-    margin-top: 20x;
 }
 
 .pm0 {
@@ -129,21 +128,20 @@ p {
 }
 
 #person {
-    padding: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     border: 0.5px solid rgb(209, 209, 209);
     border-radius: 5px;
     padding-bottom: 50px;
-    padding-top: 50px;
     margin-bottom: 50px;
     margin-top: 50px;
 }
 
 #access {
-    padding: 20px;
-    border: 0.5px solid rgb(209, 209, 209);
+    padding-left: 20px;
+    padding-right: 20px;    border: 0.5px solid rgb(209, 209, 209);
     border-radius: 5px;
     padding-bottom: 50px;
-    padding-top: 50px;
     margin-top: 10px;
 }
 
@@ -154,16 +152,12 @@ h4{
     margin-top: 10px;
 }
 
-h5{
+.labelsFields{
+    position: relative;
     color: rgb(105, 105, 105);
     background-color: white;
-    margin-top: -61px;
-}
-
-.field1Style{
-    max-width: 26.5%;
-}
-
-.field2Style{
-    max-width: 25%;
+    font-weight: bold;
+    font-size: 14px;
+    top: -0.5rem;
+    padding: 5px;
 }

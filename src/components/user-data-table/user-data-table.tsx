@@ -22,6 +22,11 @@ export interface DeathListProps {
     uuid?: string;
 }
 
+const getFullNameWithGender = (fullName: string) => {
+    const value = fullName.split('-');
+    return <>{value[0]}  <Icon className={styles.closeButton} icon={value[1] == "M" ? "emojione-monotone:man" : "emojione-monotone:woman"} /></>
+}
+
 const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
     const [rowsTable, setRows] = useState([]);
     const { colSize } = useContext(UserRegistrationContext);
@@ -72,8 +77,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                 return {
                     id: user?.uuid,
                     Username: user?.username,
-                    fullName: user?.person.display + "-" + user?.person.gender,
-                    // gender: user?.person.gender,
+                    fullName: user?.person.names[0].familyName.toUpperCase() +" "+user?.person.names[0].givenName + "-" + user?.person.gender,
                     profile: user.systemId.split('-')[0],
                     roles: user?.roles?.length > 1 ? user.roles[0].display + ", " + user.roles[1].display + " (" + user?.roles?.length + ")" : user?.roles[0]?.display,
                     phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
@@ -111,11 +115,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
             .then(async json => formatUser(json).then(data => setRows(data)))
     }
 
-    const getFullNameWithGender = (fullName: string) => {
-        const value = fullName.split('-');
-        return <>{value[0]}  <Icon className={styles.closeButton} icon={value[1] == "M" ? "emojione-monotone:man" : "emojione-monotone:woman"} /></>
-    }
-    
+
     return (
         <DataTable rows={rowsTable} headers={headers} useZebraStyles={true} >
             {({
@@ -160,20 +160,6 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                         className={styles.TableBatchActions}
                                         {...batchActionProps}
                                     >
-
-
-                                        {/* <TableToolbarMenu
-                                            className={styles.TableToolbarMenu}
-                                            renderIcon={WatsonHealthNominate64}
-                                            tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
-                                            iconDescription={t("roles")}
-                                            disabled={!(roles.length > 0)}
-                                            onClick={e => {
-                                                updateUserRoles(abortController, selectedRows, roles).then(() => changeRows(pageSize, page))
-                                            }}
-                                        >
-                                        </TableToolbarMenu> */}
-
                                         <TableToolbarMenu
                                             //className={styles.TableToolbarMenu}
                                             renderIcon={WatsonHealthNominate16}
@@ -201,7 +187,6 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                             })}
                                         </TableToolbarMenu>
                                         <TableToolbarMenu
-                                            //className={styles.TableToolbarMenu}
                                             renderIcon={Settings32}
                                             iconDescription={t("status")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>

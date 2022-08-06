@@ -142,7 +142,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                             className={styles['search-1']}
                                             onChange={(e) => ((e.currentTarget.value.trim().length) > 0) && onInputChange(e)} />
                                         {
-                                            (showAddUser || uuid) &&
+                                            (showAddUser || uuid || (lg[1] ==0)) &&
                                             <Button
                                                 hasIconOnly
                                                 renderIcon={UserFollow32}

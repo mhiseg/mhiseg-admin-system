@@ -64,7 +64,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     profile: Yup.string().required("messageErrorProfile"),
     roles: Yup.array()
       .of(Yup.object()
-      ).min(1 ,"rolesError")
+      ).min(1, "rolesError")
   });
 
   const save = (values) => {
@@ -95,7 +95,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       user.person.attributes.push({ attributeType: uuidPhoneNumber, value: values.person.phone, })
     }
     saveUser(abortController, user, values.uuid).then(async (res) => {
-      const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username}]
+      const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username }]
       await changeUserStatus(abortController, users, values.status);
       showToast({
         title: t('successfullyAdded', 'Successfully added'),
@@ -179,7 +179,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                   {/* } */}
                 </Row>
               </div>
-              
+
             </Grid>
             <Row>
               <Column>
@@ -195,8 +195,8 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                         onClick={() => {
                           colSize([12, 0])
                           userUuid(undefined)
-                        }}                      >
-
+                        }}
+                      >
                         {t("cancelButton", "Annuler")}
                       </Button>
                       <Button

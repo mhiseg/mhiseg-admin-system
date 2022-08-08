@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { SelectCustom } from "../../input/custom-input/custom-select/custom-selected-component";
 import styles from '../field.scss';
-import { status } from "../../register-form/user-ressource";
+import { SelectInput } from "../../input/basic-input/select/select-input.component";
+import { Status } from "../../administration-types";
+import { UserRegistrationContext } from "../../../../user-context";
 
 
 export const StatusField: React.FC = () => {
-  const { t } = useTranslation();
+  const { uuid } = useContext(UserRegistrationContext); 
 
   return (
     <>
-      <SelectCustom
+      <SelectInput
         className={styles.margin_field}
-        options={status}
-        label={t("statusLabel")}
-        name="status"
-        required={true}
+        options={Object.values(Status)}
+        label="statusLabel"
+        name="userProperties.status"
+        disabled={uuid == undefined}
       />
     </>
   );

@@ -12,9 +12,10 @@ import { Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-
 import { SearchInput } from "../toolbar_search_container/toolbar_search_container";
 import { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
-import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, getStatusUser, profiles, status, locales } from "../user-form/register-form/user-ressource";
+import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, getStatusUser} from "../user-form/register-form/user-ressource";
 import { UserFollow32 } from "@carbon/icons-react"
 import { Icon } from "@iconify/react";
+import { Locales, Profiles, Status } from "../user-form/administration-types";
 
 export interface DeathListProps {
     refresh?: boolean;
@@ -78,10 +79,11 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                     id: user?.uuid,
                     Username: user?.username,
                     fullName: user?.person.names[0].familyName.toUpperCase() +" "+user?.person.names[0].givenName + "-" + user?.person.gender,
+                    // fullName: user?.person.display + "-" + user?.person.gender,
                     profile: user.systemId.split('-')[0],
                     roles: user?.roles?.length > 1 ? user.roles[0].display + ", " + user.roles[1].display + " (" + user?.roles?.length + ")" : user?.roles[0]?.display,
                     phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
-                    status: getStatusUser(user?.retired, user?.userProperties?.forcePassword),
+                    status: getStatusUser(user?.userProperties?.status,user?.retired),
                     locale: user?.userProperties?.defaultLocale
                 }
             }))
@@ -89,7 +91,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
 
     const formatRows = (rows, status) => {
         const users = rows.map(row => {
-            const locale = locales.find(locale => t(locale.display) == t(row.cells[6].value))?.value;
+            const locale = Object.values(Locales).find(locale => t(locale) == t(row.cells[6].value));
             return {
                 uuid: row.id,
                 userProperties: {
@@ -178,10 +180,10 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                             renderIcon={UserAccess24}
                                             iconDescription={t("profileLabel")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
-                                            {profiles.map((element) => {
+                                            {Object.values(Profiles).map((element) => {
                                                 return (
-                                                    <TableToolbarAction onClick={(e) => changeUserProfile(abortController, selectedRows, element.value).then(() => changeRows(pageSize, page))}>
-                                                        {t(element.display)}
+                                                    <TableToolbarAction onClick={(e) => changeUserProfile(abortController, selectedRows, element).then(() => changeRows(pageSize, page))}>
+                                                        {t(element)}
                                                     </TableToolbarAction>
                                                 )
                                             })}
@@ -190,10 +192,10 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                             renderIcon={Settings32}
                                             iconDescription={t("status")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
-                                            {status.map((s) => {
+                                            {Object.values(Status).map((s) => {
                                                 return (
-                                                    <TableToolbarAction onClick={(e) => formatRows(selectedRows, s.value)}>
-                                                        {t(s.display == "waiting" ? "reset" : s.display)}
+                                                    <TableToolbarAction onClick={(e) => formatRows(selectedRows, s)}>
+                                                        {t(s == "waiting" ? "reset" : s)}
                                                     </TableToolbarAction>
                                                 )
                                             })}

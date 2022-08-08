@@ -7,6 +7,23 @@ interface NameValue {
   givenName: string;
   familyName: string;
 }
+export enum Profiles {
+  DOCTOR = "doctor",
+  NURSE = "nurse",
+  ADMIN = "admin",
+}
+
+export enum Status {
+  ENABLE = "enable",
+  DISABLED = "disabled",
+  WAITING = "waiting",
+}
+
+export enum Locales {
+  FR = "fr",
+  EN = "en",
+  KR = "kr"
+}
 export interface User {
   uuid?: string;
   display?: string;
@@ -15,7 +32,7 @@ export interface User {
   password?: string;
   userProperties?: {
     defaultLocale: string;
-    forcePassword?: string;
+    status?: string;
     allowedLocales?: Array<string>;
   };
   person: Person;

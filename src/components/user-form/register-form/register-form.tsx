@@ -56,11 +56,9 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       phone: Yup.string().min(9, ("messageErrorPhoneNumber")),
     }),
     userProperties: Yup.object({
-      defaultLocale: Yup.string(),
-      forcePassword: Yup.string()
+      status: Yup.string().required("messageErrorStatus"),
+      defaultLocale: Yup.string().required("messageErrorLocale"),
     }),
-    defaultLocale: Yup.string().required("messageErrorLocale"),
-    status: Yup.string().required("messageErrorStatus"),
     profile: Yup.string().required("messageErrorProfile"),
     roles: Yup.array()
       .of(Yup.object()
@@ -77,12 +75,9 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
           givenName: values.person.givenName,
           familyName: values.person.familyName
         }],
-        gender: values.person.gender
+        gender: values.person.gender,
       },
-      userProperties: {
-        defaultLocale: values.defaultLocale,
-        forcePassword: values.forcePassword,
-      }
+      userProperties: values.userProperties
     }
     if (!values.uuid) {
       user.password = user.username.charAt(0).toUpperCase() + user.username.substring(1) + "123"
@@ -96,7 +91,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     }
     saveUser(abortController, user, values.uuid).then(async (res) => {
       const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username }]
-      await changeUserStatus(abortController, users, values.status);
+      await changeUserStatus(abortController, users, values.userProperties.status);
       showToast({
         title: t('successfullyAdded', 'Successfully added'),
         kind: 'success',

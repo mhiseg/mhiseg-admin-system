@@ -53,5 +53,6 @@
   "cancelButton": "Cancel",
   "confirmButton": "Confirm",
   "newUser": "New User",
-  "editUser": "Edit this user"
+  "editUser": "Edit this user",
+  "tableTitle": "Users account list"
 }

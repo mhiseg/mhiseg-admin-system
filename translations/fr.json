@@ -55,5 +55,6 @@
   "cancelButton": "Annuler",
   "confirmButton": "Enregistrer",
   "newUser": "Ajout d'un nouvel utilisateur",
-  "editUser": "Modification de cet utilisateur"
+  "editUser": "Modification de cet utilisateur",
+  "tableTitle": "Liste des utilisateurs"
 }

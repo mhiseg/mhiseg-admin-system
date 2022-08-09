@@ -12,7 +12,7 @@ import { Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-
 import { SearchInput } from "../toolbar_search_container/toolbar_search_container";
 import { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
-import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, getStatusUser, profiles, status, locales } from "../user-form/register-form/user-ressource";
+import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, getStatusUser, profiles, status, locales, updateUserRoles } from "../user-form/register-form/user-ressource";
 import { UserFollow32 } from "@carbon/icons-react"
 import { Icon } from "@iconify/react";
 
@@ -113,9 +113,9 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
 
     const getFullNameWithGender = (fullName: string) => {
         const value = fullName.split('-');
-        return <>{value[0]}  <Icon className={styles.closeButton} icon={value[1] == "M" ? "emojione-monotone:man" : "emojione-monotone:woman"} /></>
+        return <><Icon className={styles.testRows} icon={value[1] == "M" ? "icomoon-free:man" : "icomoon-free:woman"} width="18px" height="18px" /> {value[0]}</>
     }
-    
+
     return (
         <DataTable rows={rowsTable} headers={headers} useZebraStyles={true} >
             {({
@@ -133,7 +133,8 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
             }) => {
                 const batchActionProps = getBatchActionProps();
                 return (
-                    <>
+                    <div className={styles.TableMainContainer}>
+                        <h4 className={styles.tableTitle}>{t("tableTitle", "Liste des utilisateurs")}</h4>
                         <TableContainer  {...getTableContainerProps()} >
                             <div className={styles.TableContainer}>
                                 <TableToolbar {...getToolbarProps()} >
@@ -175,20 +176,20 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                         </TableToolbarMenu> */}
 
                                         <TableToolbarMenu
-                                            //className={styles.TableToolbarMenu}
                                             renderIcon={WatsonHealthNominate16}
                                             iconDescription={t("profileLabel")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
-                                                    <TableToolbarAction  className={styles.TableToolbarMenu}>
-                                                        <Roles
-                                                            placeholder={t("roles")}
-                                                            onChange={(data) => { setRoles(data) }}
-                                                        />
-                                                    </TableToolbarAction>
+                                            <TableToolbarAction className={styles.TableToolbarMenu}>
+                                                <Roles
+                                                    placeholder={t("roles")}
+                                                    onChange={(data) => { setRoles(data); } } 
+                                                    updateRoles= {() =>updateUserRoles(abortController, selectedRows, roles).then(() => changeRows(pageSize, page))
+                                                    }
+                                            />
+                                            </TableToolbarAction>
                                         </TableToolbarMenu>
 
                                         <TableToolbarMenu
-                                            //className={styles.TableToolbarMenu}
                                             renderIcon={UserAccess24}
                                             iconDescription={t("profileLabel")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
@@ -216,16 +217,16 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                     </TableBatchActions>
                                 </TableToolbar>
                             </div>
-                            <Table {...getTableProps()} size='lg'>
+                            <Table {...getTableProps()} size='lg' light={true}>
                                 <TableHead className={styles.TableRowHeader}>
-                                    <TableRow>
-                                        <TableSelectAll
+                                    <TableRow className={styles.TableRowHeader}>
+                                        <TableSelectAll className={styles.TableRowHeader}
                                             onSelect={(e) => colSize([12, 0])}
                                             {...getSelectionProps()}
                                         />
                                         {headers.map((header) => (
                                             (header.key !== "uuid") &&
-                                            <TableHeader key={header.uuid} {...getHeaderProps({ header, isSortable: true })}>
+                                            <TableHeader className={styles.TableRowHeader} key={header.uuid} {...getHeaderProps({ header, isSortable: true })}>
                                                 {header.header}
                                             </TableHeader>
                                         ))}
@@ -253,6 +254,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                             </Table>
                         </TableContainer>
                         <Pagination
+                            className={styles.page}
                             backwardText={t("PreviousPage")}
                             forwardText={t("NextPage")}
                             itemsPerPageText={t("Show")}
@@ -263,7 +265,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                             size="sm"
                             totalItems={totalpageSize}
                         />
-                    </>
+                    </div>
                 );
             }}
         </DataTable >

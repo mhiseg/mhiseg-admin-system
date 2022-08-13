@@ -25,7 +25,7 @@ export interface DeathListProps {
 
 const getFullNameWithGender = (fullName: string) => {
     const value = fullName.split('-');
-    return <>{value[0]}  <Icon className={styles.closeButton} icon={value[1] == "M" ? "emojione-monotone:man" : "emojione-monotone:woman"} /></>
+    return <> <Icon className={styles.closeButton} icon={value[1] == "M" ? "emojione-monotone:man" : "emojione-monotone:woman"} /> {value[0]} </>
 }
 
 const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
@@ -78,12 +78,12 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                 return {
                     id: user?.uuid,
                     Username: user?.username,
-                    fullName: user?.person.names[0].familyName.toUpperCase() +" "+user?.person.names[0].givenName + "-" + user?.person.gender,
+                    fullName: user?.person.names[0].familyName + ", " + user?.person.names[0].givenName + "-" + user?.person.gender,
                     // fullName: user?.person.display + "-" + user?.person.gender,
                     profile: user.systemId.split('-')[0],
                     roles: user?.roles?.length > 1 ? user.roles[0].display + ", " + user.roles[1].display + " (" + user?.roles?.length + ")" : user?.roles[0]?.display,
                     phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
-                    status: getStatusUser(user?.userProperties?.status,user?.retired),
+                    status: getStatusUser(user?.userProperties?.status, user?.retired),
                     locale: user?.userProperties?.defaultLocale
                 }
             }))
@@ -145,7 +145,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                             className={styles['search-1']}
                                             onChange={(e) => ((e.currentTarget.value.trim().length) > 0) && onInputChange(e)} />
                                         {
-                                            (showAddUser || uuid || (lg[1] ==0)) &&
+                                            (showAddUser || uuid || (lg[1] == 0)) &&
                                             <Button
                                                 hasIconOnly
                                                 renderIcon={UserFollow32}

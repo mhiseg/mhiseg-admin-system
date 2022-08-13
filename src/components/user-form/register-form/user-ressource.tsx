@@ -4,18 +4,6 @@ import { Status, User } from '../administration-types';
 import { uuidPhoneNumber } from '../constante';
 const BASE_WS_API_URL = '/ws/rest/v1/';
 
-export function performLogin(username, password) {
-  const token = window.btoa(`${username}:${password}`);
-  return openmrsFetch(`${BASE_WS_API_URL}session`, {
-    headers: {
-      Authorization: `Basic ${token}`,
-    },
-  }).then((res) => {
-    refetchCurrentUser();
-    return res;
-  });
-}
-
 export function geUserCriteria(identifier: string) {
   return openmrsFetch(`${BASE_WS_API_URL}user?q=${identifier}&includeAll=true&v=full&limit=1`);
 }

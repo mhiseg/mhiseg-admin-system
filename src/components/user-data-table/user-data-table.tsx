@@ -12,14 +12,20 @@ import { Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-
 import { SearchInput } from "../toolbar_search_container/toolbar_search_container";
 import { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
-import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, getStatusUser, profiles, status, locales, updateUserRoles } from "../user-form/register-form/user-ressource";
+import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, getStatusUser, updateUserRoles} from "../user-form/register-form/user-ressource";
 import { UserFollow32 } from "@carbon/icons-react"
 import { Icon } from "@iconify/react";
+import { Locales, Profiles, Status } from "../user-form/administration-types";
 
 export interface DeathListProps {
     refresh?: boolean;
     lg?: any;
     uuid?: string;
+}
+
+const getFullNameWithGender = (fullName: string) => {
+    const value = fullName.split('-');
+    return <>{value[0]}  <Icon className={styles.closeButton} icon={value[1] == "M" ? "emojione-monotone:man" : "emojione-monotone:woman"} /></>
 }
 
 const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
@@ -72,12 +78,12 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                 return {
                     id: user?.uuid,
                     Username: user?.username,
-                    fullName: user?.person.display + "-" + user?.person.gender,
-                    // gender: user?.person.gender,
+                    fullName: user?.person.names[0].familyName.toUpperCase() +" "+user?.person.names[0].givenName + "-" + user?.person.gender,
+                    // fullName: user?.person.display + "-" + user?.person.gender,
                     profile: user.systemId.split('-')[0],
                     roles: user?.roles?.length > 1 ? user.roles[0].display + ", " + user.roles[1].display + " (" + user?.roles?.length + ")" : user?.roles[0]?.display,
                     phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
-                    status: getStatusUser(user?.retired, user?.userProperties?.forcePassword),
+                    status: getStatusUser(user?.userProperties?.status,user?.retired),
                     locale: user?.userProperties?.defaultLocale
                 }
             }))
@@ -85,7 +91,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
 
     const formatRows = (rows, status) => {
         const users = rows.map(row => {
-            const locale = locales.find(locale => t(locale.display) == t(row.cells[6].value))?.value;
+            const locale = Object.values(Locales).find(locale => t(locale) == t(row.cells[6].value));
             return {
                 uuid: row.id,
                 userProperties: {
@@ -111,10 +117,6 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
             .then(async json => formatUser(json).then(data => setRows(data)))
     }
 
-    const getFullNameWithGender = (fullName: string) => {
-        const value = fullName.split('-');
-        return <><Icon className={styles.testRows} icon={value[1] == "M" ? "icomoon-free:man" : "icomoon-free:woman"} width="18px" height="18px" /> {value[0]}</>
-    }
 
     return (
         <DataTable rows={rowsTable} headers={headers} useZebraStyles={true} >
@@ -143,7 +145,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                             className={styles['search-1']}
                                             onChange={(e) => ((e.currentTarget.value.trim().length) > 0) && onInputChange(e)} />
                                         {
-                                            (showAddUser || uuid) &&
+                                            (showAddUser || uuid || (lg[1] ==0)) &&
                                             <Button
                                                 hasIconOnly
                                                 renderIcon={UserFollow32}
@@ -161,20 +163,6 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                         className={styles.TableBatchActions}
                                         {...batchActionProps}
                                     >
-
-
-                                        {/* <TableToolbarMenu
-                                            className={styles.TableToolbarMenu}
-                                            renderIcon={WatsonHealthNominate64}
-                                            tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
-                                            iconDescription={t("roles")}
-                                            disabled={!(roles.length > 0)}
-                                            onClick={e => {
-                                                updateUserRoles(abortController, selectedRows, roles).then(() => changeRows(pageSize, page))
-                                            }}
-                                        >
-                                        </TableToolbarMenu> */}
-
                                         <TableToolbarMenu
                                             renderIcon={WatsonHealthNominate16}
                                             iconDescription={t("profileLabel")}
@@ -193,23 +181,22 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                             renderIcon={UserAccess24}
                                             iconDescription={t("profileLabel")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
-                                            {profiles.map((element) => {
+                                            {Object.values(Profiles).map((element) => {
                                                 return (
-                                                    <TableToolbarAction onClick={(e) => changeUserProfile(abortController, selectedRows, element.value).then(() => changeRows(pageSize, page))}>
-                                                        {t(element.display)}
+                                                    <TableToolbarAction onClick={(e) => changeUserProfile(abortController, selectedRows, element).then(() => changeRows(pageSize, page))}>
+                                                        {t(element)}
                                                     </TableToolbarAction>
                                                 )
                                             })}
                                         </TableToolbarMenu>
                                         <TableToolbarMenu
-                                            //className={styles.TableToolbarMenu}
                                             renderIcon={Settings32}
                                             iconDescription={t("status")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
-                                            {status.map((s) => {
+                                            {Object.values(Status).map((s) => {
                                                 return (
-                                                    <TableToolbarAction onClick={(e) => formatRows(selectedRows, s.value)}>
-                                                        {t(s.display == "waiting" ? "reset" : s.display)}
+                                                    <TableToolbarAction onClick={(e) => formatRows(selectedRows, s)}>
+                                                        {t(s == "waiting" ? "reset" : s)}
                                                     </TableToolbarAction>
                                                 )
                                             })}
@@ -273,3 +260,4 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
 }
 
 export default UserDataTable;
+

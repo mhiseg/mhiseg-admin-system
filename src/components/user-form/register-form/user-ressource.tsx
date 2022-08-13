@@ -1,12 +1,9 @@
 import { openmrsFetch, refetchCurrentUser } from '@openmrs/esm-framework';
 import { VirtualAction } from 'rxjs';
-import { User } from '../administration-types';
+import { Status, User } from '../administration-types';
 import { uuidPhoneNumber } from '../constante';
 const BASE_WS_API_URL = '/ws/rest/v1/';
 
-export const profiles = [{ display: "doctor", value: "doctor" }, { display: "nurse", value: "nurse" }, { display: "admin", value: "admin" }];
-export const status = [{ display: "enable", value: "enable" }, { display: "disabled", value: "disabled" }, { display: "waiting", value: "waiting" }]
-export const locales = [{ display: "french", value: "fr" }, { display: "english", value: "en" }, { display: "creole", value: "kr" }];
 export function performLogin(username, password) {
   const token = window.btoa(`${username}:${password}`);
   return openmrsFetch(`${BASE_WS_API_URL}session`, {
@@ -40,26 +37,31 @@ export function getAllRoles() {
 
 export async function changeUserStatus(abortController: AbortController, users: any[], status: string) {
   const res = await Promise.all(users.map(async user => {
-    if (status == "disabled") {
-      return openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid || user.id}`, {
+    if (status == Status.DISABLED) {
+      await openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid || user.id}`, {
         "method": "DELETE",
       })
-    }
-    else if (status == "enable") {
       user.userProperties = {
         ...user.userProperties,
-        forcePassword: "false",
+        status: Status.DISABLED,
       }
+    }
+    else if (status == Status.ENABLE) {
+      user.userProperties = {
+        ...user.userProperties,
+        status: Status.ENABLE,
+      }
+      user.retired = false;
     }
     else {
       user.userProperties = {
         ...user.userProperties,
-        forcePassword: "true",
+        status: Status.WAITING,
       }
       const newPassword = user.username.charAt(0).toUpperCase() + user.username.substring(1) + "123";
+      user.retired = false;
       await resetPassword(abortController, newPassword, user.uuid)
     }
-    user.retired = false;
     return saveUser(abortController, user, user.uuid);
   }));
 }
@@ -112,15 +114,16 @@ export function formatUser(user: User, person?: any) {
   return {
     uuid: user?.uuid || undefined,
     username: user?.username || "",
-    defaultLocale: user?.userProperties?.defaultLocale || "",
-    forcePassword: user?.userProperties?.forcePassword || "false",
+    userProperties: {
+      status: getStatusUser(user?.userProperties?.status,user?.retired),
+      defaultLocale: user?.userProperties?.defaultLocale || "",
+    },
     person: {
       givenName: person?.names[0]?.givenName || "",
       familyName: person?.names[0]?.familyName || "",
       phone: person?.attributes?.find((attribute) => attribute.attributeType.uuid == uuidPhoneNumber)?.value || "",
       gender: user?.person?.gender || "",
     },
-    status: getStatusUser(user?.retired, user?.userProperties?.forcePassword) || "",
     roles: formatRole(user?.roles) || [],
     profile: user?.systemId?.split("-")[0] || "",
     systemId: user?.systemId || ""
@@ -184,14 +187,14 @@ export function getSizeUsers() {
   })
 }
 
-export function getStatusUser(retired, forcePassword) {
-  if (retired !== undefined || forcePassword !== undefined) {
-    if (retired === true)
-      return "disabled";
-    else if (forcePassword == "true")
-      return "waiting"
+export function getStatusUser(status, retired) {
+  if (retired !== undefined || retired !== undefined) {
+    if (status)
+      return status;
+    else if (retired == true)
+      return Status.DISABLED
     else
-      return "enable";
+      return Status.ENABLE
   }
-  return ""
+  return Status.WAITING;
 }

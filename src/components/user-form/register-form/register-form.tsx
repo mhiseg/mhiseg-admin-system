@@ -56,15 +56,13 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       phone: Yup.string().min(9, ("messageErrorPhoneNumber")),
     }),
     userProperties: Yup.object({
-      defaultLocale: Yup.string(),
-      forcePassword: Yup.string()
+      status: Yup.string().required("messageErrorStatus"),
+      defaultLocale: Yup.string().required("messageErrorLocale"),
     }),
-    defaultLocale: Yup.string().required("messageErrorLocale"),
-    status: Yup.string().required("messageErrorStatus"),
     profile: Yup.string().required("messageErrorProfile"),
     roles: Yup.array()
       .of(Yup.object()
-      ).min(1 ,"rolesError")
+      ).min(1, "rolesError")
   });
 
   const save = (values) => {
@@ -77,12 +75,9 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
           givenName: values.person.givenName,
           familyName: values.person.familyName
         }],
-        gender: values.person.gender
+        gender: values.person.gender,
       },
-      userProperties: {
-        defaultLocale: values.defaultLocale,
-        forcePassword: values.forcePassword,
-      }
+      userProperties: values.userProperties
     }
     if (!values.uuid) {
       user.password = user.username.charAt(0).toUpperCase() + user.username.substring(1) + "123"
@@ -95,8 +90,8 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       user.person.attributes.push({ attributeType: uuidPhoneNumber, value: values.person.phone, })
     }
     saveUser(abortController, user, values.uuid).then(async (res) => {
-      const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username}]
-      await changeUserStatus(abortController, users, values.status);
+      const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username }]
+      await changeUserStatus(abortController, users, values.userProperties.status);
       showToast({
         title: t('successfullyAdded', 'Successfully added'),
         kind: 'success',
@@ -179,7 +174,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                   {/* } */}
                 </Row>
               </div>
-              
+
             </Grid>
             <Row>
               <Column>
@@ -195,8 +190,8 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                         onClick={() => {
                           colSize([12, 0])
                           userUuid(undefined)
-                        }}                      >
-
+                        }}
+                      >
                         {t("cancelButton", "Annuler")}
                       </Button>
                       <Button

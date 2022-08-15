@@ -48,6 +48,7 @@
   "nurseM": "Nurse",
   "doctor": "Physician",
   "admin": "Administrator",
+  "archivist": "Archivist",
   "unknown": "Unknown",
   "locale": "Language",
   "cancelButton": "Cancel",

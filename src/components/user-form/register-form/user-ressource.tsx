@@ -106,14 +106,12 @@ export async function updateUserRoles(abortController: AbortController, users: a
 export function formatRole(roles, object?) {
   if (roles?.length > 0 && object == undefined) {
     let rolesFormat = [];
-    roles.map(role => {
-      if (role.display.startsWith("Module:")) {
-        rolesFormat.push({
+    return roles.filter(role => role.display.startsWith("Module:"))
+       .map(role => ({
           uuid: role.uuid,
           display: role.display,
         })
-      }
-    })
+    )
     return rolesFormat;
   }
   else if (object)

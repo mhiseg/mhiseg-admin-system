@@ -33,12 +33,12 @@ export function getSynchronizedCurrentUser(
 
 
 export async function changeUserStatus(abortController: AbortController, users: any[], status: string) {
-  await Promise.all(users.filter(function(user) {
+  await Promise.all(users.filter(function (user) {
     if (user.userProperties.status == Status.WAITING) {
-      return false; 
+      return false;
     }
     return true;
-  }).map(async user => {    
+  }).map(async user => {
     if (status == Status.DISABLED) {
       await openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid || user.id}`, {
         "method": "DELETE",
@@ -48,8 +48,8 @@ export async function changeUserStatus(abortController: AbortController, users: 
         status: Status.DISABLED,
       }
     }
-    else if (status == Status.ENABLE ) {
-    
+    else if (status == Status.ENABLE) {
+
       user.userProperties = {
         ...user.userProperties,
         status: Status.ENABLE,
@@ -107,11 +107,11 @@ export function formatRole(roles, object?) {
   if (roles?.length > 0 && object == undefined) {
     let rolesFormat = [];
     return roles.filter(role => role.display.startsWith("Module:"))
-       .map(role => ({
-          uuid: role.uuid,
-          display: role.display,
-        })
-    )
+      .map(role => ({
+        uuid: role.uuid,
+        display: role.display,
+      })
+      )
     return rolesFormat;
   }
   else if (object)
@@ -159,6 +159,8 @@ export function getPage(profile) {
       return "/death"
     case Profiles.NURSE:
       return "/death";
+    case Profiles.ARCHIVIST:
+      return "/patient";
     default:
       return "/home"
   }

@@ -26,19 +26,14 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
 
 
   useEffect(() => {
-    let user;
+    setInitialV(formatUser(undefined))
     if (uuid) {
-      user = geUserByUuid(uuid)
+      geUserByUuid(uuid)
         .then(async user => {
           const person = await getPerson(user.data.person.uuid);
           setInitialV(formatUser(user.data, person.data))
         })
-    } else {
-      setInitialV(formatUser(undefined))
     }
-    return () => {
-      user;
-    };
   }, [uuid, refresh]);
 
   const userSchema = Yup.object().shape({
@@ -90,7 +85,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       user.person.attributes.push({ attributeType: uuidPhoneNumber, value: values.person.phone, })
     }
     user.userProperties.defaultPage = getPage(values.profile)
-    
+
     saveUser(abortController, user, values.uuid).then(async (res) => {
       const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username }]
       await changeUserStatus(abortController, users, values.userProperties.status);

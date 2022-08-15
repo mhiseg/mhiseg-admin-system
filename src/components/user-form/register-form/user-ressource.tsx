@@ -33,7 +33,12 @@ export function getSynchronizedCurrentUser(
 
 
 export async function changeUserStatus(abortController: AbortController, users: any[], status: string) {
-  const res = await Promise.all(users.map(async user => {
+  await Promise.all(users.filter(function(user) {
+    if (user.userProperties.status == Status.WAITING) {
+      return false; 
+    }
+    return true;
+  }).map(async user => {    
     if (status == Status.DISABLED) {
       await openmrsFetch(`${BASE_WS_API_URL}user/${user.uuid || user.id}`, {
         "method": "DELETE",
@@ -43,7 +48,8 @@ export async function changeUserStatus(abortController: AbortController, users: 
         status: Status.DISABLED,
       }
     }
-    else if (status == Status.ENABLE) {
+    else if (status == Status.ENABLE ) {
+    
       user.userProperties = {
         ...user.userProperties,
         status: Status.ENABLE,

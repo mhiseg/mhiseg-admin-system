@@ -21,7 +21,6 @@ export const MultiSelectField: React.FC<InputSelectProps> = (props) => {
     const [field, meta, helpers] = useField(props.name);
     const { setValue } = helpers;
     const { t } = useTranslation();
-    console.log(props.items)
     return (
         <>
             <MultiSelect.Filterable

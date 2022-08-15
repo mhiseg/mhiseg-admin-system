@@ -12,12 +12,11 @@ import { Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-
 import { SearchInput } from "../toolbar_search_container/toolbar_search_container";
 import { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
-import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, getStatusUser, checkProfile, updateUserRoles } from "../user-form/register-form/user-ressource";
+import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, getStatusUser, checkProfile, updateUserRoles, formatRole } from "../user-form/register-form/user-ressource";
 import { UserFollow32 } from "@carbon/icons-react"
 import { Icon } from "@iconify/react";
-import { Locales, Profiles, Status } from "../user-form/administration-types";
-import { getCurrentUser, getLoggedInUser, User } from "@openmrs/esm-framework";
-import { skip } from "rxjs/operators";
+import { Profiles, Status } from "../user-form/administration-types";
+
 
 export interface DeathListProps {
     refresh?: boolean;
@@ -80,12 +79,13 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
     const formatUser = (users) => {
         return Promise.all(
             users.map(async (user) => {
+                const roles = formatRole(user?.roles);
                 return {
                     id: user?.uuid,
                     Username: user?.username,
                     fullName: user?.person.names[0].familyName + ", " + user?.person.names[0].givenName + "-" + user?.person.gender,
                     profile: checkProfile(user.systemId),
-                    roles: user?.roles?.length > 1 ? user.roles[0].display + ", " + user.roles[1].display + " (" + user?.roles?.length + ")" : user?.roles[0]?.display,
+                    roles: roles?.length > 1 ? (roles[0].display.split(":")[1] + ", " + roles[1].display.split(":")[1] + " (" + roles?.length + ")" ) : roles[0]?.display.split(":")[1],
                     phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
                     status: getStatusUser(user?.userProperties?.status, user?.retired),
                     locale: user?.userProperties?.defaultLocale,
@@ -107,7 +107,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
 
     useEffect(function () {
         changeRows(pageSize, page ? page : 1);
-        getSizeUsers().then(res => setTotalPageSize(res.data.results.length - 1))
+        getSizeUsers(currentUser?.username).then(size => setTotalPageSize(size))
     }, [refresh]);
 
     const changeRows = (size, page) => {
@@ -171,10 +171,9 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                             <TableToolbarAction className={styles.TableToolbarMenu}>
                                                 <Roles
                                                     placeholder={t("roles")}
-                                                    onChange={(data) => { setRoles(data); } } 
-                                                    updateRoles= {() =>updateUserRoles(abortController, selectedRows, roles).then(() => changeRows(pageSize, page))
-                                                    }
-                                            />
+                                                    onChange={(data) => { setRoles(data); }}
+                                                    updateRoles={(roles) => updateUserRoles(abortController, selectedRows, roles).then(() => changeRows(pageSize, page))}
+                                                />
                                             </TableToolbarAction>
                                         </TableToolbarMenu>
 

@@ -168,12 +168,18 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                   </Column>
                 </Row>
                 <Row>
-                  {/* {
-                    values.uuid && */}
-                  <Column className={styles.firstColSyle} lg={12}>
-                    {FieldForm('roles')}
-                  </Column>
-                  {/* } */}
+                  {
+                    values.uuid &&
+                    <Column className={styles.firstColSyle} lg={12}>
+                      {FieldForm('roles')}
+                    </Column>
+                  }
+                  {
+                    values.uuid == undefined &&
+                    <Column className={styles.firstColSyle} lg={12}>
+                      {FieldForm('roles')}
+                    </Column>
+                  }
                 </Row>
               </div>
 

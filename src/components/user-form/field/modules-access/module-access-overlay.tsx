@@ -30,7 +30,7 @@ export const ModuleField: React.FC = (props) => {
         name="roles" 
         className={styles.margin_field}
         items={roles}
-        itemToString={(role) => (role ? role.display : '')}
+        itemToString={(role) => (role ? role?.display?.split(":")[1] : '')}
       />
     </>
   );

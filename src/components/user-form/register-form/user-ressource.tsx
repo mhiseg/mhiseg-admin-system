@@ -115,17 +115,15 @@ export function formatRole(roles, object?) {
 }
 
 export function checkProfile(systemId) {
-  switch (systemId?.split("-")[0]) {
-    case Profiles.DOCTOR:
-      return Profiles.DOCTOR;
-    case Profiles.NURSE:
-      return Profiles.NURSE;
-    case Profiles.ADMIN:
-      return Profiles.ADMIN;
-    default:
-      return "";
-  }
-
+  const profile = systemId?.split("-")[0];
+  let value = "";
+  Object.values(Profiles).forEach(
+    p => {
+      if (p == profile)
+        value = p;
+    }
+  )
+  return value;
 }
 
 export function formatUser(user: User, person?: any) {
@@ -157,7 +155,8 @@ export function getPage(profile) {
       return "/death"
     case Profiles.NURSE:
       return "/death";
-    default: return "/home"
+    default:
+      return "/home"
   }
 
 }
@@ -208,8 +207,6 @@ const getUsers = (limit: number, start: number) =>
     }
   })
 
-
-
 export async function getAllUserPages(limit: number, start: number, username: string) {
   let data = await getUsers(limit, start);
   const responses = (data) => data.data.results.filter(user => user.username !== username);
@@ -220,12 +217,13 @@ export async function getAllUserPages(limit: number, start: number, username: st
   return responses(data);
 }
 
-export function getSizeUsers() {
-  return openmrsFetch(`${BASE_WS_API_URL}user`, {
+export async function getSizeUsers(username) {
+  const users = await openmrsFetch(`${BASE_WS_API_URL}user`, {
     headers: {
       'Content-Type': 'application/json',
     }
   })
+  return users.data.results.filter(user => user.display !== username).length;
 }
 
 export function getStatusUser(status, retired) {

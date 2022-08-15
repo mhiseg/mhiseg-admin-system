@@ -18,7 +18,7 @@ const AdminSys: React.FC = () => {
 
     React.useEffect(() => {
         const currentUserSub = getLoggedInUser().then(user => setCurrentUser(user));
-        return () => {currentUserSub}
+        return () => { currentUserSub }
     }, []);
 
 
@@ -30,9 +30,13 @@ const AdminSys: React.FC = () => {
                     <Grid fullWidth={true} className={styles.p0}>
                         <Row>
                             <Column sm={lgValue[1]} lg={lgValue[0]} className={lgValue[0] < 12 ? styles.pr0 : ''}>
-                                {currentUser && <UserDataTable refresh={refreshTable} lg={lgValue} 
-                                // currentUser={currentUser} 
-                                uuid={userUuid} />}
+                                {currentUser &&
+                                    <UserDataTable
+                                        refresh={refreshTable}
+                                        lg={lgValue}
+                                        currentUser={currentUser}
+                                        uuid={userUuid}
+                                    />}
                             </Column>
                             <Column sm={lgValue[0]} lg={lgValue[1]}>
                                 <UserRegisterForm user={undefined} uuid={userUuid} refresh={refreshTable} />

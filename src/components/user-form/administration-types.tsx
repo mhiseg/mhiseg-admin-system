@@ -11,6 +11,7 @@ export enum Profiles {
   DOCTOR = "doctor",
   NURSE = "nurse",
   ADMIN = "admin",
+  ARCHIVIST= "archivist",
 }
 
 export enum Status {

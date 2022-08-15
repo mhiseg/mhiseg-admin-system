@@ -8,7 +8,7 @@ import { Form, Formik, validateYupSchema } from "formik";
 import FieldForm from "../field/field.component";
 import { uuidPhoneNumber } from "../constante";
 import { User } from "../administration-types";
-import { changeUserStatus, formatRole, formatUser, getPerson, geUserByUuid, saveUser } from "./user-ressource";
+import { changeUserStatus, formatRole, formatUser, getPage, getPerson, geUserByUuid, saveUser } from "./user-ressource";
 import { showToast } from "@openmrs/esm-framework";
 import { UserRegistrationContext } from "../../../user-context";
 import { Icon } from "@iconify/react";
@@ -89,6 +89,8 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       user.person.attributes = [];
       user.person.attributes.push({ attributeType: uuidPhoneNumber, value: values.person.phone, })
     }
+    user.userProperties.defaultPage = getPage(values.profile)
+    
     saveUser(abortController, user, values.uuid).then(async (res) => {
       const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username }]
       await changeUserStatus(abortController, users, values.userProperties.status);

@@ -12,15 +12,19 @@ import { Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-
 import { SearchInput } from "../toolbar_search_container/toolbar_search_container";
 import { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
-import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, getStatusUser } from "../user-form/register-form/user-ressource";
+import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, getStatusUser, checkProfile } from "../user-form/register-form/user-ressource";
 import { UserFollow32 } from "@carbon/icons-react"
 import { Icon } from "@iconify/react";
 import { Locales, Profiles, Status } from "../user-form/administration-types";
+import { getCurrentUser, getLoggedInUser, User } from "@openmrs/esm-framework";
+import { skip } from "rxjs/operators";
 
 export interface DeathListProps {
     refresh?: boolean;
     lg?: any;
     uuid?: string;
+    currentUser?: any;
+
 }
 
 const getFullNameWithGender = (fullName: string) => {
@@ -28,7 +32,7 @@ const getFullNameWithGender = (fullName: string) => {
     return <> <Icon className={styles.closeButton} icon={value[1] == "M" ? "emojione-monotone:man" : "emojione-monotone:woman"} /> {value[0]} </>
 }
 
-const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
+const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUser }) => {
     const [rowsTable, setRows] = useState([]);
     const { colSize } = useContext(UserRegistrationContext);
     const [totalpageSize, setTotalPageSize] = useState(1);
@@ -42,7 +46,8 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
     const headers = [
         { key: 'Username', header: t('Username') }, { key: 'fullName', header: t('fullName') }, { key: 'phone', header: t('phone') },
         { key: 'profile', header: t('profileLabel') }, { key: 'roles', header: t('roles') },
-        { key: "locale", header: t("locale") }, { key: 'status', header: t('status') },
+        { key: "locale", header: t("locale") }, { key: 'status', header: t('status') }, { key: 'userProperties', header: t('userProperties') }
+
     ];
 
     const checkTranslation = (text: string) => {
@@ -79,24 +84,21 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                     id: user?.uuid,
                     Username: user?.username,
                     fullName: user?.person.names[0].familyName + ", " + user?.person.names[0].givenName + "-" + user?.person.gender,
-                    // fullName: user?.person.display + "-" + user?.person.gender,
-                    profile: user.systemId.split('-')[0],
+                    profile: checkProfile(user.systemId),
                     roles: user?.roles?.length > 1 ? user.roles[0].display + ", " + user.roles[1].display + " (" + user?.roles?.length + ")" : user?.roles[0]?.display,
                     phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
                     status: getStatusUser(user?.userProperties?.status, user?.retired),
-                    locale: user?.userProperties?.defaultLocale
+                    locale: user?.userProperties?.defaultLocale,
+                    userProperties: user?.userProperties
                 }
             }))
     }
 
     const formatRows = (rows, status) => {
         const users = rows.map(row => {
-            const locale = Object.values(Locales).find(locale => t(locale) == t(row.cells[6].value));
             return {
                 uuid: row.id,
-                userProperties: {
-                    defaultLocale: locale || ""
-                },
+                userProperties: row.cells[row.cells.length - 1].value,
                 username: row.cells[0].value
             }
         })
@@ -105,18 +107,17 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
 
     useEffect(function () {
         changeRows(pageSize, page ? page : 1);
-        getSizeUsers().then(res => setTotalPageSize(res.data.results.length))
+        getSizeUsers().then(res => setTotalPageSize(res.data.results.length - 1))
     }, [refresh]);
 
     const changeRows = (size, page) => {
         let start = ((page - 1) * size);
         start = start <= 1 ? 1 : start;
         setPaginationPageSize([size, page]);
-        getAllUserPages(size, start)
-            .then(response => response.data.results)
-            .then(async json => formatUser(json).then(data => setRows(data)))
+        getAllUserPages(size, start, currentUser?.username)
+            .then(users => formatUser(users)
+                .then(data => setRows(data)))
     }
-
 
     return (
         <DataTable rows={rowsTable} headers={headers} useZebraStyles={true} >
@@ -209,7 +210,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                             {...getSelectionProps()}
                                         />
                                         {headers.map((header) => (
-                                            (header.key !== "uuid") &&
+                                            (header.key !== "userProperties") &&
                                             <TableHeader key={header.uuid} {...getHeaderProps({ header, isSortable: true })}>
                                                 {header.header}
                                             </TableHeader>
@@ -227,9 +228,11 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid }) => {
                                                 {...getSelectionProps({ row })}
                                                 onChange={(e) => colSize([12, 0])}
                                             />
-                                            {row.cells.map((cell, i) => <TableCell key={cell.id}>
-                                                {i > 2 ? checkTranslation(cell.value) : (i == 1 ? getFullNameWithGender(cell.value) : cell.value)}
-                                            </TableCell>
+                                            {row.cells.map((cell, i) => {
+                                                return cell.info.header != "userProperties" && <TableCell key={cell.id}>
+                                                    {i > 2 ? checkTranslation(cell.value) : (i == 1 ? getFullNameWithGender(cell.value) : cell.value)}
+                                                </TableCell>
+                                            }
                                             )}
 
                                         </TableRow>

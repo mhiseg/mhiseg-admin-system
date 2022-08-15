@@ -33,7 +33,7 @@ export interface User {
   userProperties?: {
     defaultLocale: string;
     status?: string;
-    allowedLocales?: Array<string>;
+    defaultPage?: string;
   };
   person: Person;
   privileges?: Array<Privilege>;

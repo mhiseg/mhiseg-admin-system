@@ -1,6 +1,8 @@
-import { openmrsFetch, refetchCurrentUser } from '@openmrs/esm-framework';
+import { CurrentUserWithResponseOption, getCurrentUser, openmrsFetch, refetchCurrentUser } from '@openmrs/esm-framework';
+import { mergeMap } from "rxjs/operators";
+
 import { VirtualAction } from 'rxjs';
-import { Status, User } from '../administration-types';
+import { Profiles, Status, User } from '../administration-types';
 import { uuidPhoneNumber } from '../constante';
 const BASE_WS_API_URL = '/ws/rest/v1/';
 
@@ -21,6 +23,13 @@ export function getAllRoles() {
   return openmrsFetch(`${BASE_WS_API_URL}role`);
 }
 
+export function getSynchronizedCurrentUser(
+  opts: CurrentUserWithResponseOption
+) {
+  return getCurrentUser(opts).pipe(
+    mergeMap(async (user) => user)
+  );
+}
 
 
 export async function changeUserStatus(abortController: AbortController, users: any[], status: string) {
@@ -89,13 +98,34 @@ export async function updateUserRoles(abortController: AbortController, users: a
 
 
 export function formatRole(roles, object?) {
-  if (roles?.length > 0 && object == undefined)
-    return roles.map(role => ({
-      uuid: role.uuid,
-      display: role.display,
-    }));
+  if (roles?.length > 0 && object == undefined) {
+    let rolesFormat = [];
+    roles.map(role => {
+      if (role.display.startsWith("Module:")) {
+        rolesFormat.push({
+          uuid: role.uuid,
+          display: role.display,
+        })
+      }
+    })
+    return rolesFormat;
+  }
   else if (object)
     return roles.map(role => role.display);
+}
+
+export function checkProfile(systemId) {
+  switch (systemId?.split("-")[0]) {
+    case Profiles.DOCTOR:
+      return Profiles.DOCTOR;
+    case Profiles.NURSE:
+      return Profiles.NURSE;
+    case Profiles.ADMIN:
+      return Profiles.ADMIN;
+    default:
+      return "";
+  }
+
 }
 
 export function formatUser(user: User, person?: any) {
@@ -103,8 +133,9 @@ export function formatUser(user: User, person?: any) {
     uuid: user?.uuid || undefined,
     username: user?.username || "",
     userProperties: {
-      status: getStatusUser(user?.userProperties?.status,user?.retired),
+      status: getStatusUser(user?.userProperties?.status, user?.retired),
       defaultLocale: user?.userProperties?.defaultLocale || "",
+      defaultPage: user?.userProperties?.defaultPage || getPage(user?.systemId?.split("-")[0])
     },
     person: {
       givenName: person?.names[0]?.givenName || "",
@@ -113,11 +144,23 @@ export function formatUser(user: User, person?: any) {
       gender: user?.person?.gender || "",
     },
     roles: formatRole(user?.roles) || [],
-    profile: user?.systemId?.split("-")[0] || "",
+    profile: checkProfile(user?.systemId),
     systemId: user?.systemId || ""
   }
 }
 
+export function getPage(profile) {
+  switch (profile) {
+    case Profiles.ADMIN:
+      return "/settings"
+    case Profiles.DOCTOR:
+      return "/death"
+    case Profiles.NURSE:
+      return "/death";
+    default: return "/home"
+  }
+
+}
 
 
 export function resetPassword(abortController: AbortController, newPassword: string, uuid?: string) {
@@ -158,13 +201,23 @@ export async function getCurrentUserRoleSession() {
   await openmrsFetch(`${BASE_WS_API_URL}session`).then(data => { CurrentSession = data.data.user.systemId.split("-")[0] });
   return CurrentSession;
 }
-
-export function getAllUserPages(limit: number, start: number) {
-  return openmrsFetch(`${BASE_WS_API_URL}user?&limit=${limit}&startIndex=${start}&v=full`, {
+const getUsers = (limit: number, start: number) =>
+  openmrsFetch(`${BASE_WS_API_URL}user?&limit=${limit}&startIndex=${start}&v=full`, {
     headers: {
       'Content-Type': 'application/json',
     }
   })
+
+
+
+export async function getAllUserPages(limit: number, start: number, username: string) {
+  let data = await getUsers(limit, start);
+  const responses = (data) => data.data.results.filter(user => user.username !== username);
+  if (responses(data).length !== limit) {
+    data = await getUsers(limit + 1, start);
+    return responses(data);
+  }
+  return responses(data);
 }
 
 export function getSizeUsers() {

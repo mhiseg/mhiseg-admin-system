@@ -3,7 +3,7 @@ import { useField } from 'formik';
 import { SelectItem, Select, MultiSelect, TableToolbarMenu, Button, Column, Row } from 'carbon-components-react';
 import { useTranslation } from 'react-i18next';
 import { Plane16 } from '@carbon/icons-react';
-import { getAllRoles } from '../user-form/register-form/user-ressource';
+import { getAllRoles, updateUserRoles } from '../user-form/register-form/user-ressource';
 import styles from "./user-data-table.scss";
 import { CheckmarkOutline32 } from "@carbon/icons-react"
 
@@ -11,12 +11,16 @@ interface RolesProps {
     placeholder?: string;
     label?: string;
     onChange?: (value: any) => void;
+    updateRoles: ()=> void;
 }
 
-export const Roles: React.FC<RolesProps> = ({ label, onChange, placeholder }) => {
+export const Roles: React.FC<RolesProps> = ({ label, onChange, placeholder,updateRoles }) => {
     const { t } = useTranslation();
     const [roles, setRoles] = useState([{ uuid: "", display: "" }]);
     const [roleSelected, setRoleSelected] = useState([]);
+    const abortController = new AbortController();
+
+
 
     useEffect(() => {
         const getRoles = getAllRoles().then(roles => setRoles(roles.data.results));
@@ -47,10 +51,10 @@ export const Roles: React.FC<RolesProps> = ({ label, onChange, placeholder }) =>
                         }}
                     />
                 </Column>
-                <Column lg={1}>
-                {/* <WatsonHealthNominate /> */}
-                    <CheckmarkOutline32 onClick={() => alert(0)} className={styles.colIcon}/>
-                    {/* <UserFollow32 /> */}
+                <Column className={styles.p0} lg={1}>
+                    <CheckmarkOutline32
+                        onClick={() => {updateRoles}}
+                        className={styles.colIcon} />
                 </Column>
             </Row>
         </div>

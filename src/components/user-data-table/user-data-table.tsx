@@ -12,7 +12,7 @@ import { Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-
 import { SearchInput } from "../toolbar_search_container/toolbar_search_container";
 import { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
-import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, getStatusUser, checkProfile } from "../user-form/register-form/user-ressource";
+import { getSizeUsers, getAllUserPages, changeUserStatus, changeUserProfile, getStatusUser, checkProfile, updateUserRoles } from "../user-form/register-form/user-ressource";
 import { UserFollow32 } from "@carbon/icons-react"
 import { Icon } from "@iconify/react";
 import { Locales, Profiles, Status } from "../user-form/administration-types";
@@ -136,7 +136,8 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
             }) => {
                 const batchActionProps = getBatchActionProps();
                 return (
-                    <>
+                    <div className={styles.TableMainContainer}>
+                        <h4 className={styles.tableTitle}>{t("tableTitle", "Liste des utilisateurs")}</h4>
                         <TableContainer  {...getTableContainerProps()} >
                             <div className={styles.TableContainer}>
                                 <TableToolbar {...getToolbarProps()} >
@@ -170,8 +171,10 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                             <TableToolbarAction className={styles.TableToolbarMenu}>
                                                 <Roles
                                                     placeholder={t("roles")}
-                                                    onChange={(data) => { setRoles(data) }}
-                                                />
+                                                    onChange={(data) => { setRoles(data); } } 
+                                                    updateRoles= {() =>updateUserRoles(abortController, selectedRows, roles).then(() => changeRows(pageSize, page))
+                                                    }
+                                            />
                                             </TableToolbarAction>
                                         </TableToolbarMenu>
 
@@ -202,10 +205,10 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                     </TableBatchActions>
                                 </TableToolbar>
                             </div>
-                            <Table {...getTableProps()} size='lg'>
+                            <Table {...getTableProps()} size='lg' light={true}>
                                 <TableHead className={styles.TableRowHeader}>
-                                    <TableRow>
-                                        <TableSelectAll
+                                    <TableRow className={styles.TableRowHeader}>
+                                        <TableSelectAll className={styles.TableRowHeader}
                                             onSelect={(e) => colSize([12, 0])}
                                             {...getSelectionProps()}
                                         />
@@ -241,6 +244,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                             </Table>
                         </TableContainer>
                         <Pagination
+                            className={styles.page}
                             backwardText={t("PreviousPage")}
                             forwardText={t("NextPage")}
                             itemsPerPageText={t("Show")}
@@ -251,7 +255,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                             size="sm"
                             totalItems={totalpageSize}
                         />
-                    </>
+                    </div>
                 );
             }}
         </DataTable >
@@ -259,3 +263,4 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
 }
 
 export default UserDataTable;
+

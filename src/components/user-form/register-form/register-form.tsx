@@ -107,6 +107,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         kind: 'success',
         description: 'User save succesfully',
       })
+      colSize([12, 0])
     }
     ).catch(
       error => {

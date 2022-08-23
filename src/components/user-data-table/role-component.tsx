@@ -52,18 +52,7 @@ export const Roles: React.FC<RolesProps> = ({ label, onChange, placeholder, upda
                     />
                 </Column>
                 <Column className={styles.p0} lg={1}>
-                    {/* <Button
-                        renderIcon={CheckmarkOutline32}
-                        // iconDescription=""
-                        // hasIconOnly
-                        onClick={() => {
-                            updateRoles(roleSelected)
-                        }}
-                        className={styles.colIcon}
-                        // size="sm"
-                    /> */}
-                    <CheckmarkOutline32
-                        
+                    <CheckmarkOutline32                        
                         onClick={() => {
                             updateRoles(roleSelected)
                         }}

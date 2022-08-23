@@ -13,6 +13,7 @@
   "messageErrorProfile": "The user must have a profile",
   "messageErrorUsernameMinVal": "There username be at least 5 caracteres",
   "messageErrorLocale": "The user must have a default locale",
+  "messageErrorPage": "The user must have a default page",
   "rolesError": "There must be at least one role for the user",
   "fieldset1Label": "Person info",
   "fieldset2Label": "Access management",
@@ -55,5 +56,12 @@
   "confirmButton": "Confirm",
   "newUser": "New User",
   "editUser": "Edit this user",
-  "tableTitle": "Users account list"
+  "tableTitle": "Users account list",
+  "pageLabel": "Default page",
+  "adminPage": "Administrator System",
+  "archivistPage": "Archivist in Out patient",
+  "deathDoctorPage": "Death doctor",
+  "outPatientDoctorPage": "Out patient doctor",
+  "deathNursePage": "Death nurse",
+  "outPatientNursePage": "Out patient nurse"
 }

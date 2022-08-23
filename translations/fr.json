@@ -6,6 +6,7 @@
   "messageErrorFamilyName": "Le nom ne peut pas être vide",
   "messageErrorPhoneNumber": "Le format du téléphone est incorrect",
   "messageErrorProfile": "L'utilisateur doit avoir un profil",
+  "messageErrorPage": "L'utilisateur doit avoir une page par défaut",
   "messageErrorUsername": "Le nom d'utilisateur ne peut pas être vide",
   "messageErrorStatus": "Le compte de l'utilisateur doit avoir un statut",
   "messageErrorUsernameExists": "Ce pseudo est associé à un autre compte",
@@ -57,5 +58,12 @@
   "confirmButton": "Enregistrer",
   "newUser": "Ajout d'un nouvel utilisateur",
   "editUser": "Modification de cet utilisateur",
-  "tableTitle": "Liste des utilisateurs"
+  "tableTitle": "Liste des utilisateurs",
+  "pageLabel": "Page par défaut",
+  "adminPage": "Administrateur du système",
+  "archivistPage": "Archiviste patient ambulatoire",
+  "deathDoctorPage": "Docteur gestionnaire de décès", 
+  "outPatientDoctorPage": "Docteur patient ambulatoire",
+  "deathNursePage": "Infirmier(ère) gestionnaire de décès",
+  "outPatientNursePage": "Infirmier(ère) patient ambulatoire"
 }

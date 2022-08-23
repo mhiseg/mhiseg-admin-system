@@ -137,7 +137,7 @@ export function formatUser(user: User, person?: any) {
     userProperties: {
       status: getStatusUser(user?.userProperties?.status, user?.retired),
       defaultLocale: user?.userProperties?.defaultLocale || "",
-      defaultPage: user?.userProperties?.defaultPage || getPage(user?.systemId?.split("-")[0])
+      defaultPage: user?.userProperties?.defaultPage || "",
     },
     person: {
       givenName: person?.names[0]?.givenName || "",
@@ -151,17 +151,27 @@ export function formatUser(user: User, person?: any) {
   }
 }
 
-export function getPage(profile) {
-  switch (profile) {
-    case Profiles.ADMIN:
-      return "/settings"
-    case Profiles.DOCTOR:
-      return "/death"
-    case Profiles.NURSE:
-      return "/death";
-    case Profiles.ARCHIVIST:
-      return "/patient";
-    default:
+export function getPage(profile, roles?) {
+  if (profile == Profiles.ADMIN) {
+    return "/settings"
+  } else if (profile == Profiles.ARCHIVIST ) {
+    return "/out-patient/search"
+  }
+  else {
+  //   const module = 
+  //   if(profile == Profiles.DOCTOR){
+  //   }
+  // }
+  // switch (profile) {
+  //   case Profiles.ADMIN:
+  //     return "/settings"
+  //   case Profiles.DOCTOR:
+  //     return "/death"
+  //   case Profiles.NURSE:
+  //     return "/death";
+  //   case Profiles.ARCHIVIST:
+  //     return "/patient";
+  //   default:
       return "/home"
   }
 

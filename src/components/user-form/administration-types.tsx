@@ -11,8 +11,14 @@ export enum Profiles {
   DOCTOR = "doctor",
   NURSE = "nurse",
   ADMIN = "admin",
-  ARCHIVIST= "archivist",
+  ARCHIVIST = "archivist",
 }
+export const pageDefaults = [
+  { display: "adminPage", value: "/settings" }, { display: "archivistPage", value: "/out-patient/search" },
+  { display: "deathDoctorPage", value: "/death/list-unvalidate" }, { display: "outPatientDoctorPage", value: "/out-patient/patient" },
+  { display: "deathNursePage", value: "/death/search" }, { display: "outPatientNursePage", value: "/out-patient/search" }
+]
+
 
 export enum Status {
   ENABLE = "enable",

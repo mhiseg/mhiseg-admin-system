@@ -7,7 +7,6 @@ interface InputSelectProps {
     name: string;
     placeholder?: string;
     label?: string;
-    options: any[];
     hideLabel?: boolean;
     id?: string;
     titleText?: string;
@@ -21,6 +20,7 @@ export const MultiSelectField: React.FC<InputSelectProps> = (props) => {
     const [field, meta, helpers] = useField(props.name);
     const { setValue } = helpers;
     const { t } = useTranslation();
+    
     return (
         <>
             <MultiSelect.Filterable
@@ -29,7 +29,7 @@ export const MultiSelectField: React.FC<InputSelectProps> = (props) => {
                 placeholder={props.placeholder}
                 items={props.items}
                 id={props.name}
-                initialSelectedItems={meta.value}
+                initialSelectedItems={meta.initialValue}
                 onChange={(e) => { setValue(e.selectedItems) }}
                 invalidText={t(meta.error)}
                 invalid={!!(meta.error)}

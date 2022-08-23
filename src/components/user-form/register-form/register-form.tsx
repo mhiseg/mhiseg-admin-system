@@ -7,8 +7,8 @@ import styles from "./form.scss"
 import { Form, Formik, validateYupSchema } from "formik";
 import FieldForm from "../field/field.component";
 import { uuidPhoneNumber } from "../constante";
-import { User } from "../administration-types";
-import { changeUserStatus, formatRole, formatUser, getPage, getPerson, geUserByUuid, saveUser } from "./user-ressource";
+import { Profiles, User } from "../administration-types";
+import { changeUserStatus, formatRole, formatUser, getAllRoles, getPage, getPerson, geUserByUuid, saveUser } from "./user-ressource";
 import { showToast } from "@openmrs/esm-framework";
 import { UserRegistrationContext } from "../../../user-context";
 import { Icon } from "@iconify/react";
@@ -23,6 +23,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
   const abortController = new AbortController();
   const { colSize, setRefresh, userUuid } = useContext(UserRegistrationContext);
   const [initialV, setInitialV] = useState(formatUser(user));
+  const [roles, setRoles] = useState([{ uuid: "", display: "" }]);
 
 
   useEffect(() => {
@@ -35,6 +36,13 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         })
     }
   }, [uuid, refresh]);
+
+  useEffect(() => {
+    const userRoles = getAllRoles().then(roles => setRoles(formatRole(roles.data.results)));
+    return () => {
+      userRoles;
+    };
+  }, []);
 
   const userSchema = Yup.object().shape({
     username: Yup.string()
@@ -53,6 +61,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     userProperties: Yup.object({
       status: Yup.string().required("messageErrorStatus"),
       defaultLocale: Yup.string().required("messageErrorLocale"),
+      defaultPage: Yup.string().required("messageErrorPage"),
     }),
     profile: Yup.string().required("messageErrorProfile"),
     roles: Yup.array()
@@ -72,6 +81,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         }],
         gender: values.person.gender,
       },
+      roles: values.roles,
       userProperties: values.userProperties
     }
     if (!values.uuid) {
@@ -84,8 +94,11 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       user.person.attributes = [];
       user.person.attributes.push({ attributeType: uuidPhoneNumber, value: values.person.phone, })
     }
-    user.userProperties.defaultPage = getPage(values.profile)
-
+    if(Profiles.ADMIN == values.profile){
+      user.roles = [...user.roles, roles.find(r=>r.display.includes("Module: Admin"))]
+    }else if(Profiles.ARCHIVIST == values.profile){
+        user.roles = [...user.roles, roles.find(r=>r.display.includes("Module: Archivist"))]
+    }
     saveUser(abortController, user, values.uuid).then(async (res) => {
       const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username }]
       await changeUserStatus(abortController, users, values.userProperties.status);
@@ -94,7 +107,6 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         kind: 'success',
         description: 'User save succesfully',
       })
-      setRefresh(res.data.systemId + new Date().getTime())
     }
     ).catch(
       error => {
@@ -105,7 +117,6 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
 
 
   return (
-
     <Formik
       enableReinitialize
       initialValues={initialV}
@@ -165,16 +176,19 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                 <Row>
                   {
                     values.uuid &&
-                    <Column className={styles.firstColSyle} lg={12}>
-                      {FieldForm('roles')}
+                    <Column className={styles.firstColSyle} lg={6}>
+                      {FieldForm('roles',roles)}
                     </Column>
                   }
                   {
                     values.uuid == undefined &&
-                    <Column className={styles.firstColSyle} lg={12}>
-                      {FieldForm('roles')}
+                    <Column className={styles.firstColSyle} lg={6}>
+                      {FieldForm('roles',roles)}
                     </Column>
                   }
+                  <Column className={styles.firstColSyle} lg={6}>
+                      {FieldForm('defaultPage')}
+                    </Column>
                 </Row>
               </div>
 

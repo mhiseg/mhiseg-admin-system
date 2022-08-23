@@ -8,7 +8,7 @@ import {
     TableToolbarAction, Table, TableHead, TableRow, TableSelectAll,
     TableHeader, TableBody, TableSelectRow, TableCell, Pagination, Button
 } from "carbon-components-react";
-import { Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-react';
+import { Edit16, Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-react';
 import { SearchInput } from "../toolbar_search_container/toolbar_search_container";
 import { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
@@ -46,7 +46,6 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
         { key: 'Username', header: t('Username') }, { key: 'fullName', header: t('fullName') }, { key: 'phone', header: t('phone') },
         { key: 'profile', header: t('profileLabel') }, { key: 'roles', header: t('roles') },
         { key: "locale", header: t("locale") }, { key: 'status', header: t('status') }, { key: 'userProperties', header: t('userProperties') }
-
     ];
 
     const checkTranslation = (text: string) => {
@@ -85,7 +84,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                     Username: user?.username,
                     fullName: user?.person.names[0].familyName + ", " + user?.person.names[0].givenName + "-" + user?.person.gender,
                     profile: checkProfile(user.systemId),
-                    roles: roles?.length > 1 ? (roles[0].display.split(":")[1] + ", " + roles[1].display.split(":")[1] + " (" + roles?.length + ")" ) : roles[0]?.display.split(":")[1],
+                    roles: roles?.length > 1 ? (roles[0].display.split(":")[1] + ", " + roles[1].display.split(":")[1] + " (" + roles?.length + ")") : roles[0]?.display.split(":")[1],
                     phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
                     status: getStatusUser(user?.userProperties?.status, user?.retired),
                     locale: user?.userProperties?.defaultLocale,
@@ -204,10 +203,10 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                     </TableBatchActions>
                                 </TableToolbar>
                             </div>
-                            <Table {...getTableProps()} size='lg' light={true}>
+                            <Table {...getTableProps()} size='lg'>
                                 <TableHead className={styles.TableRowHeader}>
-                                    <TableRow className={styles.TableRowHeader}>
-                                        <TableSelectAll className={styles.TableRowHeader}
+                                    <TableRow>
+                                        <TableSelectAll
                                             onSelect={(e) => colSize([12, 0])}
                                             {...getSelectionProps()}
                                         />
@@ -230,13 +229,13 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                                 {...getSelectionProps({ row })}
                                                 onChange={(e) => colSize([12, 0])}
                                             />
-                                            {row.cells.map((cell, i) => {
-                                                return cell.info.header != "userProperties" && <TableCell key={cell.id}>
-                                                    {i > 2 ? checkTranslation(cell.value) : (i == 1 ? getFullNameWithGender(cell.value) : cell.value)}
-                                                </TableCell>
+                                            {
+                                                row.cells.map((cell, i) => {
+                                                    return cell.info.header != "userProperties" && <TableCell key={cell.id}>
+                                                        {i > 2 ? checkTranslation(cell.value) : (i == 1 ? getFullNameWithGender(cell.value) : cell.value)}
+                                                    </TableCell>
+                                                })
                                             }
-                                            )}
-
                                         </TableRow>
                                     ))}
                                 </TableBody>

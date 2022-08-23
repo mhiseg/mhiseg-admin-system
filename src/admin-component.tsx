@@ -26,7 +26,7 @@ const AdminSys: React.FC = () => {
         <>
             <h4 className={styles['title-page']}>{t("adminSystem")}</h4>
             <div className={styles['mhiseg-main-content']}>
-                <UserRegistrationContext.Provider value={{ colSize: setLgValue, userUuid: setUserUuid, setRefresh: setRefreshTable, uuid: userUuid }}>
+                <UserRegistrationContext.Provider value={{ colSize: setLgValue, userUuid: setUserUuid, setRefresh: setRefreshTable, uuid: userUuid}}>
                     <Grid fullWidth={true} className={styles.p0}>
                         <Row>
                             <Column sm={lgValue[1]} lg={lgValue[0]} className={lgValue[0] < 12 ? styles.pr0 : ''}>

@@ -7,29 +7,21 @@ import { formatRole, getAllRoles } from "../../register-form/user-ressource";
 import styles from '../field.scss';
 
 
+interface ModuleFieldProps {
+  value: any;
+}
 
-export const ModuleField: React.FC = (props) => {
+export const ModuleField: React.FC <ModuleFieldProps> = (props) => {
   const { t } = useTranslation();
-  const [roles, setRoles] = useState([{ uuid: "", display: "" }]);
-  const [field,meta] = useField("roles");
-
-  useEffect(() => {
-    const userRoles = getAllRoles().then(roles => setRoles(formatRole(roles.data.results)));
-    return () => {
-      userRoles;
-    };
-  }, []);
-
 
   return (
     <>
       <MultiSelectField
-        options={roles}
         placeholder={t("roles")}
         label={t("roles")}
         name="roles" 
         className={styles.margin_field}
-        items={roles}
+        items={props.value}
         itemToString={(role) => (role ? role?.display?.split(":")[1] : '')}
       />
     </>

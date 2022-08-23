@@ -8,7 +8,7 @@ import {
     TableToolbarAction, Table, TableHead, TableRow, TableSelectAll,
     TableHeader, TableBody, TableSelectRow, TableCell, Pagination, Button
 } from "carbon-components-react";
-import { Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-react';
+import { Edit16, Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-react';
 import { SearchInput } from "../toolbar_search_container/toolbar_search_container";
 import { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
@@ -38,6 +38,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
     const [[pageSize, page], setPaginationPageSize] = useState([5, 1]);
     const paginationPageSizes = [1, 5, 10, 20, 30, 40];
     const [roles, setRoles] = useState([]);
+    const [changeSelectRow, setChangeSelectRow] = useState(0)
     let { userUuid } = useContext(UserRegistrationContext);
     const [showAddUser, setShowAddUser] = useState((uuid == undefined));
     const abortController = new AbortController();
@@ -45,7 +46,8 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
     const headers = [
         { key: 'Username', header: t('Username') }, { key: 'fullName', header: t('fullName') }, { key: 'phone', header: t('phone') },
         { key: 'profile', header: t('profileLabel') }, { key: 'roles', header: t('roles') },
-        { key: "locale", header: t("locale") }, { key: 'status', header: t('status') }, { key: 'userProperties', header: t('userProperties') }
+        { key: "locale", header: t("locale") }, { key: 'status', header: t('status') }, 
+       // { key: 'userProperties', header: t('userProperties') }
 
     ];
 
@@ -85,11 +87,10 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                     Username: user?.username,
                     fullName: user?.person.names[0].familyName + ", " + user?.person.names[0].givenName + "-" + user?.person.gender,
                     profile: checkProfile(user.systemId),
-                    roles: roles?.length > 1 ? (roles[0].display.split(":")[1] + ", " + roles[1].display.split(":")[1] + " (" + roles?.length + ")" ) : roles[0]?.display.split(":")[1],
+                    roles: roles?.length > 1 ? (roles[0].display.split(":")[1] + ", " + roles[1].display.split(":")[1] + " (" + roles?.length + ")") : roles[0]?.display.split(":")[1],
                     phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
                     status: getStatusUser(user?.userProperties?.status, user?.retired),
-                    locale: user?.userProperties?.defaultLocale,
-                    userProperties: user?.userProperties
+                    locale: user?.userProperties,
                 }
             }))
     }
@@ -117,6 +118,11 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
         getAllUserPages(size, start, currentUser?.username)
             .then(users => formatUser(users)
                 .then(data => setRows(data)))
+    }
+    function onclickEdit(e) {
+        e.stopPropagation();
+        userUuid(e.target.parentNode.id);
+        colSize([7, 5]);
     }
 
     return (
@@ -204,39 +210,38 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                     </TableBatchActions>
                                 </TableToolbar>
                             </div>
-                            <Table {...getTableProps()} size='lg' light={true}>
+                            <Table {...getTableProps()} size='lg'>
                                 <TableHead className={styles.TableRowHeader}>
-                                    <TableRow className={styles.TableRowHeader}>
-                                        <TableSelectAll className={styles.TableRowHeader}
+                                    <TableRow>
+                                        <TableSelectAll
                                             onSelect={(e) => colSize([12, 0])}
                                             {...getSelectionProps()}
                                         />
                                         {headers.map((header) => (
-                                            (header.key !== "userProperties") &&
+                                            (header.key !== "uuid") &&
                                             <TableHeader key={header.uuid} {...getHeaderProps({ header, isSortable: true })}>
                                                 {header.header}
                                             </TableHeader>
                                         ))}
+                                        <Edit16 className={styles.editHeader} />
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {rows.map((row) => (
-                                        <TableRow key={row.id} onClick={(e) => {
-                                            userUuid(row.id);
-                                            colSize([7, 5])
-                                        }} >
+                                        <TableRow id={row.id} key={row.id}  >
                                             <TableSelectRow
                                                 className={styles.testRows}
                                                 {...getSelectionProps({ row })}
                                                 onChange={(e) => colSize([12, 0])}
                                             />
-                                            {row.cells.map((cell, i) => {
-                                                return cell.info.header != "userProperties" && <TableCell key={cell.id}>
-                                                    {i > 2 ? checkTranslation(cell.value) : (i == 1 ? getFullNameWithGender(cell.value) : cell.value)}
-                                                </TableCell>
-                                            }
+                                            {row.cells.map((cell, i) => <TableCell key={cell.id}>
+                                                {i > 2 ? checkTranslation(cell.value) : (i == 1 ? getFullNameWithGender(cell.value) : cell.value)}
+                                            </TableCell>
                                             )}
+                                            <UserRegistrationContext.Provider value={{ uuid: undefined, colSize: undefined, userUuid: undefined, setRefresh: undefined, selectedRow: changeSelectRow }}>
 
+                                                <Edit16 className={styles.editRow} onClick={onclickEdit} />
+                                            </UserRegistrationContext.Provider>
                                         </TableRow>
                                     ))}
                                 </TableBody>

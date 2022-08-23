@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "./toolbar_search_container.scss";
 import SearchIcon from "@carbon/icons-react/es/search/20";
 import { useRef } from "react";
-// import { Icon } from "@iconify/react";
 import { useTranslation } from "react-i18next";
 
 

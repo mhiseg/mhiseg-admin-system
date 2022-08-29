@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import styles from "./form.scss"
 import { Form, Formik, validateYupSchema } from "formik";
 import FieldForm from "../field/field.component";
-import { uuidPhoneNumber } from "../constante";
+import { adminModuleUuid, outPtientModuleUuid, uuidPhoneNumber } from "../constante";
 import { Profiles, User } from "../administration-types";
 import { changeUserStatus, formatRole, formatUser, getAllRoles, getPage, getPerson, geUserByUuid, saveUser } from "./user-ressource";
 import { showToast } from "@openmrs/esm-framework";
@@ -94,10 +94,10 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       user.person.attributes = [];
       user.person.attributes.push({ attributeType: uuidPhoneNumber, value: values.person.phone, })
     }
-    if(Profiles.ADMIN == values.profile){
-      user.roles = [...user.roles, roles.find(r=>r.display.includes("Module: Admin"))]
-    }else if(Profiles.ARCHIVIST == values.profile){
-        user.roles = [...user.roles, roles.find(r=>r.display.includes("Module: Archivist"))]
+    if (Profiles.ADMIN == values.profile) {
+      user.roles = [...user.roles, roles.find(r => r.uuid == adminModuleUuid)]
+    } else if (Profiles.ARCHIVIST == values.profile) {
+      user.roles = [...user.roles, roles.find(r => r.uuid == outPtientModuleUuid)]
     }
     saveUser(abortController, user, values.uuid).then(async (res) => {
       const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username }]
@@ -178,18 +178,18 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                   {
                     values.uuid &&
                     <Column className={styles.firstColSyle} lg={6}>
-                      {FieldForm('roles',roles)}
+                      {FieldForm('roles', roles)}
                     </Column>
                   }
                   {
                     values.uuid == undefined &&
                     <Column className={styles.firstColSyle} lg={6}>
-                      {FieldForm('roles',roles)}
+                      {FieldForm('roles', roles)}
                     </Column>
                   }
                   <Column className={styles.firstColSyle} lg={6}>
-                      {FieldForm('defaultPage')}
-                    </Column>
+                    {FieldForm('defaultPage')}
+                  </Column>
                 </Row>
               </div>
 

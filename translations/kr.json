@@ -25,7 +25,7 @@
   "familyNameLabel": "Siyati",
   "givenNameLabel": "Non",
   "localeLabel": "Lang",
-  "adminSystem": "Jesyon itilizatè yo",
+  "adminSystem": "Administrasyon Systèm",
   "archivist": "Achivis",
   "Username": "Non itilizatè",
   "PreviousPage": "Paj avan",
@@ -61,7 +61,7 @@
   "pageLabel": "Paj pa defo",
   "adminPage": "Administratè sistèm nan",
   "archivistPage": "Achivis pasyan ki ka mache",
-  "deathDoctorPage": "Doktè kap jere moun ki mouri", 
+  "deathDoctorPage": "Doktè kap jere moun ki mouri",
   "outPatientDoctorPage": "Doktè pasyan ki ka mache",
   "deathNursePage": "Enfimyè kap jere moun ki mouri",
   "outPatientNursePage": "Enfimyè pasyan ki ka mache"

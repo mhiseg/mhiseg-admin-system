@@ -27,20 +27,20 @@ function setupOpenMRS() {
       {
         load: getAsyncLifecycle(() => import("./root.component"), options),
         route: "settings",
-        privilege: "App: coreapps.systemAdministration"
+        privilege: "App: system.management"
       },
     ],
-    //  extensions: [
-    //   {
-    //      id: "system-administration-link",
-    //      slot: "app-menu-slot",
-    //      load: getAsyncLifecycle(
-    //        () => import("./refapp-links/refapp-links"),
-    //        options
-    //      ),
-    //      privilege: "App: system.administration",
-    //    }
-    //  ],
+     extensions: [
+      {
+         id: "system-administration-link",
+         slot: "app-menu-slot",
+         load: getAsyncLifecycle(
+           () => import("./refapp-links/refapp-links"),
+           options
+         ),
+         privilege: "App: system.management",
+       }
+     ],
   };
 }
 

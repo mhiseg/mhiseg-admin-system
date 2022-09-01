@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useContext } from "react";
 import styles from "./user-data-table.scss";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
@@ -8,7 +8,7 @@ import {
     TableToolbarAction, Table, TableHead, TableRow, TableSelectAll,
     TableHeader, TableBody, TableSelectRow, TableCell, Pagination, Button
 } from "carbon-components-react";
-import { Edit16, Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-react';
+import { Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-react';
 import { SearchInput } from "../toolbar_search_container/toolbar_search_container";
 import { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
@@ -131,9 +131,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                 getBatchActionProps,
                 onInputChange,
                 selectedRows,
-                setRowSelection,
                 getTableProps,
-                totalSelected,
                 getTableContainerProps,
             }) => {
                 const batchActionProps = getBatchActionProps();

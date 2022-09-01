@@ -76,6 +76,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
     }
 
     const formatUser = (users) => {
+        console.log(users);
         return Promise.all(
             users.map(async (user) => {
                 const roles = formatRole(user?.roles);
@@ -165,13 +166,16 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                     >
                                         <TableToolbarMenu
                                             renderIcon={WatsonHealthNominate16}
-                                            iconDescription={t("profileLabel")}
+                                            iconDescription={t("roleLabel")}
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
                                             <TableToolbarAction className={styles.TableToolbarMenu}>
                                                 <Roles
                                                     placeholder={t("roles")}
                                                     onChange={(data) => { setRoles(data); }}
-                                                    updateRoles={(roles) => updateUserRoles(abortController, selectedRows, roles).then(() => changeRows(pageSize, page))}
+                                                    updateRoles={() => updateUserRoles(abortController, selectedRows, roles).then(() =>{ 
+                                                        changeRows(pageSize, page)}
+                                                        )}
+
                                                 />
                                             </TableToolbarAction>
                                         </TableToolbarMenu>

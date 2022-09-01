@@ -8,7 +8,7 @@ import {
     TableToolbarAction, Table, TableHead, TableRow, TableSelectAll,
     TableHeader, TableBody, TableSelectRow, TableCell, Pagination, Button
 } from "carbon-components-react";
-import { Edit16, Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-react';
+import { Settings32, UserAccess24, WatsonHealthNominate16 } from '@carbon/icons-react';
 import { SearchInput } from "../toolbar_search_container/toolbar_search_container";
 import { Roles } from "./role-component";
 import { UserRegistrationContext } from "../../user-context";
@@ -112,11 +112,13 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
 
     const changeRows = (size, page) => {
         let start = ((page - 1) * size);
-        start = start <= 1 ? 1 : start;
         setPaginationPageSize([size, page]);
         getAllUserPages(size, start, currentUser?.username)
             .then(users => formatUser(users)
                 .then(data => setRows(data)))
+    }
+    const filterUsers = (currentUser, rows) => {
+        return rows.filter(row => row.cells[0].value !== currentUser?.username && row.cells[0]?.value !== 'admin')
     }
 
     return (
@@ -131,7 +133,6 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                 onInputChange,
                 selectedRows,
                 getTableProps,
-                totalSelected,
                 getTableContainerProps,
             }) => {
                 const batchActionProps = getBatchActionProps();
@@ -175,7 +176,6 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                                     updateRoles={() => updateUserRoles(abortController, selectedRows, roles).then(() =>{ 
                                                         changeRows(pageSize, page)}
                                                         )}
-
                                                 />
                                             </TableToolbarAction>
                                         </TableToolbarMenu>
@@ -186,7 +186,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
                                             {Object.values(Profiles).map((element) => {
                                                 return (
-                                                    <TableToolbarAction onClick={(e) => changeUserProfile(abortController, selectedRows, element).then(() => changeRows(pageSize, page))}>
+                                                    <TableToolbarAction onClick={(e) => changeUserProfile(abortController, filterUsers(currentUser, selectedRows), element).then(() => changeRows(pageSize, page))}>
                                                         {t(element)}
                                                     </TableToolbarAction>
                                                 )
@@ -198,7 +198,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                             tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}>
                                             {Object.values(Status).map((s) => {
                                                 return (
-                                                    <TableToolbarAction onClick={(e) => formatRows(selectedRows, s)}>
+                                                    <TableToolbarAction onClick={(e) => formatRows(filterUsers(currentUser, selectedRows), s)}>
                                                         {t(s == "waiting" ? "reset" : s)}
                                                     </TableToolbarAction>
                                                 )
@@ -211,8 +211,13 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                 <TableHead className={styles.TableRowHeader}>
                                     <TableRow>
                                         <TableSelectAll
-                                            onSelect={(e) => colSize([12, 0])}
                                             {...getSelectionProps()}
+                                            onSelect={
+                                                (e) => {
+                                                    colSize([12, 0])
+                                                    getSelectionProps().onSelect(e);
+                                                }
+                                            }
                                         />
                                         {headers.map((header) => (
                                             (header.key !== "userProperties") &&
@@ -225,14 +230,25 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                 <TableBody>
                                     {rows.map((row) => (
                                         <TableRow key={row.id} onClick={(e) => {
-                                            userUuid(row.id);
-                                            colSize([7, 5])
+                                            if (row.cells[0].value !== currentUser?.username && row.cells[0]?.value !== 'admin' && selectedRows.length == 0) {
+                                                userUuid(row.id);
+                                                colSize([7, 5])
+                                            } else {
+                                                userUuid(undefined);
+                                                colSize([12, 0])
+                                            }
                                         }} >
-                                            <TableSelectRow
-                                                className={styles.testRows}
-                                                {...getSelectionProps({ row })}
-                                                onChange={(e) => colSize([12, 0])}
-                                            />
+                                            {currentUser?.username == row.cells[0]?.value || row.cells[0]?.value == 'admin' ?
+                                                (<TableSelectRow
+                                                    {...getSelectionProps({ row })}
+                                                    disabled={true}
+                                                    checked={false}
+                                                />) :
+                                                (<TableSelectRow
+                                                    className={styles.testRows}
+                                                    {...getSelectionProps({ row })}
+                                                />)
+                                            }
                                             {
                                                 row.cells.map((cell, i) => {
                                                     return cell.info.header != "userProperties" && <TableCell key={cell.id}>

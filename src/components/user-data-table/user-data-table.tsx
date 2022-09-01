@@ -209,6 +209,12 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                     <TableRow>
                                         <TableSelectAll
                                             {...getSelectionProps()}
+                                            onSelect={
+                                                (e) => {
+                                                    colSize([12, 0])
+                                                    getSelectionProps().onSelect(e);
+                                                }
+                                            }
                                         />
                                         {headers.map((header) => (
                                             (header.key !== "userProperties") &&
@@ -221,7 +227,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                 <TableBody>
                                     {rows.map((row) => (
                                         <TableRow key={row.id} onClick={(e) => {
-                                            if (row.cells[0].value !== currentUser?.username && row.cells[0]?.value !== 'admin') {
+                                            if (row.cells[0].value !== currentUser?.username && row.cells[0]?.value !== 'admin' && selectedRows.length == 0) {
                                                 userUuid(row.id);
                                                 colSize([7, 5])
                                             } else {

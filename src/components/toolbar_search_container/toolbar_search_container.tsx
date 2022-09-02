@@ -3,6 +3,7 @@ import styles from "./toolbar_search_container.scss";
 import SearchIcon from "@carbon/icons-react/es/search/20";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { Icon } from "@iconify/react";
 
 
 export function SearchInput({ onChange, className }) {
@@ -42,16 +43,16 @@ export function SearchInput({ onChange, className }) {
         <i className={styles.SearchIcon} >
 
             <SearchIcon
-                id="searchIcon"
+                id={styles.searchIcon}
                 className={isActiveSearchIcon ? styles["SearchIconChild"] : ''}
                 onClick={toggleClass}
             />
-            {/* <Icon
+            <Icon
                 icon="gridicons:cross-small"
                 id={styles.removeIcon}
                 className={isActiveRemoveIcon ? styles["SearchIconChild"] : ""}
                 onClick={toggleClass}
-            /> */}
+            />
         </i>
         <input ref={input} type="text" className={className} name="search" autoComplete="off"
             onChange={onChange} onInput={onInputChange}

@@ -8,7 +8,7 @@ import { Form, Formik, validateYupSchema } from "formik";
 import FieldForm from "../field/field.component";
 import { adminModuleUuid, outPtientModuleUuid, uuidPhoneNumber } from "../constante";
 import { Profiles, User } from "../administration-types";
-import { changeUserStatus, formatRole, formatUser, getAllRoles, getPage, getPerson, geUserByUuid, saveUser } from "./user-ressource";
+import { changeUserStatus, formatRole, formatUser, getAllRoles, getPerson, geUserByUuid, saveUser } from "./user-ressource";
 import { showToast } from "@openmrs/esm-framework";
 import { UserRegistrationContext } from "../../../user-context";
 import { Icon } from "@iconify/react";

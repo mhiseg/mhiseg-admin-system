@@ -43,7 +43,7 @@ export function SearchInput({ onChange, className }) {
         <i className={styles.SearchIcon} >
 
             <SearchIcon
-                id="searchIcon"
+                id={styles.searchIcon}
                 className={isActiveSearchIcon ? styles["SearchIconChild"] : ''}
                 onClick={toggleClass}
             />

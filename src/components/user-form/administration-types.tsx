@@ -1,4 +1,4 @@
-import { Privilege, Role } from '@openmrs/esm-framework';
+import { Privilege } from '@openmrs/esm-framework';
 import { string } from 'yup';
 
 interface NameValue {
@@ -31,6 +31,12 @@ export enum Locales {
   EN = "en",
   KR = "kr"
 }
+export interface Role {
+  uuid: string;
+  display: string;
+  links?: Array<any>;
+}
+
 export interface User {
   uuid?: string;
   display?: string;

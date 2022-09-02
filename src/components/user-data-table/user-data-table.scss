@@ -62,92 +62,72 @@
 }
 
 .colIcon {
- 
-     margin-top: 5px;
-     margin-left: 5px;
- 
+  margin-top: 5px;
+  margin-left: 5px;
+
 }
+
 .colIcon:hover {
   background-color: #007d79;
 
 }
 
-
-// .Button {
-//   margin-left: 5px;
-//   background: $brand-01;
-//   border-radius: 5px;
-//   justify-content: center;
-//   background: none;
-//   margin-top: 1px;
-//   border: 2px solid $brand-01;
-//   color: $brand-01;
-//   width: 20px;
-//   :last-child {
-//     width: 1000%;
-//     height: 100%;
-//   }
-// }
-
-// .ButtonAdd:hover,.Button:hover {
-//   background-color: $brand-01;
-//   color: $ui-03;
-// }
-// .ButtonAdd{
-//   margin-top: 3%;
-//   background-color: $brand-02;
-// padding: 1%;
-// }
-
 .search-1 {
-  width: 30%;
-  height: 34px;
+  width: 25%;
+  height: 30px;
   position: absolute;
   left: 0;
   margin-left: 5px;
   box-sizing: border-box;
-  border: .5px solid #ccc;
-  font-size: 16px;
-  background-position: 10px 10px;
-  background: none;
+  border: 1px solid #8b9099;
+  border-radius: 2px;
+  font-size: 14px;
+  background-color: white;
   padding: 12px 20px 12px 40px;
   -webkit-transition: width 0.4s ease-in-out;
   transition: width 0.4s ease-in-out;
+  
+
+  &:focus {
+    width: 75%;
+    outline: none;
+    border: 1px solid #8b9099;
+  }
+
+  &::placeholder{
+    color: gray;
+    font-weight: lighter;
+    font-size: 13px;
+  }
 }
 
-.search-1:focus {
-  width: 75%;
-  box-sizing: border-box;
-  appearance: none;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-}
+  .TableToolbarMenu {
+    width: 300px;
+    max-width: 100% !important;
+    background-color: white;
+  }
 
-.TableToolbarMenu {
-  width: 300px;
-  max-width: 100% !important;
-  background-color: white;
-}
+  .p0 {
+    padding: 0;
+  }
 
-.p0 {
-  padding: 0;
-}
+  .page {
+    background-color: #e0e0e0;
+  }
 
-.page {
-  background-color: #e0e0e0;
-}
+  .TableMainContainer {
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin: auto;
+  }
 
-.TableMainContainer {
-  padding: 10px;
-  background-color: white;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-}
-
-.tableTitle {
-  margin-top: 18px;
-  border-bottom: 0.5px solid rgb(223, 223, 196);
-  margin-bottom: 4px;
-  color: rgb(105, 105, 105);
-  font-weight: bold;
-  font-size: 16px;
-}
+  .tableTitle {
+    margin-top: 18px;
+    border-bottom: 0.5px solid rgb(223, 223, 196);
+    margin-bottom: 4px;
+    color: rgb(105, 105, 105);
+    font-weight: bold;
+    font-size: 16px;
+  }

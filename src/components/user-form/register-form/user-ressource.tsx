@@ -1,7 +1,5 @@
-import { CurrentUserWithResponseOption, getCurrentUser, openmrsFetch, refetchCurrentUser } from '@openmrs/esm-framework';
+import { CurrentUserWithResponseOption, getCurrentUser, openmrsFetch } from '@openmrs/esm-framework';
 import { mergeMap } from "rxjs/operators";
-
-import { VirtualAction } from 'rxjs';
 import { Profiles, Status, User } from '../administration-types';
 import { uuidPhoneNumber } from '../constante';
 const BASE_WS_API_URL = '/ws/rest/v1/';
@@ -71,7 +69,7 @@ export async function changeUserStatus(abortController: AbortController, users: 
 
 export async function changeUserProfile(abortController: AbortController, users: any[], profile: string) {
   await Promise.all(users.map(async (user, i) => {
-    const id = profile + '-' + i + new Date().getTime();
+    const id = `${profile}-${ i + (new Date().getTime())}`;
     await openmrsFetch(`${BASE_WS_API_URL}user/${user.id}`, {
       method: 'POST',
       body: {
@@ -151,33 +149,6 @@ export function formatUser(user: User, person?: any) {
   }
 }
 
-export function getPage(profile, roles?) {
-  if (profile == Profiles.ADMIN) {
-    return "/settings"
-  } else if (profile == Profiles.ARCHIVIST ) {
-    return "/out-patient/search"
-  }
-  else {
-  //   const module = 
-  //   if(profile == Profiles.DOCTOR){
-  //   }
-  // }
-  // switch (profile) {
-  //   case Profiles.ADMIN:
-  //     return "/settings"
-  //   case Profiles.DOCTOR:
-  //     return "/death"
-  //   case Profiles.NURSE:
-  //     return "/death";
-  //   case Profiles.ARCHIVIST:
-  //     return "/patient";
-  //   default:
-      return "/home"
-  }
-
-}
-
-
 export function resetPassword(abortController: AbortController, newPassword: string, uuid?: string) {
   return openmrsFetch(`${BASE_WS_API_URL}password/${uuid}`, {
     method: 'POST',
@@ -225,12 +196,7 @@ const getUsers = (limit: number, start: number) =>
 
 export async function getAllUserPages(limit: number, start: number, username: string) {
   let data = await getUsers(limit, start);
-  const responses = (data) => data.data.results.filter(user => user.username !== username);
-  if (responses(data).length !== limit) {
-    data = await getUsers(limit + 1, start);
-    return responses(data);
-  }
-  return responses(data);
+  return data.data.results;
 }
 
 export async function getSizeUsers(username) {
@@ -239,7 +205,7 @@ export async function getSizeUsers(username) {
       'Content-Type': 'application/json',
     }
   })
-  return users.data.results.filter(user => user.display !== username).length;
+  return users.data.results.length;
 }
 
 export function getStatusUser(status, retired) {

@@ -11,7 +11,7 @@ import { UserRegistrationContext } from "./user-context";
 
 const AdminSys: React.FC = () => {
     const { t } = useTranslation();
-    const [lgValue, setLgValue] = useState([12, 0]);
+    const [lgValue, setLgValue] = useState([12, 0, 12, 0]);
     const [userUuid, setUserUuid] = useState(undefined);
     const [refreshTable, setRefreshTable] = useState();
     const [currentUser, setCurrentUser] = useState<LoggedInUser>();
@@ -29,7 +29,7 @@ const AdminSys: React.FC = () => {
                 <UserRegistrationContext.Provider value={{ colSize: setLgValue, userUuid: setUserUuid, setRefresh: setRefreshTable, uuid: userUuid}}>
                     <Grid fullWidth={true} className={styles.p0}>
                         <Row>
-                            <Column sm={12} lg={lgValue[0]} className={lgValue[0] < 12 ? styles.pr0 : ''}>
+                            <Column sm={lgValue[2]} lg={lgValue[0]} className={lgValue[0] < 12 ? styles.pr0 : ''}>
                                 {currentUser &&
                                     <UserDataTable
                                         refresh={refreshTable}
@@ -38,7 +38,7 @@ const AdminSys: React.FC = () => {
                                         uuid={userUuid}
                                     />}
                             </Column>
-                            <Column sm={12} lg={lgValue[1]}>
+                            <Column sm={lgValue[3]} lg={lgValue[1]}>
                                 <UserRegisterForm user={undefined} uuid={userUuid} refresh={refreshTable} />
                             </Column>
                         </Row>

@@ -153,7 +153,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                                 renderIcon={UserFollow32}
                                                 onClick={() => {
                                                     userUuid(undefined)
-                                                    colSize([7, 5])
+                                                    colSize([7, 5, 0, 12])
                                                     setShowAddUser(false)
                                                 }}
                                                 className={styles.Button}
@@ -214,7 +214,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                             {...getSelectionProps()}
                                             onSelect={
                                                 (e) => {
-                                                    colSize([12, 0])
+                                                    //colSize([12, 0,12, 0])
                                                     getSelectionProps().onSelect(e);
                                                 }
                                             }
@@ -232,10 +232,10 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                         <TableRow key={row.id} onClick={(e) => {
                                             if (row.cells[0].value !== currentUser?.username && row.cells[0]?.value !== 'admin' && selectedRows.length == 0) {
                                                 userUuid(row.id);
-                                                colSize([7, 5])
+                                                colSize([7, 5,0,12])
                                             } else {
                                                 userUuid(undefined);
-                                                colSize([12, 0])
+                                                colSize([12, 0,])
                                             }
                                         }} >
                                             {currentUser?.username == row.cells[0]?.value || row.cells[0]?.value == 'admin' ?

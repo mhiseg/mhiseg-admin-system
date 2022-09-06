@@ -29,7 +29,7 @@ export enum Status {
 export enum Locales {
   FR = "fr",
   EN = "en",
-  KR = "kr"
+  HT = "ht"
 }
 export interface Role {
   uuid: string;

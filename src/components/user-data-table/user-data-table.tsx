@@ -76,7 +76,6 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
     }
 
     const formatUser = (users) => {
-        console.log(users);
         return Promise.all(
             users.map(async (user) => {
                 const roles = formatRole(user?.roles);

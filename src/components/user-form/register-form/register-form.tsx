@@ -107,7 +107,6 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         kind: 'success',
         description: 'User save succesfully',
       })
-
       if (!profile) {
         setRefresh(new Date().getTime())
         colSize([12, 0])
@@ -147,7 +146,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
           <Form name="form" className={styles.cardForm} onSubmit={handleSubmit}>
             {!profile && <Icon type="reset" className={styles.closeButton} icon="carbon:close-outline" onClick={() => {
               resetForm();
-              colSize([12, 0])
+              colSize([12, 0, 12, 0]);
               userUuid(undefined)
             }} />}
             <h4>{t(getTitle())}</h4>
@@ -221,7 +220,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                         size="sm"
                         isSelected={true}
                         onClick={() => {
-                          colSize([12, 0])
+                          colSize([12, 0, 12, 0])
                           userUuid(undefined)
                         }}
                       >

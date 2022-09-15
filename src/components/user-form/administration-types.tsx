@@ -1,5 +1,4 @@
 import { Privilege } from '@openmrs/esm-framework';
-import { string } from 'yup';
 
 interface NameValue {
   uuid?: string;
@@ -7,12 +6,14 @@ interface NameValue {
   givenName: string;
   familyName: string;
 }
+
 export enum Profiles {
   DOCTOR = "doctor",
   NURSE = "nurse",
   ADMIN = "admin",
   ARCHIVIST = "archivist",
 }
+
 export const pageDefaults = [
   { display: "adminPage", value: "/settings" }, { display: "archivistPage", value: "/out-patient/search" },
   { display: "deathDoctorPage", value: "/death/list-unvalidate" }, { display: "outPatientDoctorPage", value: "/out-patient/patient" },
@@ -31,6 +32,7 @@ export enum Locales {
   EN = "en",
   HT = "ht"
 }
+
 export interface Role {
   uuid: string;
   display: string;

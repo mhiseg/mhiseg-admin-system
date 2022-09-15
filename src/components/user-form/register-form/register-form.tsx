@@ -107,13 +107,12 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         kind: 'success',
         description: 'User save succesfully',
       })
-      
-      if (!profile)
-      {  
+
+      if (!profile) {
         setRefresh(new Date().getTime())
         colSize([12, 0])
       }
-      else{
+      else {
         window.location.reload();
       }
 
@@ -146,11 +145,11 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         const { handleSubmit, isValid, dirty, values, resetForm } = formik;
         return (
           <Form name="form" className={styles.cardForm} onSubmit={handleSubmit}>
-            <Icon type="reset" className={styles.closeButton} icon="carbon:close-outline" onClick={() => {
+            {!profile && <Icon type="reset" className={styles.closeButton} icon="carbon:close-outline" onClick={() => {
               resetForm();
               colSize([12, 0])
               userUuid(undefined)
-            }} />
+            }} />}
             <h4>{t(getTitle())}</h4>
             <Grid fullWidth={true} className={styles.p0}>
               <div id={styles.person}>

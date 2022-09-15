@@ -23,12 +23,12 @@ const FieldForm = (name: string, value?: any) => {
       return <FamilyNameField name={name} required={true} />;
     case 'username':
       return <UsernameField name={name} required={true} />;
-    case 'password':
+    case 'oldPassword':
       return <PasswordField name={name} />;
     case 'email':
       return <EmailField name={name} />;
-    case 'passwordConfirm':
-      return <PasswordConfirmField name={name} />;
+    case 'newPassword':
+      return <PasswordField name={name} />;
     case 'gender':
       return <GenderField />;
     case 'phone':

@@ -65,5 +65,17 @@
   "outPatientDoctorPage": "Out patient doctor",
   "deathNursePage": "Death nurse",
   "outPatientNursePage": "Out patient nurse",
-  "profileUser": "Update your profile"
+  "profileUser": "Update your profile",
+  "messageErrorPasswordFormat": "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number",
+  "messageErrorPasswordMin": "Please enter a minimum 8 characters",
+  "messageErrorPasswordMax": "Please enter a maximum 50 characters",
+  "messageErrorIdenticPassword": "Please enter a identic password ",
+  "messageErrorIdentic":  "old password can not identic with new password",
+  "messageErrorUsernameOrPassword": "Incorrect username or password",
+  "messageErrorOldPassword": "Old password is required",
+  "messageErrorNewPassword": "New password is required",
+  "changePasswordLabel":"Change your password",
+  "oldPassword": "Old password",
+  "newPassword": "New password"
+  
 }

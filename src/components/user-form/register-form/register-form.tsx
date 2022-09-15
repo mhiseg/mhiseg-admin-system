@@ -8,7 +8,7 @@ import { Form, Formik, validateYupSchema } from "formik";
 import FieldForm from "../field/field.component";
 import { adminModuleUuid, outPtientModuleUuid, uuidPhoneNumber } from "../constante";
 import { Profiles, User } from "../administration-types";
-import { changeUserStatus, formatRole, formatUser, getAllRoles, getPerson, geUserByUuid, saveUser } from "./user-ressource";
+import { changeUserStatus, formatRole, formatUser, getAllRoles, getPerson, geUserByUuid, saveUser, updatePassword } from "./user-ressource";
 import { showToast } from "@openmrs/esm-framework";
 import { UserRegistrationContext } from "../../../user-context";
 import { Icon } from "@iconify/react";
@@ -66,7 +66,30 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     profile: Yup.string().required("messageErrorProfile"),
     roles: Yup.array()
       .of(Yup.object()
-      ).min(1, "rolesError")
+      ).min(1, "rolesError"),
+    oldPassword: Yup.string(),
+    newPassword: Yup.string()
+      .min(8, t('messageErrorPasswordMin'))
+      .max(50, 'messageErrorPasswordMax')
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/, t('messageErrorPasswordFormat'))
+  }).test("valide form with password ", (value, { createError }) => {
+    if (value.newPassword && !value.oldPassword)
+      return createError({
+        path: 'oldPassword',
+        message: ("messageErrorOldPassword"),
+      });
+    else if (!value.newPassword && value.oldPassword)
+      return createError({
+        path: 'newPassword',
+        message: ("messageErrorNewPassword"),
+      });
+    else if (value.newPassword && value.oldPassword && value.newPassword == value.oldPassword)
+      return createError({
+        path: 'newPassword',
+        message: ("messageErrorIdentic"),
+      });
+    else
+      return true;
   });
 
   const save = (values) => {
@@ -102,6 +125,8 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     saveUser(abortController, user, values.uuid).then(async (res) => {
       const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username }]
       await changeUserStatus(abortController, users, values.userProperties.status);
+      if (values.oldPassword && values.oldPassword)
+        await updatePassword(abortController, values.oldPassword, values.newPassword)
       showToast({
         title: t('successfullyAdded', 'Successfully added'),
         kind: 'success',
@@ -119,7 +144,6 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     ).catch(
       error => {
         showToast({ description: error.message })
-        console.log(error);
       }
     )
   }
@@ -206,26 +230,39 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                   </Column>
                 </Row>
               </div>
-
+              {profile &&
+                <div id={styles.password}>
+                  <label className={styles.labelsFields}>{t("changePasswordLabel", "Change Password")}</label>
+                  <Row>
+                    <Column className={styles.firstColSyle} lg={6}>
+                      {FieldForm('oldPassword')}
+                    </Column>
+                    <Column className={styles.secondColStyle} lg={6}>
+                      {FieldForm('newPassword')}
+                    </Column>
+                  </Row>
+                </div>}
             </Grid>
             <Row>
               <Column>
                 <Row>
                   <Column className={styles.marginTop} lg={12} >
                     <div className={styles.flexEnd}>
-                      <Button
-                        className={styles.buttonStyle}
-                        kind="danger--tertiary"
-                        type="reset"
-                        size="sm"
-                        isSelected={true}
-                        onClick={() => {
-                          colSize([12, 0, 12, 0])
-                          userUuid(undefined)
-                        }}
-                      >
-                        {t("cancelButton", "Annuler")}
-                      </Button>
+                      {!profile &&
+                        <Button
+                          className={styles.buttonStyle}
+                          kind="danger--tertiary"
+                          type="reset"
+                          size="sm"
+                          isSelected={true}
+                          onClick={() => {
+                            colSize([12, 0, 12, 0])
+                            userUuid(undefined)
+                          }}
+                        >
+                          {t("cancelButton", "Annuler")}
+                        </Button>
+                      }
                       <Button
                         className={styles.buttonStyle1}
                         kind="tertiary"

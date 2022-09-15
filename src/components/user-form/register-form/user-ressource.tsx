@@ -101,6 +101,24 @@ export async function updateUserRoles(abortController: AbortController, users: a
 }
 
 
+export async function updatePasswordUser(
+  abortController: AbortController,
+  oldPassword: string,
+  newPassword: string,
+) {
+  return openmrsFetch(`${BASE_WS_API_URL}password`, {
+    method: 'POST',
+    body: {
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+    },
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    signal: abortController.signal,
+  });
+}
+
 export function formatRole(roles, object?) {
   if (roles?.length > 0 && object == undefined) {
     let rolesFormat = [];

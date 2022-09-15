@@ -31,7 +31,7 @@ const UserProfile: React.FC = () => {
   return (
     user &&
     <>
-      <h4 className={styles['title-page']}>{t("adminSystem")}</h4>
+      <h4 className={styles['title-page']}>{t("profileLabel")}</h4>
       <div className={styles['mhiseg-main-content']}>
         <UserRegistrationContext.Provider value={{ colSize: [12, 0], userUuid: null, setRefresh: setRefreshTable, uuid: user.uuid, profile: true }}>
           <UserRegisterForm user={undefined} uuid={user.uuid} />

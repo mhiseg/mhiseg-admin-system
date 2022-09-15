@@ -7,8 +7,8 @@ import styles from "./form.scss"
 import { Form, Formik, validateYupSchema } from "formik";
 import FieldForm from "../field/field.component";
 import { adminModuleUuid, outPtientModuleUuid, uuidPhoneNumber } from "../constante";
-import { Profiles, User } from "../administration-types";
-import { changeUserStatus, formatRole, formatUser, getAllRoles, getPerson, geUserByUuid, saveUser, updatePassword } from "./user-ressource";
+import { Profiles, Status, User } from "../administration-types";
+import { changeUserStatus, formatRole, formatUser, getAllRoles, getPerson, geUserByUuid, resetPassword, saveUser, updatePassword } from "./user-ressource";
 import { showToast } from "@openmrs/esm-framework";
 import { UserRegistrationContext } from "../../../user-context";
 import { Icon } from "@iconify/react";
@@ -124,7 +124,8 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     }
     saveUser(abortController, user, values.uuid).then(async (res) => {
       const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username }]
-      await changeUserStatus(abortController, users, values.userProperties.status);
+      if (values.userProperties.status == Status.WAITING)
+        await resetPassword(abortController, res.data.username.charAt(0).toUpperCase() + res.data.username.substring(1) + "123", res.data.uuid)
       if (values.oldPassword && values.oldPassword)
         await updatePassword(abortController, values.oldPassword, values.newPassword)
       showToast({
@@ -139,7 +140,6 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
       else {
         window.location.reload();
       }
-
     }
     ).catch(
       error => {

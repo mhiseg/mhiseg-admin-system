@@ -47,7 +47,6 @@ export async function changeUserStatus(abortController: AbortController, users: 
       }
     }
     else if (status == Status.ENABLE) {
-
       user.userProperties = {
         ...user.userProperties,
         status: Status.ENABLE,
@@ -168,6 +167,7 @@ export function formatUser(user: User, person?: any) {
 }
 
 export function resetPassword(abortController: AbortController, newPassword: string, uuid?: string) {
+  
   return openmrsFetch(`${BASE_WS_API_URL}password/${uuid}`, {
     method: 'POST',
     body: {

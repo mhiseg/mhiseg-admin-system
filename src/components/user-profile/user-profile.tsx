@@ -1,0 +1,44 @@
+import { createErrorHandler, LoggedInUser } from "@openmrs/esm-framework";
+import React, { useContext, useState } from "react";
+import UserRegisterForm from "../user-form/register-form/register-form";
+import { getSynchronizedCurrentUser } from "../user-form/register-form/user-ressource";
+import { getCurrentSession } from "./user-profile-resource";
+import styles from "../../admin.scss"
+import { useTranslation } from "react-i18next";
+import { UserRegistrationContext } from "../../user-context";
+
+const UserProfile: React.FC = () => {
+  const [user, setUser] = React.useState<LoggedInUser | null | false>(null);
+  const { t } = useTranslation();
+  const [refreshTable, setRefreshTable] = useState();
+
+  React.useEffect(() => {
+    const currentUserSub = getSynchronizedCurrentUser({
+      includeAuthStatus: true,
+    }).subscribe((response) => {
+      if (response.authenticated) {
+        setUser(response.user);
+      } else {
+        setUser(false);
+      }
+      createErrorHandler();
+    });
+    return () => {
+      currentUserSub.unsubscribe();
+    };
+  }, []);
+
+  return (
+    user &&
+    <>
+      <h4 className={styles['title-page']}>{t("adminSystem")}</h4>
+      <div className={styles['mhiseg-main-content']}>
+        <UserRegistrationContext.Provider value={{ colSize: [12, 0], userUuid: null, setRefresh: setRefreshTable, uuid: user.uuid, profile: true }}>
+          <UserRegisterForm user={undefined} uuid={user.uuid} />
+        </UserRegistrationContext.Provider>
+      </div>
+    </>
+  )
+};
+
+export default UserProfile;

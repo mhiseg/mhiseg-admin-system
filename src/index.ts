@@ -29,6 +29,10 @@ function setupOpenMRS() {
         route: "settings",
         privilege: "App: system.management"
       },
+      {
+        load: getAsyncLifecycle(() => import("./components/user-profile/user-profile"), options),
+        route: "profile",
+      },
     ],
      extensions: [
       {

@@ -21,7 +21,7 @@ interface UserRegisterFormuser {
 const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh }) => {
   const { t } = useTranslation();
   const abortController = new AbortController();
-  const { colSize, setRefresh, userUuid } = useContext(UserRegistrationContext);
+  const { colSize, setRefresh, userUuid, profile } = useContext(UserRegistrationContext);
   const [initialV, setInitialV] = useState(formatUser(user));
   const [roles, setRoles] = useState([{ uuid: "", display: "" }]);
 
@@ -107,17 +107,31 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
         kind: 'success',
         description: 'User save succesfully',
       })
-      setRefresh( new Date().getTime())
-      colSize([12, 0])
+      
+      if (!profile)
+      {  
+        setRefresh(new Date().getTime())
+        colSize([12, 0])
+      }
+      else{
+        window.location.reload();
+      }
 
     }
     ).catch(
       error => {
         showToast({ description: error.message })
+        console.log(error);
       }
     )
   }
 
+  const getTitle = () => {
+    if (profile)
+      return "profileUser";
+    return uuid ? "editUser" : "newUser";
+
+  }
 
   return (
     <Formik
@@ -137,7 +151,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
               colSize([12, 0])
               userUuid(undefined)
             }} />
-            <h4>{t(uuid ? "editUser" : "newUser")}</h4>
+            <h4>{t(getTitle())}</h4>
             <Grid fullWidth={true} className={styles.p0}>
               <div id={styles.person}>
                 <label className={styles.labelsFields}>{t("fieldset1Label", "Info personne")}</label>

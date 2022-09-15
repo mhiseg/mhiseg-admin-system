@@ -8,7 +8,7 @@ import { useField } from "formik";
 
 
 export const StatusField: React.FC = () => {
-  const { uuid } = useContext(UserRegistrationContext); 
+  const { uuid, profile } = useContext(UserRegistrationContext);
   const [field, meta] = useField("userProperties.status");
 
   return (
@@ -18,7 +18,7 @@ export const StatusField: React.FC = () => {
         options={Object.values(Status)}
         label="statusLabel"
         name="userProperties.status"
-        disabled={uuid == undefined || meta.initialValue == Status.WAITING}
+        disabled={profile || uuid == undefined || meta.initialValue == Status.WAITING}
       />
     </>
   );

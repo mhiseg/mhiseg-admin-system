@@ -8,7 +8,7 @@ export interface UserRegistrationContextProps {
     userUuid: any;
     uuid: any;
     setRefresh: any;
-    // selectedRow: any;
+    profile: boolean;
   }
   
   export const UserRegistrationContext = createContext<UserRegistrationContextProps | undefined>(undefined);

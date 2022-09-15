@@ -66,5 +66,6 @@
   "deathDoctorPage": "Docteur gestionnaire de décès", 
   "outPatientDoctorPage": "Docteur patient ambulatoire",
   "deathNursePage": "Infirmier(ère) gestionnaire de décès",
-  "outPatientNursePage": "Infirmier(ère) patient ambulatoire"
+  "outPatientNursePage": "Infirmier(ère) patient ambulatoire",
+  "profileUser": "Modifier votre profil"
 }

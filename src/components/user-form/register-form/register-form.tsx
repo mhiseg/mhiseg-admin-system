@@ -124,9 +124,8 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
     }
     saveUser(abortController, user, values.uuid).then(async (res) => {
       const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username }]
-      if (values.userProperties.status == Status.WAITING)
-        await resetPassword(abortController, res.data.username.charAt(0).toUpperCase() + res.data.username.substring(1) + "123", res.data.uuid)
-      if (values.oldPassword && values.oldPassword)
+      await changeUserStatus(abortController, users, values.userProperties.status, true);
+       if (values.oldPassword && values.oldPassword)
         await updatePassword(abortController, values.oldPassword, values.newPassword)
       showToast({
         title: t('successfullyAdded', 'Successfully added'),

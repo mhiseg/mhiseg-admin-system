@@ -30,11 +30,12 @@ export function getSynchronizedCurrentUser(
 }
 
 
-export async function changeUserStatus(abortController: AbortController, users: any[], status: string) {
-  await Promise.all(users.filter(function (user) {
-    if (user.userProperties.status == Status.WAITING) {
+export async function changeUserStatus(abortController: AbortController, users: any[], status: string, form?) {
+  await Promise.all(users.filter((user) => {
+    if (user.userProperties.status == Status.WAITING && form)
+      return true;
+    else if (user.userProperties.status == Status.WAITING)
       return false;
-    }
     return true;
   }).map(async user => {
     if (status == Status.DISABLED) {
@@ -68,7 +69,7 @@ export async function changeUserStatus(abortController: AbortController, users: 
 
 export async function changeUserProfile(abortController: AbortController, users: any[], profile: string) {
   await Promise.all(users.map(async (user, i) => {
-    const id = `${profile}-${ i + (new Date().getTime())}`;
+    const id = `${profile}-${i + (new Date().getTime())}`;
     await openmrsFetch(`${BASE_WS_API_URL}user/${user.id}`, {
       method: 'POST',
       body: {
@@ -167,7 +168,7 @@ export function formatUser(user: User, person?: any) {
 }
 
 export function resetPassword(abortController: AbortController, newPassword: string, uuid?: string) {
-  
+
   return openmrsFetch(`${BASE_WS_API_URL}password/${uuid}`, {
     method: 'POST',
     body: {

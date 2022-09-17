@@ -36,7 +36,7 @@ const FieldForm = (name: string, value?: any) => {
     case 'status':
       return <StatusField />;
     case 'locale':
-      return <LocaleField />;
+      return <LocaleField values={value}  />;
     case 'roles':
       return <ModuleField value={value} />;
     case 'profile':

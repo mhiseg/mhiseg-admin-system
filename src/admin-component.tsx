@@ -1,4 +1,4 @@
-import { getCurrentUser, getLoggedInUser, LoggedInUser } from "@openmrs/esm-framework";
+import { createErrorHandler, getCurrentUser, getLoggedInUser, LoggedInUser } from "@openmrs/esm-framework";
 import { Column, Grid, Row } from "carbon-components-react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,13 +14,26 @@ const AdminSys: React.FC = () => {
     const [lgValue, setLgValue] = useState([12, 0, 12, 0]);
     const [userUuid, setUserUuid] = useState(undefined);
     const [refreshTable, setRefreshTable] = useState();
-    const [currentUser, setCurrentUser] = useState<LoggedInUser>();
+    const [currentUser, setCurrentUser] = useState<LoggedInUser | boolean>();
+    const [allowedLocales, setAllowedLocales] = useState<Array<string>>();
+
 
     React.useEffect(() => {
-        const currentUserSub = getLoggedInUser().then(user => setCurrentUser(user));
-        return () => { currentUserSub }
-    }, []);
-
+        const currentUserSub = getSynchronizedCurrentUser({
+          includeAuthStatus: true,
+        }).subscribe((response) => {
+          if (response.authenticated) {
+            setCurrentUser(response.user);
+            setAllowedLocales(response["allowedLocales"]);
+          } else {
+            setCurrentUser(false);
+          }
+          createErrorHandler();
+        });
+        return () => {
+          currentUserSub.unsubscribe();
+        };
+      }, []);
 
     return (
         <>
@@ -39,7 +52,7 @@ const AdminSys: React.FC = () => {
                                     />}
                             </Column>
                             <Column sm={lgValue[3]} lg={lgValue[1]}>
-                                <UserRegisterForm user={undefined} uuid={userUuid} refresh={refreshTable} />
+                                { allowedLocales && <UserRegisterForm user={undefined} uuid={userUuid} refresh={refreshTable} allowedLocales={allowedLocales}/>}
                             </Column>
                         </Row>
                     </Grid>

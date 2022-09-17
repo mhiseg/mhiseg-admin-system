@@ -11,6 +11,8 @@ const UserProfile: React.FC = () => {
   const [user, setUser] = React.useState<LoggedInUser | null | false>(null);
   const { t } = useTranslation();
   const [refreshTable, setRefreshTable] = useState();
+  const [allowedLocales, setAllowedLocales] = useState<Array<string>>();
+
 
   React.useEffect(() => {
     const currentUserSub = getSynchronizedCurrentUser({
@@ -18,6 +20,7 @@ const UserProfile: React.FC = () => {
     }).subscribe((response) => {
       if (response.authenticated) {
         setUser(response.user);
+        setAllowedLocales(response["allowedLocales"]);
       } else {
         setUser(false);
       }
@@ -34,7 +37,7 @@ const UserProfile: React.FC = () => {
       <h4 className={styles['title-page']}>{t("profileLabel")}</h4>
       <div className={styles['mhiseg-main-content']}>
         <UserRegistrationContext.Provider value={{ colSize: [12, 0], userUuid: null, setRefresh: setRefreshTable, uuid: user.uuid, profile: true }}>
-          <UserRegisterForm user={undefined} uuid={user.uuid} />
+          {allowedLocales && <UserRegisterForm user={undefined} uuid={user.uuid} allowedLocales={allowedLocales} />}
         </UserRegistrationContext.Provider>
       </div>
     </>

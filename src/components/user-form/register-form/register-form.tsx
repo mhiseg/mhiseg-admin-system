@@ -16,9 +16,10 @@ interface UserRegisterFormuser {
   user?: User;
   uuid?: string;
   refresh?: any;
+  allowedLocales: Array<string>;
 }
 
-const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh }) => {
+const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh, allowedLocales }) => {
   const { t } = useTranslation();
   const abortController = new AbortController();
   const { colSize, setRefresh, userUuid, profile } = useContext(UserRegistrationContext);
@@ -200,7 +201,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh 
                     {FieldForm('username')}
                   </Column>
                   <Column className={styles.secondColStyle} lg={6}>
-                    {FieldForm('locale')}
+                    {FieldForm('locale',allowedLocales)}
                   </Column>
                 </Row>
                 <Row>

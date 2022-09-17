@@ -27,12 +27,6 @@ export enum Status {
   WAITING = "waiting",
 }
 
-export enum Locales {
-  FR = "fr",
-  EN = "en",
-  HT = "ht"
-}
-
 export interface Role {
   uuid: string;
   display: string;

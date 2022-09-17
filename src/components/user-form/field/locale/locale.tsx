@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, {  } from "react";
 import { useTranslation } from "react-i18next";
-import { Locales } from "../../administration-types";
 import { SelectInput } from "../../input/basic-input/select/select-input.component";
 import styles from '../field.scss';
 
+interface LocaleFieldProps {
+  values: Array<string>;
+}
 
-
-export const LocaleField: React.FC = () => {
+export const LocaleField: React.FC<LocaleFieldProps> = ({ values }) => {
   const { t } = useTranslation();
-
   return (
     <>
       <SelectInput
         className={styles.margin_field}
-        options={Object.values(Locales)}
+        options={values}
         label={t("localeLabel")}
         name="userProperties.defaultLocale"
       />

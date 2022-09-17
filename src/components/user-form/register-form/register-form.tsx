@@ -225,7 +225,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh,
                       {FieldForm('roles', roles)}
                     </Column>
                   }
-                  <Column className={styles.firstColSyle} lg={6}>
+                  <Column className={styles.secondColStyle} lg={6}>
                     {FieldForm('defaultPage')}
                   </Column>
                 </Row>

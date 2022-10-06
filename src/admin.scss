@@ -12,18 +12,18 @@
   width: 100%;
 }
 
-.mhiseg-main-column {
-  height: 50%;
-}
+// .mhiseg-main-column {
+//   height: 50%;
+// }
 
 .mhiseg-main-content {
-  max-height: calc(89vh - 1.5rem);
-  padding: 1rem;
-  border-radius: 12px;
-  background: #efeef0;
-  position: relative;
-  margin-left: 30px;
-  margin-right: 30px;
+  overflow: auto;
+  height: 86.5vh;
+  padding: .8rem;
+  background: #f4f4f4;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  border-radius: 5px;
 }
 
 .footer-miseg {
@@ -49,7 +49,7 @@ body {
   font-family: Roboto Condensed;
   font-style: normal;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 18px;
   color: rgba(0, 0, 0, .69);
 }
 
@@ -92,6 +92,12 @@ body {
   padding: 0;
 }
 
-.pr0 {
-  padding-right: 0px;
+.pl0 {
+  padding-left: 0px;
+}
+
+
+.pm0{
+  padding: 0;
+  margin: 0;
 }

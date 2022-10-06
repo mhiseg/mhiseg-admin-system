@@ -139,7 +139,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                     <div className={styles.TableMainContainer}>
                         <h4 className={styles.tableTitle}>{t("tableTitle", "Liste des utilisateurs")}</h4>
                         <TableContainer  {...getTableContainerProps()} >
-                            <div className={styles.TableContainer}>
+                             <div className={styles.TableContainer}>
                                 <TableToolbar {...getToolbarProps()} >
                                     <div id={styles["toolbar-content"]} className={"bx--toolbar-content"}>
                                         <SearchInput
@@ -228,7 +228,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                 </TableHead>
                                 <TableBody>
                                     {rows.map((row) => (
-                                        <TableRow key={row.id} onClick={(e) => {
+                                        <TableRow color="true" key={row.id} onClick={(e) => {
                                             if (row.cells[0].value !== currentUser?.username && row.cells[0]?.value !== 'admin' && selectedRows.length == 0) {
                                                 userUuid(row.id);
                                                 colSize([7, 5,0,12])
@@ -243,8 +243,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                                     disabled={true}
                                                     checked={false}
                                                 />) :
-                                                (<TableSelectRow
-                                                    className={styles.testRows}
+                                                (<TableSelectRow 
                                                     {...getSelectionProps({ row })}
                                                 />)
                                             }
@@ -271,7 +270,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                             pageSizes={paginationPageSizes}
                             size="sm"
                             totalItems={totalpageSize}
-                        />
+                        /> 
                     </div>
                 );
             }}

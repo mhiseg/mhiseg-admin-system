@@ -40,9 +40,9 @@ const AdminSys: React.FC = () => {
             <h4 className={styles['title-page']}>{t("adminSystem")}</h4>
             <div className={styles['mhiseg-main-content']}>
                 <UserRegistrationContext.Provider value={{ colSize: setLgValue, userUuid: setUserUuid, setRefresh: setRefreshTable, uuid: userUuid, profile: false}}>
-                    <Grid fullWidth={true} className={styles.p0}>
-                        <Row>
-                            <Column sm={lgValue[2]} lg={lgValue[0]} className={lgValue[0] < 12 ? styles.pr0 : ''}>
+                    <Grid fullWidth={true} className={styles.pm0}>
+                        <Row className={styles.pm0}>
+                            <Column sm={lgValue[2]} lg={lgValue[0]} className={lgValue[0] < 12 ? styles.pl0 : styles.pm0 }>
                                 {currentUser &&
                                     <UserDataTable
                                         refresh={refreshTable}
@@ -51,7 +51,7 @@ const AdminSys: React.FC = () => {
                                         uuid={userUuid}
                                     />}
                             </Column>
-                            <Column sm={lgValue[3]} lg={lgValue[1]}>
+                            <Column sm={lgValue[3]} lg={lgValue[1]} className={styles.pm0}>
                                 { allowedLocales && <UserRegisterForm user={undefined} uuid={userUuid} refresh={refreshTable} allowedLocales={allowedLocales}/>}
                             </Column>
                         </Row>

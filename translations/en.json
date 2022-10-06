@@ -65,7 +65,7 @@
   "outPatientDoctorPage": "Out patient doctor",
   "deathNursePage": "Death nurse",
   "outPatientNursePage": "Out patient nurse",
-  "profileUser": "Update your profile",
+  "profileUser": "Update user profile",
   "messageErrorPasswordFormat": "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number",
   "messageErrorPasswordMin": "Please enter a minimum 8 characters",
   "messageErrorPasswordMax": "Please enter a maximum 50 characters",

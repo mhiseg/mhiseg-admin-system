@@ -126,7 +126,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh,
     saveUser(abortController, user, values.uuid).then(async (res) => {
       const users = [{ userProperties: res.data.userProperties, uuid: res.data.uuid, username: res.data.username }]
       await changeUserStatus(abortController, users, values.userProperties.status, true);
-       if (values.oldPassword && values.oldPassword)
+      if (values.oldPassword && values.oldPassword)
         await updatePassword(abortController, values.oldPassword, values.newPassword)
       showToast({
         title: t('successfullyAdded', 'Successfully added'),
@@ -201,7 +201,7 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh,
                     {FieldForm('username')}
                   </Column>
                   <Column className={styles.secondColStyle} lg={6}>
-                    {FieldForm('locale',allowedLocales)}
+                    {FieldForm('locale', allowedLocales)}
                   </Column>
                 </Row>
                 <Row>
@@ -242,43 +242,42 @@ const UserRegisterForm: React.FC<UserRegisterFormuser> = ({ user, uuid, refresh,
                     </Column>
                   </Row>
                 </div>}
-            </Grid>
-            <Row>
-              <Column>
-                <Row>
-                  <Column className={styles.marginTop} lg={12} >
-                    <div className={styles.flexEnd}>
-                      {!profile &&
+              <Row>
+                <Column>
+                  <Row>
+                    <Column className={styles.marginTop} lg={12} >
+                      <div className={styles.flexEnd}>
+                        {!profile &&
+                          <Button
+                            className={styles.buttonStyle}
+                            kind="danger--tertiary"
+                            type="reset"
+                            size="sm"
+                            isSelected={true}
+                            onClick={() => {
+                              colSize([12, 0, 12, 0])
+                              userUuid(undefined)
+                            }}
+                          >
+                            {t("cancelButton", "Annuler")}
+                          </Button>
+                        }
                         <Button
-                          className={styles.buttonStyle}
-                          kind="danger--tertiary"
-                          type="reset"
+                          className={styles.buttonStyle1}
+                          kind="tertiary"
+                          type="submit"
                           size="sm"
                           isSelected={true}
-                          onClick={() => {
-                            colSize([12, 0, 12, 0])
-                            userUuid(undefined)
-                          }}
+                          disabled={!(dirty && isValid)}
                         >
-                          {t("cancelButton", "Annuler")}
+                          {t("confirmButton", "Enregistrer")}
                         </Button>
-                      }
-                      <Button
-                        className={styles.buttonStyle1}
-                        kind="tertiary"
-                        type="submit"
-                        size="sm"
-                        isSelected={true}
-                        disabled={!(dirty && isValid)}
-                      >
-                        {t("confirmButton", "Enregistrer")}
-                      </Button>
-                    </div>
-                  </Column>
-                </Row>
-              </Column>
-            </Row>
-
+                      </div>
+                    </Column>
+                  </Row>
+                </Column>
+              </Row>
+            </Grid>
           </Form>
         );
       }}

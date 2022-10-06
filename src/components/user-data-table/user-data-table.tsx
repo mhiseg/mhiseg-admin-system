@@ -75,6 +75,13 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
         }
     }
 
+    const getRoles = (roles) => {
+        if (roles?.length == 1)
+            return roles[0]?.display.split(":")[1];
+        else if (roles?.length > 1)
+            return (roles[0].display.split(":")[1] + ", " + roles[1].display.split(":")[1] + " (" + roles?.length + ")");
+    }
+
     const formatUser = (users) => {
         return Promise.all(
             users.map(async (user) => {
@@ -84,7 +91,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                     Username: user?.username,
                     fullName: user?.person.names[0].familyName + ", " + user?.person.names[0].givenName + "-" + user?.person.gender,
                     profile: checkProfile(user.systemId),
-                    roles: roles?.length > 1 ? (roles[0].display.split(":")[1] + ", " + roles[1].display.split(":")[1] + " (" + roles?.length + ")") : roles[0]?.display.split(":")[1],
+                    roles: getRoles(roles),
                     phone: user?.person.attributes?.find((attribute) => attribute?.display.split(" = ")[0] == "Telephone Number")?.display.split("Telephone Number = ")[1],
                     status: getStatusUser(user?.userProperties?.status, user?.retired),
                     locale: user?.userProperties?.defaultLocale,
@@ -172,9 +179,10 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                                 <Roles
                                                     placeholder={t("roles")}
                                                     onChange={(data) => { setRoles(data); }}
-                                                    updateRoles={() => updateUserRoles(abortController, selectedRows, roles).then(() =>{ 
-                                                        changeRows(pageSize, page)}
-                                                        )}
+                                                    updateRoles={() => updateUserRoles(abortController, selectedRows, roles).then(() => {
+                                                        changeRows(pageSize, page)
+                                                    }
+                                                    )}
                                                 />
                                             </TableToolbarAction>
                                         </TableToolbarMenu>
@@ -231,7 +239,7 @@ const UserDataTable: React.FC<DeathListProps> = ({ refresh, lg, uuid, currentUse
                                         <TableRow color="true" key={row.id} onClick={(e) => {
                                             if (row.cells[0].value !== currentUser?.username && row.cells[0]?.value !== 'admin' && selectedRows.length == 0) {
                                                 userUuid(row.id);
-                                                colSize([7, 5,0,12])
+                                                colSize([7, 5, 0, 12])
                                             } else {
                                                 userUuid(undefined);
                                                 colSize([12, 0,])
